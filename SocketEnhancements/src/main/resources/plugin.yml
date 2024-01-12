@@ -1,0 +1,7 @@
+name: "SocketEnhancements"
+version: "${version}"
+description: "A basic gear enhancement plugin for PaperMC servers."
+author: "animal"
+prefix: "SE"
+main: "net.wandermc.enhancements.SocketEnhancements"
+api-version: "1.20"
