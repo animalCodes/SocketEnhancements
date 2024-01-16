@@ -5,3 +5,14 @@ author: "animal"
 prefix: "SE"
 main: "net.wandermc.enhancements.SocketEnhancements"
 api-version: "1.20"
+
+commands:
+  addsocket:
+    description: "Adds socket(s) to item held in main hand."
+    usage: "/addsocket {n} or /addsocket"
+    permission: socketenhancements.command.addsocket
+
+
+permissions:
+  command.addsocket:
+    default: op
