@@ -13,9 +13,12 @@ public class AddSocketCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            // For now, just assume the item is valid
-            // TODO limit how many sockets an item can have
             EnhancedItem item = new EnhancedItem(player.getInventory().getItemInMainHand());
+
+            if (item.getSockets() >= item.getSocketLimit()) {
+                sender.sendMessage(Component.text("This item already has the maximum number of sockets. (" + item.getSocketLimit() + ")"));
+                return false;
+            }
 
             int numSockets = 1;
             if (args.length > 0) {
@@ -25,6 +28,11 @@ public class AddSocketCommand implements CommandExecutor {
                     sender.sendMessage(Component.text(args[0] + " Is not a valid number."));
                     return false;
                 }
+            }
+
+            if (item.getSockets() + numSockets > item.getSocketLimit()) {
+                sender.sendMessage(Component.text("Adding that many sockets would put this item over it's socket limit. (" + item.getSocketLimit() + ")"));
+                return false;
             }
 
             item.addSockets(numSockets);

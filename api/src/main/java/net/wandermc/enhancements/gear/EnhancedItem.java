@@ -32,14 +32,35 @@ public class EnhancedItem {
   }
 
   /**
+   * Gets how many sockets are currently on the item
+   *
+   * @return The number of sockets
+   */
+  public int getSockets() {
+    return dataContainer.get(socketsKey, PersistentDataType.INTEGER);
+  }
+
+  /**
+   * Gets the maximum number of sockets that this item could have.
+   *
+   * @return The maximum
+   */
+  public int getSocketLimit() {
+    return Settings.SOCKET_LIMITS.getOrDefault(item.getType(), Settings.DEFAULT_SOCKET_LIMIT);
+  }
+
+  /**
    * Adds the specified number of sockets to this item.
+   * Warning: This will happily accept a number of sockets that would push the
+   * item over it's socket limit, if you want to avoid this check `.getSockets()`
+   * and `.getSocketLimit()` before using.
    * 
    * @param Sockets The number of sockets to add
    * @return The new number of sockets on the item
    */
   public int addSockets(int sockets) {
     // Update stored number
-    int currentSockets = dataContainer.get(socketsKey, PersistentDataType.INTEGER);
+    int currentSockets = getSockets();
     dataContainer.set(socketsKey, PersistentDataType.INTEGER, currentSockets + sockets);
 
     // Update lore
