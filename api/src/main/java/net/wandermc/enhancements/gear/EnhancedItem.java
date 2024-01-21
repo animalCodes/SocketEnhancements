@@ -17,31 +17,42 @@ public class EnhancedItem {
 
   private ItemStack item;
   private ItemMeta itemMeta;
-  private PersistentDataContainer dataContainer;
+  private ArrayList<String> socketList;
 
   public EnhancedItem(ItemStack item) {
     this.item = item;
     this.itemMeta = item.getItemMeta();
-    this.dataContainer = itemMeta.getPersistentDataContainer();
 
-    // Avoid having to repeatedly check whether the container has a socketsKey
-    // (This'll only be actually stored on the item if the api user calls
-    // .getItemStack())
+    PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
     if (!dataContainer.has(socketsKey))
-      dataContainer.set(socketsKey, PersistentDataType.INTEGER, 0);
+      dataContainer.set(socketsKey, PersistentDataType.LIST.strings(), new ArrayList<String>());
+    this.socketList = new ArrayList<String>(dataContainer.get(socketsKey, PersistentDataType.LIST.strings()));
   }
 
   /**
-   * Gets how many sockets are currently on the item
+   * Gets how many sockets are currently on the item.
    *
    * @return The number of sockets
    */
   public int getSockets() {
-    return dataContainer.get(socketsKey, PersistentDataType.INTEGER);
+    return socketList.size();
   }
 
   /**
-   * Gets the maximum number of sockets that this item could have.
+   * Gets how many empty sockets are currently on the item.
+   *
+   * @return The number of empty sockets
+   */
+  public int getEmptySockets() {
+    int count = 0;
+    for (String socket : socketList)
+      if (socket.isEmpty())
+        count++;
+    return count;
+  }
+
+  /**
+   * Gets the maximum number of sockets that the item can have.
    *
    * @return The maximum
    */
@@ -50,30 +61,26 @@ public class EnhancedItem {
   }
 
   /**
-   * Adds the specified number of sockets to this item.
-   * Warning: This will happily accept a number of sockets that would push the
-   * item over it's socket limit, if you want to avoid this check `.getSockets()`
-   * and `.getSocketLimit()` before using.
+   * Adds the specified number of sockets to the item.
+   * Note that this will **not** check if adding the given number of sockets would
+   * push the item over it's socket limit.
    * 
    * @param Sockets The number of sockets to add
-   * @return The new number of sockets on the item
    */
-  public int addSockets(int sockets) {
-    // Update stored number
-    int currentSockets = getSockets();
-    dataContainer.set(socketsKey, PersistentDataType.INTEGER, currentSockets + sockets);
-
-    // Update lore
+  public void addSockets(int sockets) {
+    // Get lore list
     ArrayList<Component> lore;
     if (itemMeta.hasLore())
       lore = (ArrayList<Component>) itemMeta.lore();
     else
       lore = new ArrayList<Component>();
-    for (int i = 0; i < sockets; i++)
-      lore.add(Settings.EMPTY_SOCKET_MESSAGE);
-    itemMeta.lore(lore);
 
-    return currentSockets + sockets;
+    for (int i = 0; i < sockets; i++) {
+      socketList.add("");
+      lore.add(Settings.EMPTY_SOCKET_MESSAGE);
+    }
+
+    itemMeta.lore(lore);
   }
 
   /**
@@ -82,6 +89,7 @@ public class EnhancedItem {
    * @return The item
    */
   public ItemStack getItemStack() {
+    itemMeta.getPersistentDataContainer().set(socketsKey, PersistentDataType.LIST.strings(), socketList);
     item.setItemMeta(itemMeta);
     return item;
   }
