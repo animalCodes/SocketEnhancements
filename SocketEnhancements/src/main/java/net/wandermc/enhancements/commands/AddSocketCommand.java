@@ -13,6 +13,7 @@ public class AddSocketCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
+            // TODO check item actually exists
             EnhancedItem item = new EnhancedItem(player.getInventory().getItemInMainHand());
 
             if (item.getSockets() >= item.getSocketLimit()) {
