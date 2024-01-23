@@ -7,6 +7,11 @@ import java.util.HashMap;
  */
 public class EnhancementManager {
     private static final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
+    private static final EmptyEnhancement emptyEnhancement = new EmptyEnhancement();
+
+    static {
+        store(emptyEnhancement);
+    }
 
     /**
      * Normalises `name` to ease storage and retrieval of enhancements.
@@ -26,17 +31,18 @@ public class EnhancementManager {
      * @param enhancement The enhancement to store
      */
     public static void store(Enhancement enhancement) {
-       enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
+        enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
 
     /**
      * Retrieves the enhancement stored under `name`.
-     * Return value may be null.
+     * If the enhancement doesn't exist, an EmptyEnhancement will be returned
+     * instead.
      *
      * @param name The name of the enhancement
      * @return The enhancement, or null if it doesn't exist.
      */
     public static Enhancement get(String name) {
-       return enhancementStore.get(normaliseName(name));
+        return enhancementStore.getOrDefault(normaliseName(name), emptyEnhancement);
     }
 }

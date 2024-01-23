@@ -39,13 +39,7 @@ public class EnhancedItem {
     private void updateLore() {
         ArrayList<Component> lore = new ArrayList<Component>(socketList.size());
 
-        socketList.forEach(socketId -> {
-            Enhancement enhancement = EnhancementManager.get(socketId);
-            if (enhancement == null)
-                lore.add(Settings.EMPTY_SOCKET_MESSAGE);
-            else
-                lore.add(enhancement.getSocketMessage());
-        });
+        socketList.forEach(socketId -> lore.add(EnhancementManager.get(socketId).getSocketMessage()));
 
         itemMeta.lore(lore);
     }
@@ -67,7 +61,7 @@ public class EnhancedItem {
     public int getEmptySockets() {
         int count = 0;
         for (String socket : socketList)
-            if (socket.isEmpty())
+            if (socket == EnhancementManager.get("").getName())
                 count++;
         return count;
     }
@@ -90,9 +84,10 @@ public class EnhancedItem {
      */
     public void addSockets(int sockets) {
         for (int i = 0; i < sockets; i++) {
-            socketList.add("");
+            // Can't use `bind()` as unlike normal enhancements empty sockets can very much
+            // be 'bound' multiple times.
+            socketList.add(EnhancementManager.get("").getName());
         }
-        updateLore();
     }
 
     /**
@@ -112,22 +107,20 @@ public class EnhancedItem {
      * @return Whether the binding was successful.
      */
     public boolean bind(Enhancement enhancement) {
-        if (!enhancement.isValidGear(item.getType()))
+        if (!enhancement.isValidItem(this))
             return false;
 
         // Can't bind an enhancement more than once.
         if (hasEnhancement(enhancement))
             return false;
 
-        int index = socketList.indexOf("");
+        int index = socketList.indexOf(EnhancementManager.get("").getName());
         if (index < 0)
             // No empty sockets
             return false;
         else
             // Yes empty sockets, fill it
             socketList.set(index, enhancement.getName());
-
-        updateLore();
 
         return true;
     }
@@ -139,6 +132,7 @@ public class EnhancedItem {
      */
     public ItemStack getItemStack() {
         itemMeta.getPersistentDataContainer().set(socketsKey, PersistentDataType.LIST.strings(), socketList);
+        updateLore();
         item.setItemMeta(itemMeta);
         return item;
     }

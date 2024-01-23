@@ -38,7 +38,7 @@ public class BindCommand implements CommandExecutor {
                 return false;
             }
 
-            if (!enhancement.isValidGear(player.getInventory().getItemInMainHand().getType())) {
+            if (!enhancement.isValidItem(item)) {
                 sender.sendMessage(Component.text("\"" + args[0] + "\" cannot be bound to this item."));
                 return false;
             }

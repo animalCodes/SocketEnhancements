@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.enhancements.commands.*;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
-import net.wandermc.enhancements.enhancements.*;
 
 public class SocketEnhancements extends JavaPlugin {
     public void onEnable() {
@@ -31,6 +30,6 @@ public class SocketEnhancements extends JavaPlugin {
     }
 
     private void registerEnhancements() {
-        EnhancementManager.store(new DummyEnhancement());
+        // This will be important later I promise
     }
 }

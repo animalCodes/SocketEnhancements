@@ -1,8 +1,8 @@
 package net.wandermc.enhancements.enhancement;
 
-import org.bukkit.Material;
-
 import net.kyori.adventure.text.TextComponent;
+
+import net.wandermc.enhancements.gear.EnhancedItem;
 
 // enhancements.enhancement.Enhancement... hmm
 public interface Enhancement {
@@ -22,10 +22,10 @@ public interface Enhancement {
     public TextComponent getSocketMessage();
 
     /**
-     * Whether `gear` can have this item .
+     * Whether `item` is valid gear for this enhancement.
      *
      * @param gear The gear to check
      * @return Whether this enhancement can be bound to `gear`.
      */
-    public boolean isValidGear(Material gear);
+    public boolean isValidItem(EnhancedItem item);
 }
