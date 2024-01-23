@@ -22,7 +22,7 @@ public class BindCommand implements CommandExecutor {
 
             EnhancedItem item = new EnhancedItem(player.getInventory().getItemInMainHand());
 
-            if (item.getEmptySockets() < 1) {
+            if (!item.hasEmptySocket()) {
                 sender.sendMessage(Component.text("No empty sockets available."));
                 return false;
             }

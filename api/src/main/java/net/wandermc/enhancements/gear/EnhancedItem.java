@@ -54,16 +54,12 @@ public class EnhancedItem {
     }
 
     /**
-     * Gets how many empty sockets are currently on the item.
+     * Determines whether there is at least one empty socket on the item.
      *
-     * @return The number of empty sockets
+     * @return Whether there is an empty socket.
      */
-    public int getEmptySockets() {
-        int count = 0;
-        for (String socket : socketList)
-            if (socket == EnhancementManager.get("").getName())
-                count++;
-        return count;
+    public boolean hasEmptySocket() {
+        return hasEnhancement(EnhancementManager.get(""));
     }
 
     /**
