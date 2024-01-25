@@ -7,10 +7,10 @@ import java.util.HashMap;
  */
 public class EnhancementManager {
     private static final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
-    private static final EmptyEnhancement emptyEnhancement = new EmptyEnhancement();
+    private static final EmptySocket emptySocket = new EmptySocket();
 
     static {
-        store(emptyEnhancement);
+        store(emptySocket);
     }
 
     /**
@@ -36,13 +36,13 @@ public class EnhancementManager {
 
     /**
      * Retrieves the enhancement stored under `name`.
-     * If the enhancement doesn't exist, an EmptyEnhancement will be returned
+     * If the enhancement doesn't exist, an EmptySocket will be returned
      * instead.
      *
      * @param name The name of the enhancement
      * @return The enhancement, or null if it doesn't exist.
      */
     public static Enhancement get(String name) {
-        return enhancementStore.getOrDefault(normaliseName(name), emptyEnhancement);
+        return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
     }
 }
