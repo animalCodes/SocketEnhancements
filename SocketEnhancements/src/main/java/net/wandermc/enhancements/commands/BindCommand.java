@@ -12,6 +12,12 @@ import net.wandermc.enhancements.enhancement.Enhancement;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
 
 public class BindCommand implements CommandExecutor {
+    private EnhancementManager enhancementManager;
+
+    public BindCommand(EnhancementManager manager) {
+        this.enhancementManager = manager;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
@@ -20,7 +26,7 @@ public class BindCommand implements CommandExecutor {
                 return false;
             }
 
-            EnhancedItem item = new EnhancedItem(player.getInventory().getItemInMainHand());
+            EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
 
             if (!item.hasEmptySocket()) {
                 sender.sendMessage(Component.text("No empty sockets available."));
@@ -32,7 +38,7 @@ public class BindCommand implements CommandExecutor {
                 return false;
             }
 
-            Enhancement enhancement = EnhancementManager.get(args[0]);
+            Enhancement enhancement = enhancementManager.get(args[0]);
             if (enhancement == null) {
                 sender.sendMessage(Component.text("Invalid enhancement \"" + args[0] + "\""));
                 return false;

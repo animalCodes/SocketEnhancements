@@ -6,12 +6,10 @@ import java.util.HashMap;
  * Class for storing an instance of each enhancement etc.
  */
 public class EnhancementManager {
-    private static final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
-    private static final EmptySocket emptySocket = new EmptySocket();
+    private final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
+    private final EmptySocket emptySocket = new EmptySocket();
 
-    static {
-        store(emptySocket);
-    }
+    public EnhancementManager() {}
 
     /**
      * Normalises `name` to ease storage and retrieval of enhancements.
@@ -19,7 +17,7 @@ public class EnhancementManager {
      * @param name Starting name
      * @return Normalised version of `name`
      */
-    private static String normaliseName(String name) {
+    private String normaliseName(String name) {
         // TODO expand this
         return name.toLowerCase();
     }
@@ -30,7 +28,7 @@ public class EnhancementManager {
      * 
      * @param enhancement The enhancement to store
      */
-    public static void store(Enhancement enhancement) {
+    public void store(Enhancement enhancement) {
         enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
 
@@ -42,7 +40,7 @@ public class EnhancementManager {
      * @param name The name of the enhancement
      * @return The enhancement, or null if it doesn't exist.
      */
-    public static Enhancement get(String name) {
+    public Enhancement get(String name) {
         return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
     }
 }

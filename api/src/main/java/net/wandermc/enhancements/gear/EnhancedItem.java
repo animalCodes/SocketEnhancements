@@ -17,11 +17,15 @@ import net.wandermc.enhancements.enhancement.EnhancementManager;
 public class EnhancedItem {
     private static NamespacedKey socketsKey = new NamespacedKey(Settings.NAMESPACE, "sockets");
 
+    private EnhancementManager enhancementManager;
+
     private ItemStack item;
     private ItemMeta itemMeta;
     private ArrayList<String> socketList;
 
-    public EnhancedItem(ItemStack item) {
+    public EnhancedItem(EnhancementManager manager, ItemStack item) {
+        this.enhancementManager = manager;
+        
         this.item = item;
         this.itemMeta = item.getItemMeta();
 
@@ -39,7 +43,7 @@ public class EnhancedItem {
     private void updateLore() {
         ArrayList<Component> lore = new ArrayList<Component>(socketList.size());
 
-        socketList.forEach(socketId -> lore.add(EnhancementManager.get(socketId).getSocketMessage()));
+        socketList.forEach(socketId -> lore.add(enhancementManager.get(socketId).getSocketMessage()));
 
         itemMeta.lore(lore);
     }
@@ -59,7 +63,7 @@ public class EnhancedItem {
      * @return Whether there is an empty socket.
      */
     public boolean hasEmptySocket() {
-        return hasEnhancement(EnhancementManager.get(""));
+        return hasEnhancement(enhancementManager.get(""));
     }
 
     /**
@@ -82,7 +86,7 @@ public class EnhancedItem {
         for (int i = 0; i < sockets; i++) {
             // Can't use `bind()` as unlike normal enhancements empty sockets can very much
             // be 'bound' multiple times.
-            socketList.add(EnhancementManager.get("").getName());
+            socketList.add(enhancementManager.get("").getName());
         }
     }
 
@@ -110,7 +114,7 @@ public class EnhancedItem {
         if (hasEnhancement(enhancement))
             return false;
 
-        int index = socketList.indexOf(EnhancementManager.get("").getName());
+        int index = socketList.indexOf(enhancementManager.get("").getName());
         if (index < 0)
             // No empty sockets
             return false;

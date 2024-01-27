@@ -8,13 +8,20 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 
 import net.wandermc.enhancements.gear.EnhancedItem;
+import net.wandermc.enhancements.enhancement.EnhancementManager;
 
 public class AddSocketCommand implements CommandExecutor {
+    private EnhancementManager enhancementManager;
+
+    public AddSocketCommand(EnhancementManager manager) {
+        this.enhancementManager = manager;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             // TODO check item actually exists
-            EnhancedItem item = new EnhancedItem(player.getInventory().getItemInMainHand());
+            EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
 
             if (item.getSockets() >= item.getSocketLimit()) {
                 sender.sendMessage(Component.text("This item already has the maximum number of sockets. (" + item.getSocketLimit() + ")"));

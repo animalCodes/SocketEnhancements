@@ -23,8 +23,10 @@ import net.wandermc.enhancements.enhancement.EnhancementManager;
 
 public class SocketEnhancements extends JavaPlugin {
     public void onEnable() {
-        getCommand("addsocket").setExecutor(new AddSocketCommand());
-        getCommand("bind").setExecutor(new BindCommand());
+        EnhancementManager manager = new EnhancementManager();
+
+        getCommand("addsocket").setExecutor(new AddSocketCommand(manager));
+        getCommand("bind").setExecutor(new BindCommand(manager));
 
         registerEnhancements();
     }
