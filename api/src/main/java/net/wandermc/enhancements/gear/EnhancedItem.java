@@ -101,6 +101,16 @@ public class EnhancedItem {
     }
 
     /**
+     * Removes `enhancement` from the item.
+     *
+     * @param enhancement The enhancement to remove
+     * @return Whether the enhancement was present.
+     */
+    public boolean removeEnhancement(Enhancement enhancement) {
+        return socketList.remove(enhancement.getName());
+    }
+
+    /**
      * Attempts to bind `enhancement` to the item.
      *
      * @param enhancement The enhancement to bind
