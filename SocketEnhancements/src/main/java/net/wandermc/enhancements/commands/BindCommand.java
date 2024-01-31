@@ -23,14 +23,14 @@ public class BindCommand implements CommandExecutor {
         if (sender instanceof Player player) {
             if (player.getInventory().getItemInMainHand().isEmpty()) {
                 sender.sendMessage(Component.text("Can't bind an enhancement to nothing!"));
-                return false;
+                return true;
             }
 
             EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
 
             if (!item.hasEmptySocket()) {
                 sender.sendMessage(Component.text("No empty sockets available."));
-                return false;
+                return true;
             }
 
             if (args.length < 1) {
@@ -46,23 +46,24 @@ public class BindCommand implements CommandExecutor {
 
             if (!enhancement.isValidItem(item)) {
                 sender.sendMessage(Component.text("\"" + args[0] + "\" cannot be bound to this item."));
-                return false;
+                return true;
             }
 
             if (item.hasEnhancement(enhancement)) {
                 sender.sendMessage(Component.text("This item already has that enhancement."));
-                return false;
+                return true;
             }
 
             // EnhancedItem.bind() also does most of the above checks, oh well.
             item.bind(enhancement);
-
             player.getInventory().setItemInMainHand(item.getItemStack());
+
+            sender.sendMessage(Component.text("Bound " + enhancement.getName() + " to held item."));
 
             return true;
         } else {
             sender.sendMessage(Component.text("Only players can run this command."));
-            return false;
+            return true;
         }
     }
 }

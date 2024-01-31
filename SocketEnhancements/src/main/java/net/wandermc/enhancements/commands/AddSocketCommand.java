@@ -20,12 +20,16 @@ public class AddSocketCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            // TODO check item actually exists
+            if (player.getInventory().getItemInMainHand().isEmpty()) {
+                sender.sendMessage(Component.text("Can't add a socket to nothing!"));
+                return true;
+            }
+
             EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
 
             if (item.getSockets() >= item.getSocketLimit()) {
                 sender.sendMessage(Component.text("This item already has the maximum number of sockets. (" + item.getSocketLimit() + ")"));
-                return false;
+                return true;
             }
 
             int numSockets = 1;
@@ -40,16 +44,18 @@ public class AddSocketCommand implements CommandExecutor {
 
             if (item.getSockets() + numSockets > item.getSocketLimit()) {
                 sender.sendMessage(Component.text("Adding that many sockets would put this item over it's socket limit. (" + item.getSocketLimit() + ")"));
-                return false;
+                return true;
             }
 
             item.addSockets(numSockets);
-
             player.getInventory().setItemInMainHand(item.getItemStack());
 
-            return true;
-        }
+            sender.sendMessage(Component.text("Added " + numSockets + " to held item."));
 
-        return false;
+            return true;
+        } else {
+            sender.sendMessage(Component.text("Only players can run this command."));
+            return false;
+        }
     }
 }
