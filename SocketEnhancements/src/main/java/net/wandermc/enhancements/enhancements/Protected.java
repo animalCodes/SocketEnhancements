@@ -11,11 +11,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import net.wandermc.enhancements.enhancement.ActiveEnhancement;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
+import net.wandermc.enhancements.events.EventType;
 import net.wandermc.enhancements.gear.EnhancedItem;
 
 /**
  * Protected enhancement, Stops the item from breaking but will be consumed in the process.
  */
+@EventType(PlayerItemBreakEvent.class)
 public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     private EnhancementManager manager;
     

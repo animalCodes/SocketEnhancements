@@ -19,19 +19,24 @@ package net.wandermc.enhancements;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.enhancements.commands.*;
+import net.wandermc.enhancements.enhancements.*;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
 
 public class SocketEnhancements extends JavaPlugin {
+    private EnhancementManager manager;
+    
     public void onEnable() {
-        EnhancementManager manager = new EnhancementManager();
+        this.manager = new EnhancementManager(this);
 
         getCommand("addsocket").setExecutor(new AddSocketCommand(manager));
         getCommand("bind").setExecutor(new BindCommand(manager));
 
         registerEnhancements();
+
+        manager.activateEnhancements();
     }
 
     private void registerEnhancements() {
-        // This will be important later I promise
+        manager.store(new Protected(manager));
     }
 }
