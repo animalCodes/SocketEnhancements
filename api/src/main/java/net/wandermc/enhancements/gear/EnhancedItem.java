@@ -107,7 +107,12 @@ public class EnhancedItem {
      * @return Whether the enhancement was present.
      */
     public boolean removeEnhancement(Enhancement enhancement) {
-        return socketList.remove(enhancement.getName());
+        int index = socketList.indexOf(enhancement.getName());
+        if (index < 0)
+            return false;
+
+        socketList.set(index, enhancementManager.get("").getName());
+        return true;
     }
 
     /**
