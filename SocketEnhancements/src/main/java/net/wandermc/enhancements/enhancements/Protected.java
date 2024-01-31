@@ -31,7 +31,7 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
     public TextComponent getSocketMessage() {
         // "<Protected>" where the text "Protected" is dark gray.
-        return Component.text("<").append(Component.text("Protected", NamedTextColor.DARK_GRAY)).append(Component.text(">"));
+        return Component.text("<", NamedTextColor.WHITE).append(Component.text("Protected", NamedTextColor.DARK_GRAY)).append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public boolean isValidItem(EnhancedItem item) {
