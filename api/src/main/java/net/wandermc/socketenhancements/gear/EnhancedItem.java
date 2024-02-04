@@ -14,7 +14,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.gear;
+package net.wandermc.socketenhancements.gear;
 
 import java.util.ArrayList;
 
@@ -26,9 +26,9 @@ import org.bukkit.persistence.PersistentDataType;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.enhancements.config.Settings;
-import net.wandermc.enhancements.enhancement.Enhancement;
-import net.wandermc.enhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.config.Settings;
+import net.wandermc.socketenhancements.enhancement.Enhancement;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 
 /**
  * A wrapper class for reading, updating and removing sockets and enhancements

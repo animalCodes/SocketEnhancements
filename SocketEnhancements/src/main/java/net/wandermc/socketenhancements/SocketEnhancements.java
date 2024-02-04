@@ -14,13 +14,13 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements;
+package net.wandermc.socketenhancements;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.enhancements.commands.*;
-import net.wandermc.enhancements.enhancement.EnhancementManager;
-import net.wandermc.enhancements.enhancements.*;
+import net.wandermc.socketenhancements.commands.*;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancements.*;
 
 /**
  * SocketEnhancements: a gear enhancement plugin for PaperMC servers.

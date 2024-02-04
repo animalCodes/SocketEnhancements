@@ -14,7 +14,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.enhancement;
+package net.wandermc.socketenhancements.enhancement;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,8 +27,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.destroystokyo.paper.event.executor.MethodHandleEventExecutor;
 
-import net.wandermc.enhancements.events.AggregateEventListener;
-import net.wandermc.enhancements.events.EventType;
+import net.wandermc.socketenhancements.events.AggregateEventListener;
+import net.wandermc.socketenhancements.events.EventType;
 
 /**
  * Manages storing, registering and activating enhancements.

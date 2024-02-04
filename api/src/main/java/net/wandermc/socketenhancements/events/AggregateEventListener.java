@@ -14,7 +14,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.events;
+package net.wandermc.socketenhancements.events;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import net.wandermc.enhancements.enhancement.ActiveEnhancement;
+import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 
 /**
  * Aggregates multiple ActiveEnhancements that should run on the same event

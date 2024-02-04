@@ -14,7 +14,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.commands;
+package net.wandermc.socketenhancements.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,9 +23,9 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.enhancements.gear.EnhancedItem;
-import net.wandermc.enhancements.enhancement.Enhancement;
-import net.wandermc.enhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.enhancement.Enhancement;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 
 /**
  * /bind: the default, operator-only method of binding an enhancement to an item.

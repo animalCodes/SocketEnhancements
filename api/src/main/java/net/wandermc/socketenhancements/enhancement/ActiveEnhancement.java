@@ -14,21 +14,29 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.events;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.event.Event;
 
 /**
- * Associates an Event type with a class for retrieval at runtime.
+ * Defines enhancements that are run on an event.
+ * Note that implementations will also require an `EventType` annotation with
+ * the same type as `C`
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventType {
+public interface ActiveEnhancement<C extends Event> extends Enhancement {
     /**
-     * I'm literally just adding this comment so maven will generate the goddamn javadoc
-     * @return Holy fuck just work
+     * Determines whether the enhancement's effect should be run.
+     *
+     * @param context The event to check.
+     * @return Whether the enhancement's effect should be run.
      */
-    Class<? extends Event> value();
+    public boolean shouldRun(C context);
+
+    /**
+     * Runs this Enhancement's effect.
+     *
+     * @param context The event being handled.
+     * @return Whether the effect was run successfully.
+     */
+    public boolean runEffect(C context);
 }

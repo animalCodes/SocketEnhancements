@@ -14,11 +14,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.enhancement;
+package net.wandermc.socketenhancements.enhancement;
 
 import net.kyori.adventure.text.TextComponent;
 
-import net.wandermc.enhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
  * Parent interface for different variants of Enhancements

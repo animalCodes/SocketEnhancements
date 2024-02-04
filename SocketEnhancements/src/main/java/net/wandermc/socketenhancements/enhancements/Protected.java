@@ -14,7 +14,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.enhancements.enhancements;
+package net.wandermc.socketenhancements.enhancements;
 
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,10 +25,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-import net.wandermc.enhancements.enhancement.ActiveEnhancement;
-import net.wandermc.enhancements.enhancement.EnhancementManager;
-import net.wandermc.enhancements.events.EventType;
-import net.wandermc.enhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.events.EventType;
+import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
  * Protected enhancement, Stops the item from breaking but will be consumed in the process.
