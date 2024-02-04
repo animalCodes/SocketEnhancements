@@ -27,13 +27,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.events.EventType;
 import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
  * Protected enhancement, Stops the item from breaking but will be consumed in the process.
  */
-@EventType(PlayerItemBreakEvent.class)
 public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     private EnhancementManager manager;
     
@@ -80,5 +78,9 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
         context.getPlayer().getInventory().addItem(itemStack);
 
         return true;
+    }
+
+    public Class<PlayerItemBreakEvent> getEventType() {
+        return PlayerItemBreakEvent.class;
     }
 }

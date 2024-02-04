@@ -28,7 +28,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.destroystokyo.paper.event.executor.MethodHandleEventExecutor;
 
 import net.wandermc.socketenhancements.events.AggregateEventListener;
-import net.wandermc.socketenhancements.events.EventType;
 
 /**
  * Manages storing, registering and activating enhancements.
@@ -69,14 +68,11 @@ public class EnhancementManager {
      * @param enhancement The enhancement to register
      */
     private <C extends Event> void registerActiveEnhancement(ActiveEnhancement<C> enhancement) {
-        // Get the event on which `enhancement` should be run
-        Class<?> event = enhancement.getClass().getAnnotation(EventType.class).value();
-
         AggregateEventListener<C> listener = null;
 
         for (AggregateEventListener<?> activeListener : listeners) {
             // If there's already a listener with a matching eventType, use it
-            if (activeListener.getEventType() == event) {
+            if (activeListener.getEventType() == enhancement.getEventType()) {
                 ((AggregateEventListener<C>) activeListener).add(enhancement);
                 break;
             }

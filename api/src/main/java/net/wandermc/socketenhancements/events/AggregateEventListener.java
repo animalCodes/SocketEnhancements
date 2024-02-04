@@ -38,12 +38,10 @@ public class AggregateEventListener<C extends Event> implements Listener {
      * The type of this Aggregate will be taken from initialEnhancement.
      * @param initialEnhancement The first enhancement added to this Aggregate.
      */
-    @SuppressWarnings("unchecked")
     public AggregateEventListener(ActiveEnhancement<C> initialEnhancement) {
         this.enhancements = new ArrayList<>();
         this.enhancements.add(initialEnhancement);
-        // Store the Event type in a Class so we can access it at runtime
-        this.eventType = (Class<C>) initialEnhancement.getClass().getAnnotation(EventType.class).value();
+        this.eventType = initialEnhancement.getEventType();
     }
 
     /**
