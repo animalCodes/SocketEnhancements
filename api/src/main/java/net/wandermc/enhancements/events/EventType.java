@@ -26,5 +26,9 @@ import org.bukkit.event.Event;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventType {
+    /**
+     * I'm literally just adding this comment so maven will generate the goddamn javadoc
+     * @return Holy fuck just work
+     */
     Class<? extends Event> value();
 }

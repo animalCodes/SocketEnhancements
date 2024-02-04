@@ -20,28 +20,32 @@ import net.kyori.adventure.text.TextComponent;
 
 import net.wandermc.enhancements.gear.EnhancedItem;
 
-// enhancements.enhancement.Enhancement... hmm
+/**
+ * Parent interface for different variants of Enhancements
+ */
 public interface Enhancement {
     /**
-     * The unique identifier for this Enhancement, used for internal storage of Enhancement.
+     * The name of this Enhancement, should be comprised of lowercase alphabetical
+     * characters, with underscores for spacing. (snake_case, [a-z_])
      *
      * @return The name of this enhancement.
      */
     public String getName();
 
     /**
-     * What should be displayed on items with this Enhancement.
-     * Essentially the user-friendly version of .getName()
+     * The lore message that will be displayed on items with this Enhancement.
      *
      * @return The socket message.
      */
     public TextComponent getSocketMessage();
 
     /**
-     * Whether `item` is valid gear for this enhancement.
+     * Whether players should be allowed to bind this enhancement to `item`.
+     * That the item has an empty socket and that it doesn't already have this
+     * enhancement is implied.
      *
-     * @param gear The gear to check
-     * @return Whether this enhancement can be bound to `gear`.
+     * @param item The item to check
+     * @return Whether this enhancement can be bound to `item`.
      */
     public boolean isValidItem(EnhancedItem item);
 }

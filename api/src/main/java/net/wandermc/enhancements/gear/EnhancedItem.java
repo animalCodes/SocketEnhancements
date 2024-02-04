@@ -30,6 +30,10 @@ import net.wandermc.enhancements.config.Settings;
 import net.wandermc.enhancements.enhancement.Enhancement;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
 
+/**
+ * A wrapper class for reading, updating and removing sockets and enhancements
+ * from ItemStacks.
+ */
 public class EnhancedItem {
     private static NamespacedKey socketsKey = new NamespacedKey(Settings.NAMESPACE, "sockets");
 
@@ -39,28 +43,40 @@ public class EnhancedItem {
     private ItemMeta itemMeta;
     private ArrayList<String> socketList;
 
+    /**
+     * Create an EnhancedItem based on `item`
+     * 
+     * @param manager The current EnhancementManager
+     * @param item The item to be enhanced
+     */
     public EnhancedItem(EnhancementManager manager, ItemStack item) {
         this.enhancementManager = manager;
-        
+
         this.item = item;
         this.itemMeta = item.getItemMeta();
 
-        PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
+        PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
         if (!dataContainer.has(socketsKey))
             dataContainer.set(socketsKey, PersistentDataType.LIST.strings(), new ArrayList<String>());
+        // A PersistentDataType.LIST is immutable, but we need to modify it.
+        // So create a new ArrayList based on the ArrayList we might have literally just
+        // stored on the item.
         this.socketList = new ArrayList<String>(dataContainer.get(socketsKey, PersistentDataType.LIST.strings()));
     }
 
     /**
-     * Updates item lore to match socketList.
-     * Essentially converts the unique name of the Enhancement to it's socket
-     * message.
+     * Updates the item's lore to match socketList.
      */
     private void updateLore() {
         ArrayList<Component> lore = new ArrayList<Component>(socketList.size());
 
+        // socketList is the internal list used to identify how many sockets the item
+        // has and, if they are filled, what with. The lore is just a user-friendly
+        // version of that information.
         socketList.forEach(socketId -> lore.add(enhancementManager.get(socketId).getSocketMessage()));
 
+        // Currently, SocketEnhancements greedily resets the entire lore field, meaning
+        // anything previously stored on the item will be deleted.
         itemMeta.lore(lore);
     }
 
@@ -96,7 +112,7 @@ public class EnhancedItem {
      * Note that this will **not** check if adding the given number of sockets would
      * push the item over it's socket limit.
      * 
-     * @param Sockets The number of sockets to add
+     * @param sockets The number of sockets to add
      */
     public void addSockets(int sockets) {
         for (int i = 0; i < sockets; i++) {
@@ -157,9 +173,9 @@ public class EnhancedItem {
     }
 
     /**
-     * Gets the ItemStack held by this instance.
+     * Gets an ItemStack with up-to-date socket/enhancement data.
      * 
-     * @return The item
+     * @return The modified ItemStack
      */
     public ItemStack getItemStack() {
         itemMeta.getPersistentDataContainer().set(socketsKey, PersistentDataType.LIST.strings(), socketList);

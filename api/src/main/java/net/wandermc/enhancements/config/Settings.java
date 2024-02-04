@@ -26,13 +26,32 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
+/**
+ * Class for storing values that may need to be accessed anywhere in the api and that won't change during runtime.
+ */
 public class Settings {
+    // TODO store under plugin namespace (use plugin instance)
+    /**
+     * The namespace used by the api
+     */
     public static final String NAMESPACE = "socketenhancements";
-    // Lore is italic by default, explicitly setting it to "false" overrides this.
+
+    /**
+     * The message displayed on an item's lore for each empty socket it has.
+     */
     public static final TextComponent EMPTY_SOCKET_MESSAGE = Component.text("<Empty Socket>")
+            // Lore is italic by default, explicitly setting it to "false" overrides this.
             .style(Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
+
     // TODO read from configuration file
+    /**
+     * Socket limit used for any item not in SOCKET_LIMITS
+     */
     public static final int DEFAULT_SOCKET_LIMIT = 0;
+    /**
+     * Limits for how many sockets can be applied to certain items.
+     * Be default, only "gear" items can be enhanced.
+     */
     public static final EnumMap<Material, Integer> SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
     static {
         SOCKET_LIMITS.put(Material.BOW, 5);

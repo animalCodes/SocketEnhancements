@@ -23,12 +23,20 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.enhancements.gear.EnhancedItem;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
+import net.wandermc.enhancements.gear.EnhancedItem;
 
+/**
+ * /addsocket: the default, operator-only method of adding sockets to items.
+ */
 public class AddSocketCommand implements CommandExecutor {
     private EnhancementManager enhancementManager;
 
+    /**
+     * Create an AddSocketCommand
+     *
+     * @param manager The current EnhancementManager
+     */
     public AddSocketCommand(EnhancementManager manager) {
         this.enhancementManager = manager;
     }

@@ -31,7 +31,8 @@ import net.wandermc.enhancements.events.AggregateEventListener;
 import net.wandermc.enhancements.events.EventType;
 
 /**
- * Class for storing an instance of each enhancement etc.
+ * Manages storing, registering and activating enhancements.
+ * Only one EnhancementManager should ever be constructed, as creating multiple could lead to enhancements being registered multiple times.
  */
 public class EnhancementManager {
     private final JavaPlugin plugin;
@@ -41,6 +42,11 @@ public class EnhancementManager {
 
     private final EmptySocket emptySocket = new EmptySocket();
 
+    /**
+     * Create an EnhancementManager for `plugin`
+     *
+     * @param plugin The plugin this manager will run under.
+     */
     public EnhancementManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
@@ -64,7 +70,6 @@ public class EnhancementManager {
      */
     private <C extends Event> void registerActiveEnhancement(ActiveEnhancement<C> enhancement) {
         // Get the event on which `enhancement` should be run
-        // TODO check annotation exists
         Class<?> event = enhancement.getClass().getAnnotation(EventType.class).value();
 
         AggregateEventListener<C> listener = null;
@@ -90,11 +95,14 @@ public class EnhancementManager {
     public void activateEnhancements() {
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         listeners.forEach(listener -> {
-            pluginManager.registerEvent(listener.getEventType(),
+            // Yuck
+            pluginManager.registerEvent(
+                    listener.getEventType(),
                     listener,
                     EventPriority.NORMAL,
                     new MethodHandleEventExecutor(listener.getEventType(), listener.getHandler()),
-                    plugin);
+                    plugin
+            );
         });
     }
 

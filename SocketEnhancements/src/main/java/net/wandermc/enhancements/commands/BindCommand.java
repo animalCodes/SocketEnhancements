@@ -27,9 +27,17 @@ import net.wandermc.enhancements.gear.EnhancedItem;
 import net.wandermc.enhancements.enhancement.Enhancement;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
 
+/**
+ * /bind: the default, operator-only method of binding an enhancement to an item.
+ */
 public class BindCommand implements CommandExecutor {
     private EnhancementManager enhancementManager;
 
+    /**
+     * Create a BindCommand
+     *
+     * @param manager The current EnhancementManager
+     */
     public BindCommand(EnhancementManager manager) {
         this.enhancementManager = manager;
     }

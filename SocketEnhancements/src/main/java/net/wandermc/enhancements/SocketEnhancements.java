@@ -19,9 +19,12 @@ package net.wandermc.enhancements;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.enhancements.commands.*;
-import net.wandermc.enhancements.enhancements.*;
 import net.wandermc.enhancements.enhancement.EnhancementManager;
+import net.wandermc.enhancements.enhancements.*;
 
+/**
+ * SocketEnhancements: a gear enhancement plugin for PaperMC servers.
+ */
 public class SocketEnhancements extends JavaPlugin {
     private EnhancementManager manager;
     
@@ -36,6 +39,9 @@ public class SocketEnhancements extends JavaPlugin {
         manager.activateEnhancements();
     }
 
+    /**
+     * Registers all SocketEnhancements core enhancements.
+     */
     private void registerEnhancements() {
         manager.store(new Protected(manager));
     }

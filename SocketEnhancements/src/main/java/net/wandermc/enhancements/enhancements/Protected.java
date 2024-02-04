@@ -37,6 +37,11 @@ import net.wandermc.enhancements.gear.EnhancedItem;
 public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     private EnhancementManager manager;
     
+    /**
+     * Create a Protected enhancement
+     * 
+     * @param manager The current EnhancementManager
+     */
     public Protected(EnhancementManager manager) {
         this.manager = manager;
     }
@@ -46,7 +51,7 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Protected>" where the text "Protected" is dark gray.
+        // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
         return Component.text("<", NamedTextColor.WHITE).append(Component.text("Protected", NamedTextColor.DARK_GRAY)).append(Component.text(">", NamedTextColor.WHITE));
     }
 

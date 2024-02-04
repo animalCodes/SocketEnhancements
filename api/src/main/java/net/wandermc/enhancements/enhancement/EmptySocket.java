@@ -23,6 +23,10 @@ import net.wandermc.enhancements.gear.EnhancedItem;
 
 /**
  * Enhancement representing an empty socket.
+ * Note that due to representing an empty socket, (rather than a filled one)
+ * this breaks a few rules that normal Enhancements must adhere to, and should
+ * **not** be used as a reference.
+ * Instead, please use Protected for that purpose.
  */
 public class EmptySocket implements Enhancement {
     public String getName() {
@@ -37,4 +41,3 @@ public class EmptySocket implements Enhancement {
         return item.getSocketLimit() > item.getSockets();
     }
 }
-

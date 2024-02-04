@@ -20,11 +20,14 @@ import org.bukkit.event.Event;
 
 /**
  * Defines enhancements that are run on an event.
+ * Note that implementations will also require an `EventType` annotation with
+ * the same type as `C`
  */
 public interface ActiveEnhancement<C extends Event> extends Enhancement {
     /**
      * Determines whether the enhancement's effect should be run.
      *
+     * @param context The event to check.
      * @return Whether the enhancement's effect should be run.
      */
     public boolean shouldRun(C context);
@@ -32,6 +35,7 @@ public interface ActiveEnhancement<C extends Event> extends Enhancement {
     /**
      * Runs this Enhancement's effect.
      *
+     * @param context The event being handled.
      * @return Whether the effect was run successfully.
      */
     public boolean runEffect(C context);
