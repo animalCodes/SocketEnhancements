@@ -21,28 +21,32 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancements.*;
+import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 
 /**
  * SocketEnhancements: a gear enhancement plugin for PaperMC servers.
  */
 public class SocketEnhancements extends JavaPlugin {
-    private EnhancementManager manager;
+    private EnhancementManager enhancementManager;
+    private OrbOfBindingManager orbOfBindingManager;
     
     public void onEnable() {
-        this.manager = new EnhancementManager(this);
+        this.enhancementManager = new EnhancementManager(this);
 
-        getCommand("addsocket").setExecutor(new AddSocketCommand(manager));
-        getCommand("bind").setExecutor(new BindCommand(manager));
+        getCommand("addsocket").setExecutor(new AddSocketCommand(enhancementManager));
+        getCommand("bind").setExecutor(new BindCommand(enhancementManager));
+
+        // Simply constructing an OrbOfBindingManager is sufficient to activate orbs of binding.
+        this.orbOfBindingManager = new OrbOfBindingManager(this, enhancementManager);
 
         registerEnhancements();
-
-        manager.activateEnhancements();
+        enhancementManager.activateEnhancements();
     }
 
     /**
      * Registers all SocketEnhancements core enhancements.
      */
     private void registerEnhancements() {
-        manager.store(new Protected(manager));
+        enhancementManager.store(new Protected(enhancementManager));
     }
 }
