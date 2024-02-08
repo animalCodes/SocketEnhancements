@@ -119,32 +119,22 @@ public class OrbOfBindingManager implements Listener {
      */
     @EventHandler
     public void handleCraft(PrepareItemCraftEvent event) {
-        // This is messy, but .getInventory().first() won't work due to it also looking at the result slot 
-        // and therefore breaking the orb of binding crafting recipe.
+        // Try to find orb of binding and item being bound in crafting table
         boolean hasOrb = false;
-        for (ItemStack item : event.getInventory().getMatrix()) {
-            if (item == null) // Empty slots are represented by nulls because fuck you
-                continue;
-            if (item.isSimilar(orbOfBinding)) {
-                hasOrb = true;
-                break;
-            }
-        }
-        // We only care about the event if there is an Orb of Binding involved in the "crafting matrix".
-        if (!hasOrb)
-            return;
-
-
-        // Try to find next item in the table which isn't the orb
         EnhancedItem itemToUpgrade = null;
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (item == null)
+            if (item == null) // Empty slots are represented by null
                 continue;
-            if (!item.isSimilar(orbOfBinding))
+
+            if (item.isSimilar(orbOfBinding))
+                hasOrb = true;
+            else
                 itemToUpgrade = new EnhancedItem(manager, item.clone());
         }
       
-        if (itemToUpgrade == null)
+        // We only care about the event if the crafting matrix contains just an orb 
+        // of binding and another item.
+        if (!hasOrb || itemToUpgrade == null)
             return;
 
         if (itemToUpgrade.getSocketLimit() > itemToUpgrade.getSockets()) {
@@ -152,7 +142,7 @@ public class OrbOfBindingManager implements Listener {
             itemToUpgrade.addSockets(1);
             event.getInventory().setResult(itemToUpgrade.getItemStack());
         } else {
-            // Hide dummy result item
+            // In case item can't have a socket added, hide dummy result item.
             event.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }
