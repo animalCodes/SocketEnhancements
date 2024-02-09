@@ -113,33 +113,33 @@ public class OrbOfBindingManager implements Listener {
     }
 
     /**
-     * Add a socket to an item when combined with an orb of binding in a crafting table.
+     * Add sockets to an item when combined with one or more orbs of binding in a crafting table.
      *
      * @param event The event
      */
     @EventHandler
     public void handleCraft(PrepareItemCraftEvent event) {
-        // Try to find orb of binding and item being bound in crafting table
-        boolean hasOrb = false;
+        // Try to find orbs of binding and item being bound in crafting table
+        int orbs = 0;
         EnhancedItem itemToUpgrade = null;
         for (ItemStack item : event.getInventory().getMatrix()) {
             if (item == null) // Empty slots are represented by null
                 continue;
 
             if (item.isSimilar(orbOfBinding))
-                hasOrb = true;
+                orbs++;
             else
                 itemToUpgrade = new EnhancedItem(manager, item.clone());
         }
       
-        // We only care about the event if the crafting matrix contains just an orb 
+        // We only care about the event if the crafting matrix contains at least one orb 
         // of binding and another item.
-        if (!hasOrb || itemToUpgrade == null)
+        if (orbs < 1 || itemToUpgrade == null)
             return;
 
-        if (itemToUpgrade.getSocketLimit() > itemToUpgrade.getSockets()) {
+        if (itemToUpgrade.getSocketLimit() >= itemToUpgrade.getSockets() + orbs) {
             // Item exists and can have a socket added, do so.
-            itemToUpgrade.addSockets(1);
+            itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.getItemStack());
         } else {
             // In case item can't have a socket added, hide dummy result item.
