@@ -18,6 +18,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Collection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -126,5 +127,15 @@ public class EnhancementManager {
      */
     public Enhancement get(String name) {
         return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
+    }
+
+    /**
+     * Gets all currently stored enhancements.
+     *
+     * @return All current enhancements.
+     */
+    public Collection<Enhancement> getAll() {
+        enhancementStore.values().removeIf(e -> e instanceof EmptySocket);
+        return enhancementStore.values();
     }
 }

@@ -22,6 +22,7 @@ import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancements.*;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
 
 /**
  * SocketEnhancements: a gear enhancement plugin for PaperMC servers.
@@ -29,18 +30,20 @@ import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 public class SocketEnhancements extends JavaPlugin {
     private EnhancementManager enhancementManager;
     private OrbOfBindingManager orbOfBindingManager;
+    private EnhancementTableManager enhancementTableManager;
     
     public void onEnable() {
         this.enhancementManager = new EnhancementManager(this);
 
+        registerEnhancements();
+        enhancementManager.activateEnhancements();
+
         getCommand("addsocket").setExecutor(new AddSocketCommand(enhancementManager));
         getCommand("bind").setExecutor(new BindCommand(enhancementManager));
 
-        // Simply constructing an OrbOfBindingManager is sufficient to activate orbs of binding.
         this.orbOfBindingManager = new OrbOfBindingManager(this, enhancementManager);
+        this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager);
 
-        registerEnhancements();
-        enhancementManager.activateEnhancements();
     }
 
     /**
