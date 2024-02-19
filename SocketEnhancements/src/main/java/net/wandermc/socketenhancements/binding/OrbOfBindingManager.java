@@ -138,11 +138,11 @@ public class OrbOfBindingManager implements Listener {
             return;
 
         if (itemToUpgrade.getSocketLimit() >= itemToUpgrade.getSockets() + orbs) {
-            // Item exists and can have a socket added, do so.
+            // Item exists and can have `orbs` sockets added, do so.
             itemToUpgrade.addSockets(orbs);
-            event.getInventory().setResult(itemToUpgrade.getItemStack());
+            event.getInventory().setResult(itemToUpgrade.update());
         } else {
-            // In case item can't have a socket added, hide dummy result item.
+            // In case item can't have the orbs added, hide dummy result item.
             event.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }

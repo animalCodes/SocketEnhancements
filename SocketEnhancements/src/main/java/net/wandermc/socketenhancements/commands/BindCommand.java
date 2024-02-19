@@ -63,6 +63,7 @@ public class BindCommand implements CommandExecutor {
             }
 
             Enhancement enhancement = enhancementManager.get(args[0]);
+            // TODO check for EmptySocket instead
             if (enhancement == null) {
                 sender.sendMessage(Component.text("Invalid enhancement \"" + args[0] + "\""));
                 return false;
@@ -80,7 +81,7 @@ public class BindCommand implements CommandExecutor {
 
             // EnhancedItem.bind() also does most of the above checks, oh well.
             item.bind(enhancement);
-            player.getInventory().setItemInMainHand(item.getItemStack());
+            item.update();
 
             sender.sendMessage(Component.text("Bound " + enhancement.getName() + " to held item."));
 

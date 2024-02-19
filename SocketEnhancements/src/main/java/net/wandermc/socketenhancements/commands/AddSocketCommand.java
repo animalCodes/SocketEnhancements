@@ -72,7 +72,7 @@ public class AddSocketCommand implements CommandExecutor {
             }
 
             item.addSockets(numSockets);
-            player.getInventory().setItemInMainHand(item.getItemStack());
+            item.update();
 
             sender.sendMessage(Component.text("Added " + numSockets + " to held item."));
 

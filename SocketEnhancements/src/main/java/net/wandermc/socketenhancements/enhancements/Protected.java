@@ -55,7 +55,7 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
     public boolean isValidItem(EnhancedItem item) {
         // If an item can take damage, it can break.
-        return item.getItemStack().getItemMeta() instanceof Damageable;
+        return item.update().getItemMeta() instanceof Damageable;
     }
 
     public boolean shouldRun(PlayerItemBreakEvent context)  {
@@ -66,7 +66,7 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
         EnhancedItem enhancedItem = new EnhancedItem(manager, context.getBrokenItem());
         enhancedItem.removeEnhancement(this);
 
-        ItemStack itemStack = enhancedItem.getItemStack();
+        ItemStack itemStack = enhancedItem.update();
 
         // Get and update damage
         ItemMeta itemMeta = itemStack.getItemMeta();

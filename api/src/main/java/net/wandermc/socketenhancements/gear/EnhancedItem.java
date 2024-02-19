@@ -44,10 +44,12 @@ public class EnhancedItem {
     private ArrayList<String> socketList;
 
     /**
-     * Create an EnhancedItem based on `item`
+     * Create an EnhancedItem around `item`.
+     * Note that `.update()` will need to be called for any subsequent changes to be
+     * applied.
      * 
      * @param manager The current EnhancementManager
-     * @param item The item to be enhanced
+     * @param item    The item to work on.
      */
     public EnhancedItem(EnhancementManager manager, ItemStack item) {
         this.enhancementManager = manager;
@@ -55,6 +57,7 @@ public class EnhancedItem {
         this.item = item;
         this.itemMeta = item.getItemMeta();
 
+        // Ensure the item has a socket list before doing anything with it
         PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
         if (!dataContainer.has(socketsKey))
             dataContainer.set(socketsKey, PersistentDataType.LIST.strings(), new ArrayList<String>());
@@ -71,12 +74,12 @@ public class EnhancedItem {
         ArrayList<Component> lore = new ArrayList<Component>(socketList.size());
 
         // socketList is the internal list used to identify how many sockets the item
-        // has and, if they are filled, what with. The lore is just a user-friendly
-        // version of that information.
+        // has and, if they are filled, what with. The lore is basically just a
+        // user-friendly version of that information.
         socketList.forEach(socketId -> lore.add(enhancementManager.get(socketId).getSocketMessage()));
 
         // Currently, SocketEnhancements greedily resets the entire lore field, meaning
-        // anything previously stored on the item will be deleted.
+        // any none-SE lore will be deleted. Ah well.
         itemMeta.lore(lore);
     }
 
@@ -173,11 +176,11 @@ public class EnhancedItem {
     }
 
     /**
-     * Gets an ItemStack with up-to-date socket/enhancement data.
+     * Applies all enhancement/socket changes to the ItemStack.
      * 
-     * @return The modified ItemStack
+     * @return The ItemStack.
      */
-    public ItemStack getItemStack() {
+    public ItemStack update() {
         itemMeta.getPersistentDataContainer().set(socketsKey, PersistentDataType.LIST.strings(), socketList);
         updateLore();
         item.setItemMeta(itemMeta);
