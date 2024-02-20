@@ -28,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
@@ -38,7 +39,12 @@ public class EnhancementTableManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancementManager manager;
 
-    private final ArrayList<Enhancement> enhancements;
+    // Enhancements that can be picked based on which option was selected 
+    // in the enchanting table.
+    // Each pool includes Enhancements of lesser rarities.
+    private final ArrayList<Enhancement> enhancementPoolI;
+    private final ArrayList<Enhancement> enhancementPoolII;
+    private final ArrayList<Enhancement> enhancementPoolIII;
 
     /**
      * Create an EnhancementTableManager for `plugin`.
@@ -50,21 +56,43 @@ public class EnhancementTableManager implements Listener {
         this.plugin = plugin;
         this.manager = manager;
 
-        this.enhancements = new ArrayList<Enhancement>(manager.getAll());
+        enhancementPoolI = new ArrayList();
+        enhancementPoolII = new ArrayList();
+        enhancementPoolIII = new ArrayList();
+
+        // Fill out Enhancement pools with all currently registered Enhancements.
+        // Enhancements will be placed in the pool of their rarity plus any lesser 
+        // rarity pools.
+        for (Enhancement enhancement : manager.getAll()) {
+            switch (enhancement.getRarity()) {
+                case I: 
+                    enhancementPoolI.add(enhancement);
+                case II: 
+                    enhancementPoolII.add(enhancement);
+                case III: 
+                    enhancementPoolIII.add(enhancement);
+                    break;
+            }
+        }
+
+        enhancementPoolI.trimToSize();
+        enhancementPoolII.trimToSize();
+        enhancementPoolIII.trimToSize();
 
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**
-     * Pick a random enhancement from `this.enhancements`.
+     * Pick a random enhancement from `pool`.
      *
+     * @param pool A list of Enhancements to choose from.
      * @return The Enhancement.
      */
-    private Enhancement pickRandomEnhancement() {
+    private Enhancement pickRandomEnhancement(ArrayList<Enhancement> pool) {
         double random = Math.random();
         random = (random == 0 ? 0.9 : random); // Avoid division by zero
-        return enhancements.get(
-            (int)Math.floor(random * enhancements.size()));
+        return pool.get(
+            (int)Math.floor(random * pool.size()));
     }
 
     /**
@@ -94,10 +122,26 @@ public class EnhancementTableManager implements Listener {
         if (!item.hasEmptySocket())
             return;
 
+        // Choose pool to get enhancement from based on which button the player pressed
+        ArrayList<Enhancement> pool;
+        switch (event.whichButton()) {
+            case 0:
+                pool = this.enhancementPoolI;
+                break;
+            case 1:
+                pool = this.enhancementPoolII;
+                break;
+            // If the player manages to find and press a 4th button, they'll get the 
+            // rarest pool. Good for them!
+            default:
+                pool = this.enhancementPoolIII;
+                break;
+        }
+
         // Keep picking random enhancements until we get a valid enhancement.
-        Enhancement enhancement = pickRandomEnhancement();
+        Enhancement enhancement = pickRandomEnhancement(pool);
         while (!item.bind(enhancement))
-            enhancement = pickRandomEnhancement();
+            enhancement = pickRandomEnhancement(pool);
 
         item.update();
 
@@ -108,7 +152,7 @@ public class EnhancementTableManager implements Listener {
         // It is possible to have 0 levels but still use an enchanting table if you are in creative,
         // but if a player's level drops below 0 an IllegalArgumentException will be thrown.
         // .. So let's just not decrement levels if doing so would make them negative.
-        if (event.getEnchanter().getLevel() < 1)
+        if (!(event.getEnchanter().getLevel() < 1))
             event.getEnchanter().setLevel(event.getEnchanter().getLevel() - 1);
     }
 }
