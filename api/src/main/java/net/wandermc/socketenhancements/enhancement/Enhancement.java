@@ -40,7 +40,15 @@ public interface Enhancement {
     public TextComponent getSocketMessage();
 
     /**
-     * Whether players should be allowed to bind this enhancement to `item`.
+     * How rare this Enhancement is.
+     * See EnhancementRarity itself for more information on how this should be used.
+     *
+     * @return The rarity.
+     */
+    public EnhancementRarity getRarity();
+
+    /**
+     * Whether players should be allowed to bind this Enhancement to `item`.
      * That the item has an empty socket and that it doesn't already have this
      * enhancement is implied.
      *

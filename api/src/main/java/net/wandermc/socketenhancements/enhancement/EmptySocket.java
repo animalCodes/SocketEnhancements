@@ -37,6 +37,10 @@ public class EmptySocket implements Enhancement {
         return Settings.EMPTY_SOCKET_MESSAGE;
     }
 
+    public EnhancementRarity getRarity() {
+        return EnhancementRarity.IMPOSSIBLE;
+    }
+
     public boolean isValidItem(EnhancedItem item) {
         return item.getSocketLimit() > item.getSockets();
     }

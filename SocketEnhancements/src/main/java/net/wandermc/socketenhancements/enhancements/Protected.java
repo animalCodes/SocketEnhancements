@@ -27,6 +27,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
@@ -51,6 +52,10 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     public TextComponent getSocketMessage() {
         // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
         return Component.text("<", NamedTextColor.WHITE).append(Component.text("Protected", NamedTextColor.DARK_GRAY)).append(Component.text(">", NamedTextColor.WHITE));
+    }
+
+    public EnhancementRarity getRarity() {
+        return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
