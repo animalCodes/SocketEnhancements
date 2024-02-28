@@ -16,25 +16,41 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Collection;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.destroystokyo.paper.event.executor.MethodHandleEventExecutor;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
+
+import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.events.AggregateEventListener;
+import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
  * Manages storing, registering and activating enhancements.
- * Only one EnhancementManager should ever be constructed, as creating multiple could lead to enhancements being registered multiple times.
+ * Only one EnhancementManager should ever be constructed, as creating multiple
+ * could lead to enhancements being registered multiple times.
  */
 public class EnhancementManager {
+    private static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem", 
+            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
+    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
+
     private final JavaPlugin plugin;
 
     private final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
@@ -49,6 +65,8 @@ public class EnhancementManager {
      */
     public EnhancementManager(JavaPlugin plugin) {
         this.plugin = plugin;
+
+        Settings.SOCKET_LIMITS.put(ENHANCEMENT_GEM_TYPE, 1);
     }
 
     /**
@@ -98,9 +116,32 @@ public class EnhancementManager {
                     listener,
                     EventPriority.NORMAL,
                     new MethodHandleEventExecutor(listener.getEventType(), listener.getHandler()),
-                    plugin
-            );
+                    plugin);
         });
+    }
+
+    /**
+     * Create an enhancement gem of type `enhancement`.
+     *
+     * An "Enhancement Gem" is an ItemStack of type `Settings.enhancementGemType`
+     * and a single socket. The enhancement in that socket is the "type" of the
+     * Enhancement Gem.
+     *
+     * @param enhancement The Enhancement the gem represents.
+     * @return An Enhancement Gem.
+     */
+    public ItemStack createGemOfType(Enhancement enhancement) {
+        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
+
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(ENHANCEMENT_GEM_NAME);
+        item.setItemMeta(meta);
+
+        EnhancedItem enhancedItem = new EnhancedItem(this, item);
+        enhancedItem.addSockets(1);
+        enhancedItem.bind(enhancement);
+
+        return enhancedItem.update();
     }
 
     /**

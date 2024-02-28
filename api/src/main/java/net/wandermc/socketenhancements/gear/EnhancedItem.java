@@ -28,6 +28,7 @@ import net.kyori.adventure.text.Component;
 
 import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
+import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 
 /**
@@ -148,6 +149,26 @@ public class EnhancedItem {
 
         socketList.set(index, enhancementManager.get("").getName());
         return true;
+    }
+
+    /**
+     * Removes the last Enhancement from the item.
+     *
+     * @return The last Enhancement, or an EmptySocket if none are bound.
+     */
+    public Enhancement pop() {
+        Enhancement enhancement = null;
+        for (int i = 0; i < socketList.size(); i++) {
+            if (enhancementManager.get(socketList.get(i)) instanceof EmptySocket)
+                break;
+
+            enhancement = enhancementManager.get(socketList.get(i));
+        }
+
+        if (enhancement != null)
+            removeEnhancement(enhancement);
+
+        return enhancement;
     }
 
     /**
