@@ -165,10 +165,11 @@ public class EnhancedItem {
             enhancement = enhancementManager.get(socketList.get(i));
         }
 
-        if (enhancement != null)
+        if (enhancement != null) {
             removeEnhancement(enhancement);
-
-        return enhancement;
+            return enhancement;
+        } else 
+            return enhancementManager.get("");
     }
 
     /**
