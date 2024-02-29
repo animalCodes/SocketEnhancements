@@ -16,29 +16,38 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.config.Settings;
 
 /**
  * Manages the *use* (not creation) of Enhancement Gems.
+ *
+ * To be more specific, while EnhancementManager handles the creation of Enhancement Gems, 
+ * (`.createGemOfType()`) this makes them actually usable. Allowing for them to be obtained 
+ * and added to items, and stopping them from being placed.
  */
 public class EnhancementGemManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancementManager manager;
 
-    // Dummy enhancement gem for comparing in `.handlePlace()`
     private final ItemStack dummyGem;
 
     /**
@@ -52,7 +61,25 @@ public class EnhancementGemManager implements Listener {
 
         this.dummyGem = manager.createGemOfType(manager.get(""));
 
+        registerRecipe();
+
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    /**
+     * Creates and registers recipe for applying Enhancement Gems to items.
+     */
+    private void registerRecipe() {
+        ShapelessRecipe recipe = new ShapelessRecipe(
+                new NamespacedKey(Settings.NAMESPACE, "enhancement_gem_addition"), 
+                new ItemStack(Material.STONE, 1));
+
+        // Any item with a socket limit (and can therefore be enhanced)
+        recipe.addIngredient(new RecipeChoice.MaterialChoice(
+                Settings.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
+        recipe.addIngredient(dummyGem.getType());
+
+        Bukkit.addRecipe(recipe);
     }
 
     /**
@@ -70,18 +97,18 @@ public class EnhancementGemManager implements Listener {
             return;
         if (event.getClickedBlock().getType() != Material.GRINDSTONE)
             return;
-        if (event.getHand() != EquipmentSlot.HAND)
-            return;
         if (!event.getPlayer().isSneaking())
             return;
-
-        // Okay, we now know the player right-clicked a grindstone while sneaking.
-        
+        if (event.getHand() != EquipmentSlot.HAND)
+            return;
         ItemStack item = event.getItem();
         if (item == null)
             return;
-        EnhancedItem enhancedItem = new EnhancedItem(manager, item);
 
+        // Okay, we now know the player right-clicked a grindstone while sneaking 
+        // and holding an item.
+        
+        EnhancedItem enhancedItem = new EnhancedItem(manager, item);
         Enhancement enhancement = enhancedItem.pop();
         if (enhancement instanceof EmptySocket)
             return;
@@ -95,13 +122,60 @@ public class EnhancementGemManager implements Listener {
     }
 
     /**
+     * Add Enhancements to an item when combined with Enhancement Gems in a crafting table.
+     *
+     * @param event The event
+     */
+    @EventHandler
+    public void handleCraft(PrepareItemCraftEvent event) {
+        // Find gems and item to be enhanced in crafting "matrix"
+        ArrayList<Enhancement> enhancements = new ArrayList<>();
+        EnhancedItem itemToEnhance = null;
+        for (ItemStack item : event.getInventory().getMatrix()) {
+            if (item == null) // Empty slots are represented by null
+                continue;
+
+            if (item.getType() == dummyGem.getType()) {
+                Enhancement enhancement = new EnhancedItem(manager, item).pop();
+                if (enhancement instanceof EmptySocket) {
+                    // Normal end crystal in crafting table, cover our backs and run.
+                    // "Prepare" events can't be cancelled, emptying the result is the next best thing.
+                    event.getInventory().setResult(new ItemStack(Material.AIR));
+                    return;
+                } else {
+                    enhancements.add(enhancement);
+                }
+            } else
+                itemToEnhance = new EnhancedItem(manager, item.clone());
+        }
+
+        // Maybe we shouldn't add an empty list to a none-existent item, idk.
+        if (enhancements.size() < 1 || itemToEnhance == null)
+            return;
+
+        // Try to add all enhancements
+        // if a binding fails, don't allow the player to take the item.
+        for (Enhancement enhancement : enhancements) {
+            if (!itemToEnhance.bind(enhancement)) {
+                event.getInventory().setResult(new ItemStack(Material.AIR));
+                return;
+            }
+        }
+
+        event.getInventory().setResult(itemToEnhance.update());
+    }
+
+    /**
      * Stop players from placing enhancement gems.
      *
      * @param event The event
      */
     @EventHandler
-    public void handlePlace(BlockPlaceEvent event) {
-        if (event.getItemInHand().isSimilar(dummyGem))
+    public void handlePlace(EntityPlaceEvent event) {
+        ItemStack placedItem = event.getPlayer().getInventory().getItem(event.getHand());
+        // If placed item is an end crystal with an enhancement, aka an Enhancement Gem
+        if (placedItem.getType() == dummyGem.getType() &&
+            !(new EnhancedItem(manager, placedItem).pop() instanceof EmptySocket))
             event.setCancelled(true);
     }
 }
