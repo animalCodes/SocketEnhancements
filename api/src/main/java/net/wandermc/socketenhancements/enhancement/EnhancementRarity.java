@@ -36,7 +36,7 @@ public enum EnhancementRarity {
     III,
 
     /**
-     * Impossible to obtain normally, should only be used for special case
+     * Impossible to obtain normally, mainly used for special case
      * enhancements such as EmptySocket.
      */
     IMPOSSIBLE

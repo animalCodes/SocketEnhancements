@@ -53,6 +53,7 @@ public class EnhancementGemManager implements Listener {
     /**
      * Create an EnhancementGemManager for `plugin`.
      *
+     * @param plugin The plugin this manager is working for
      * @param manager The current EnhancementManager
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancementManager manager) {
@@ -74,7 +75,7 @@ public class EnhancementGemManager implements Listener {
                 new NamespacedKey(Settings.NAMESPACE, "enhancement_gem_addition"), 
                 new ItemStack(Material.STONE, 1));
 
-        // Any item with a socket limit (and can therefore be enhanced)
+        // If an item has a socket limit, it can be enhanced
         recipe.addIngredient(new RecipeChoice.MaterialChoice(
                 Settings.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
         recipe.addIngredient(dummyGem.getType());

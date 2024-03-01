@@ -89,6 +89,7 @@ public class OrbOfBindingManager implements Listener {
                 new NamespacedKey(Settings.NAMESPACE, "orb_of_binding_craft"), orbOfBinding);
 
         // Players must travel great distances to obtain an orb of binding ..
+        // TODO make recipe configurable
         orbOfBindingRecipe.addIngredient(Material.END_CRYSTAL);
         orbOfBindingRecipe.addIngredient(Material.PRISMARINE_SHARD);
         orbOfBindingRecipe.addIngredient(Material.CHORUS_FRUIT);
@@ -98,7 +99,7 @@ public class OrbOfBindingManager implements Listener {
 
         // Recipe for adding an orb of binding to an item.
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
-                // Paper won't let me set the result to AIR , so in the (hopefully impossible) case where the recipe 
+                // Paper won't let me set the result to AIR, so in the (hopefully impossible) case where the recipe 
                 // matches and the handler doesn't pick up on it, there will be a random stone block result..
                 new NamespacedKey(Settings.NAMESPACE, "orb_of_binding_upgrade"), 
                 new ItemStack(Material.STONE, 1));

@@ -36,6 +36,7 @@ public class AggregateEventListener<C extends Event> implements Listener {
     /**
      * Create a new AggregateEventListener.
      * The type of this Aggregate will be taken from initialEnhancement.
+     *
      * @param initialEnhancement The first enhancement added to this Aggregate.
      */
     public AggregateEventListener(ActiveEnhancement<C> initialEnhancement) {
@@ -90,7 +91,9 @@ public class AggregateEventListener<C extends Event> implements Listener {
             if (e.getClass() == enhancement.getClass())
                 return false;
         }
+
         enhancements.add(enhancement);
+
         return true;
     }
 

@@ -43,7 +43,7 @@ import net.wandermc.socketenhancements.gear.EnhancedItem;
 
 /**
  * Manages storing, registering and activating enhancements.
- * Only one EnhancementManager should ever be constructed, as creating multiple
+ * Only one EnhancementManager should be active at a time, as creating multiple
  * could lead to enhancements being registered multiple times.
  */
 public class EnhancementManager {
@@ -54,6 +54,7 @@ public class EnhancementManager {
     private final JavaPlugin plugin;
 
     private final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
+    // TODO A doubly-linked list isn't very memory-efficient for this, maybe switch to ArrayList?
     private final LinkedList<AggregateEventListener<? extends Event>> listeners = new LinkedList<>();
 
     private final EmptySocket emptySocket = new EmptySocket();
@@ -123,9 +124,8 @@ public class EnhancementManager {
     /**
      * Create an enhancement gem of type `enhancement`.
      *
-     * An "Enhancement Gem" is an ItemStack of type `Settings.enhancementGemType`
-     * and a single socket. The enhancement in that socket is the "type" of the
-     * Enhancement Gem.
+     * An "Enhancement Gem" is an end crystal with a single socket. 
+     * The enhancement in that socket is the "type" of the Enhancement Gem.
      *
      * @param enhancement The Enhancement the gem represents.
      * @return An Enhancement Gem.
@@ -154,6 +154,7 @@ public class EnhancementManager {
     public void store(Enhancement enhancement) {
         if (enhancement instanceof ActiveEnhancement<?> activeEnhancement)
             registerActiveEnhancement(activeEnhancement);
+        // TODO log warning if enhancement isn't a valid extension of Enhancement
 
         enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
@@ -164,7 +165,7 @@ public class EnhancementManager {
      * instead.
      *
      * @param name The name of the enhancement
-     * @return The enhancement, or null if it doesn't exist.
+     * @return The enhancement, or an EmptySocket if it doesn't exist.
      */
     public Enhancement get(String name) {
         return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
@@ -176,7 +177,6 @@ public class EnhancementManager {
      * @return All current enhancements.
      */
     public Collection<Enhancement> getAll() {
-        enhancementStore.values().removeIf(e -> e instanceof EmptySocket);
         return enhancementStore.values();
     }
 }

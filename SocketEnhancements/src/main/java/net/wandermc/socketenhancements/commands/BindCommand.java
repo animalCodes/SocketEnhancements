@@ -57,6 +57,8 @@ public class BindCommand implements CommandExecutor {
                 return true;
             }
 
+            // TODO allow for multiple enhancements to be specified at once
+            // TODO if no enhancements are given, pick a random one
             if (args.length < 1) {
                 sender.sendMessage(Component.text("No enhancement given."));
                 return false;

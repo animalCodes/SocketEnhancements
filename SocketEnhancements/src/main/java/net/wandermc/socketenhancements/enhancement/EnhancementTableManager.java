@@ -71,6 +71,7 @@ public class EnhancementTableManager implements Listener {
                     enhancementPoolII.add(enhancement);
                 case III: 
                     enhancementPoolIII.add(enhancement);
+                default:
                     break;
             }
         }
@@ -90,8 +91,7 @@ public class EnhancementTableManager implements Listener {
      */
     private Enhancement pickRandomEnhancement(ArrayList<Enhancement> pool) {
         double random = Math.random();
-        return pool.get(
-            (int)Math.floor(random * pool.size()));
+        return pool.get((int)Math.floor(random * pool.size()));
     }
 
     /**
@@ -104,6 +104,7 @@ public class EnhancementTableManager implements Listener {
         // By default, if the item placed in the enchantment table is enchanted, the event will be cancelled.
         // However, we want players to be able to enhance their items regardless of whether they are enchanted,
         // so, provided the item has an empty socket, allow the event to pass through.
+        // TODO the event may have been cancelled for reasons apart from the item being enchanted, check it is enchanted as well.
         if (new EnhancedItem(manager, event.getItem()).hasEmptySocket()) {
             event.setCancelled(false);
         }

@@ -50,7 +50,7 @@ public class Settings {
     public static final int DEFAULT_SOCKET_LIMIT = 0;
     /**
      * Limits for how many sockets can be applied to certain items.
-     * Be default, only "gear" items can be enhanced.
+     * By default, only "gear" items can be enhanced.
      */
     public static final EnumMap<Material, Integer> SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
     static {
