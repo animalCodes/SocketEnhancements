@@ -24,6 +24,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
@@ -51,7 +53,9 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
     public TextComponent getSocketMessage() {
         // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
-        return Component.text("<", NamedTextColor.WHITE).append(Component.text("Protected", NamedTextColor.DARK_GRAY)).append(Component.text(">", NamedTextColor.WHITE));
+        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+        .append(Component.text("Protected", NamedTextColor.DARK_GRAY))
+        .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {
@@ -73,10 +77,10 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
         ItemStack itemStack = enhancedItem.update();
 
-        // Get and update damage
         ItemMeta itemMeta = itemStack.getItemMeta();
         // Damage = how much damage item has taken so 0 damage = full durability
-        // The checker already confirmed that the item's ItemMeta is an instance of Damageable, so this should be a safe cast.
+        // The checker already confirmed that the item's ItemMeta is an instance 
+        // of Damageable, so this should be a safe cast.
         ((Damageable) itemMeta).setDamage(0);
         itemStack.setItemMeta(itemMeta);
 
