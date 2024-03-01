@@ -138,9 +138,12 @@ public class EnhancementGemManager implements Listener {
             if (item.getType() == dummyGem.getType()) {
                 Enhancement enhancement = new EnhancedItem(manager, item).pop();
                 if (enhancement instanceof EmptySocket) {
-                    // Normal end crystal in crafting table, cover our backs and run.
-                    // "Prepare" events can't be cancelled, emptying the result is the next best thing.
-                    event.getInventory().setResult(new ItemStack(Material.AIR));
+                    // Normal end crystal in crafting table, if the recipe still matches 
+                    // hide the stone block dummy result.
+                    ItemStack result = event.getInventory().getResult();
+                    if (result != null && result.getType() == Material.STONE)
+                        event.getInventory().setResult(new ItemStack(Material.AIR));
+                    // Prevent normal end crystal from being consumed if recipe is crafted.
                     return;
                 } else {
                     enhancements.add(enhancement);
