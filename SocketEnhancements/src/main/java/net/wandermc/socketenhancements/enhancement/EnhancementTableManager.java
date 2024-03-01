@@ -90,7 +90,6 @@ public class EnhancementTableManager implements Listener {
      */
     private Enhancement pickRandomEnhancement(ArrayList<Enhancement> pool) {
         double random = Math.random();
-        random = (random == 0 ? 0.9 : random); // Avoid division by zero
         return pool.get(
             (int)Math.floor(random * pool.size()));
     }
