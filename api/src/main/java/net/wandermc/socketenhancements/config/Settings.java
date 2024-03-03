@@ -37,6 +37,16 @@ public class Settings {
     public static final String NAMESPACE = "socketenhancements";
 
     /**
+     * The name of Enhancement Gems
+     */
+    public static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem", 
+            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
+    /**
+     * The type of Enhancement Gems
+     */
+    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
+
+    /**
      * The message displayed on an item's lore for each empty socket it has.
      */
     public static final TextComponent EMPTY_SOCKET_MESSAGE = Component.text("<Empty Socket>")
@@ -54,6 +64,7 @@ public class Settings {
      */
     public static final EnumMap<Material, Integer> SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
     static {
+        SOCKET_LIMITS.put(ENHANCEMENT_GEM_TYPE, 1);
         SOCKET_LIMITS.put(Material.BOW, 5);
         SOCKET_LIMITS.put(Material.CROSSBOW, 6);
         SOCKET_LIMITS.put(Material.TRIDENT, 4);

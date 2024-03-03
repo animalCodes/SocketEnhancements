@@ -38,9 +38,9 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
  * storing those Enhancements on items.
  */
 public class EnhancedItemForge {
-    private EnhancementManager manager;
+    private static final NamespacedKey socketsKey = new NamespacedKey(Settings.NAMESPACE, "sockets");
 
-    private static NamespacedKey socketsKey = new NamespacedKey(Settings.NAMESPACE, "sockets");
+    private EnhancementManager manager;
 
     /**
      * Create an EnhancedItemForge for `plugin`.
@@ -62,7 +62,30 @@ public class EnhancedItemForge {
     public EnhancedItem create(ItemStack item) {
         return new EnhancedItem(item);
     }
-    
+
+    /**
+     * Create an enhancement gem of type `enhancement`.
+     *
+     * An "Enhancement Gem" is an end crystal with a single socket. 
+     * The enhancement in that socket is the "type" of the Enhancement Gem.
+     *
+     * @param enhancement The Enhancement the gem represents.
+     * @return An Enhancement Gem.
+     */
+    public ItemStack createGemOfType(Enhancement enhancement) {
+        ItemStack item = new ItemStack(Settings.ENHANCEMENT_GEM_TYPE);
+
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Settings.ENHANCEMENT_GEM_NAME);
+        item.setItemMeta(meta);
+
+        EnhancedItem enhancedItem = this.create(item);
+        enhancedItem.addSockets(1);
+        enhancedItem.bind(enhancement);
+
+        return enhancedItem.update();
+    }
+
     /**
      * A wrapper class for reading, updating and removing sockets and enhancements
      * from ItemStacks.

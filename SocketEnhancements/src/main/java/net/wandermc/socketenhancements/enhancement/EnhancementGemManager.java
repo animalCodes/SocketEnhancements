@@ -34,20 +34,19 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.config.Settings;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
 
 /**
  * Manages the *use* (not creation) of Enhancement Gems.
  *
- * To be more specific, while EnhancementManager handles the creation of Enhancement Gems, 
+ * To be more specific, while the EnhancedItemForge handles the creation of Enhancement Gems, 
  * (`.createGemOfType()`) this makes them actually usable. Allowing for them to be obtained 
- * and added to items, and stopping them from being placed.
+ * and added to items and stopping them from being placed.
  */
 public class EnhancementGemManager implements Listener {
     private final JavaPlugin plugin;
-    private final EnhancementManager manager;
     private final EnhancedItemForge forge;
 
     private final ItemStack dummyGem;
@@ -58,12 +57,11 @@ public class EnhancementGemManager implements Listener {
      * @param plugin The plugin this manager is working for
      * @param manager The current EnhancementManager
      */
-    public EnhancementGemManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
+    public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge) {
         this.plugin = plugin;
-        this.manager = manager;
         this.forge = forge;
 
-        this.dummyGem = manager.createGemOfType(forge, manager.get(""));
+        this.dummyGem = forge.createGemOfType(new EmptySocket());
 
         registerRecipe();
 
@@ -121,7 +119,7 @@ public class EnhancementGemManager implements Listener {
 
         event.getPlayer().getWorld().dropItemNaturally(
             event.getClickedBlock().getLocation(),
-            manager.createGemOfType(forge, enhancement)
+            forge.createGemOfType(enhancement)
         );
     }
 

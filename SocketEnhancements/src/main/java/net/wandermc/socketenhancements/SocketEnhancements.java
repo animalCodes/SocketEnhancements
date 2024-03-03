@@ -49,7 +49,7 @@ public class SocketEnhancements extends JavaPlugin {
 
         this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge);
         this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
-        this.enhancementGemManager = new EnhancementGemManager(this, enhancementManager, enhancedItemForge);
+        this.enhancementGemManager = new EnhancementGemManager(this, enhancedItemForge);
     }
 
     /**
