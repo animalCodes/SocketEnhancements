@@ -23,23 +23,26 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.socketenhancements.gear.EnhancedItem;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
 
 /**
  * /bind: the default, operator-only method of binding an enhancement to an item.
  */
 public class BindCommand implements CommandExecutor {
     private EnhancementManager enhancementManager;
+    private EnhancedItemForge forge;
 
     /**
      * Create a BindCommand
      *
      * @param manager The current EnhancementManager
      */
-    public BindCommand(EnhancementManager manager) {
+    public BindCommand(EnhancementManager manager, EnhancedItemForge forge) {
         this.enhancementManager = manager;
+        this.forge = forge;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class BindCommand implements CommandExecutor {
                 return true;
             }
 
-            EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
+            EnhancedItem item = forge.create(player.getInventory().getItemInMainHand());
 
             if (!item.hasEmptySocket()) {
                 sender.sendMessage(Component.text("No empty sockets available."));

@@ -18,7 +18,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import net.kyori.adventure.text.TextComponent;
 
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * Parent interface for different variants of Enhancements

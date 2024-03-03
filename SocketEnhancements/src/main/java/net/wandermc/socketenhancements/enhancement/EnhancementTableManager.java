@@ -29,7 +29,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * Manages the use of enchanting tables to enhance items. (referred to as "Enhancement tables")
@@ -38,6 +39,7 @@ import net.wandermc.socketenhancements.gear.EnhancedItem;
 public class EnhancementTableManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancementManager manager;
+    private final EnhancedItemForge forge;
 
     // Enhancements that can be picked based on which option was selected 
     // in the enchanting table.
@@ -52,9 +54,10 @@ public class EnhancementTableManager implements Listener {
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
      */
-    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager) {
+    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
         this.plugin = plugin;
         this.manager = manager;
+        this.forge = forge;
 
         enhancementPoolI = new ArrayList();
         enhancementPoolII = new ArrayList();
@@ -105,7 +108,7 @@ public class EnhancementTableManager implements Listener {
         // However, we want players to be able to enhance their items regardless of whether they are enchanted,
         // so, provided the item has an empty socket, allow the event to pass through.
         // TODO the event may have been cancelled for reasons apart from the item being enchanted, check it is enchanted as well.
-        if (new EnhancedItem(manager, event.getItem()).hasEmptySocket()) {
+        if (forge.create(event.getItem()).hasEmptySocket()) {
             event.setCancelled(false);
         }
     }
@@ -117,7 +120,7 @@ public class EnhancementTableManager implements Listener {
      */
     @EventHandler
     public void handleEnchant(EnchantItemEvent event) {
-        EnhancedItem item = new EnhancedItem(manager, event.getItem());
+        EnhancedItem item = forge.create(event.getItem());
 
         if (!item.hasEmptySocket())
             return;

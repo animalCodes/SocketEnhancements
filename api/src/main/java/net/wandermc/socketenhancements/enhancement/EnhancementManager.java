@@ -39,7 +39,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.events.AggregateEventListener;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
 
 /**
  * Manages storing, registering and activating enhancements.
@@ -49,7 +49,7 @@ import net.wandermc.socketenhancements.gear.EnhancedItem;
 public class EnhancementManager {
     private static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem", 
             Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
-    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
+    private static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
 
     private final JavaPlugin plugin;
 
@@ -127,17 +127,18 @@ public class EnhancementManager {
      * An "Enhancement Gem" is an end crystal with a single socket. 
      * The enhancement in that socket is the "type" of the Enhancement Gem.
      *
+     * @param forge The current EnhancedItemForge.
      * @param enhancement The Enhancement the gem represents.
      * @return An Enhancement Gem.
      */
-    public ItemStack createGemOfType(Enhancement enhancement) {
+    public ItemStack createGemOfType(EnhancedItemForge forge, Enhancement enhancement) {
         ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
 
         ItemMeta meta = item.getItemMeta();
         meta.displayName(ENHANCEMENT_GEM_NAME);
         item.setItemMeta(meta);
 
-        EnhancedItem enhancedItem = new EnhancedItem(this, item);
+        EnhancedItemForge.EnhancedItem enhancedItem = forge.create(item);
         enhancedItem.addSockets(1);
         enhancedItem.bind(enhancement);
 

@@ -23,22 +23,22 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * /addsocket: the default, operator-only method of adding sockets to items.
  */
 public class AddSocketCommand implements CommandExecutor {
-    private EnhancementManager enhancementManager;
+    private EnhancedItemForge forge;
 
     /**
      * Create an AddSocketCommand
      *
-     * @param manager The current EnhancementManager
+     * @param forge The current EnhancedItemForge
      */
-    public AddSocketCommand(EnhancementManager manager) {
-        this.enhancementManager = manager;
+    public AddSocketCommand(EnhancedItemForge forge) {
+        this.forge = forge;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AddSocketCommand implements CommandExecutor {
                 return true;
             }
 
-            EnhancedItem item = new EnhancedItem(enhancementManager, player.getInventory().getItemInMainHand());
+            EnhancedItem item = forge.create(player.getInventory().getItemInMainHand());
 
             if (item.getSockets() >= item.getSocketLimit()) {
                 sender.sendMessage(Component.text("This item already has the maximum number of sockets. (" + item.getSocketLimit() + ")"));

@@ -30,21 +30,22 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * Protected enhancement, Stops the item from breaking but will be consumed in the process.
  */
 public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
-    private EnhancementManager manager;
+    private EnhancedItemForge forge;
     
     /**
      * Create a Protected enhancement
      * 
-     * @param manager The current EnhancementManager
+     * @param forge The current EnhancedItemForge
      */
-    public Protected(EnhancementManager manager) {
-        this.manager = manager;
+    public Protected(EnhancedItemForge forge) {
+        this.forge = forge;
     }
 
     public String getName() {
@@ -68,11 +69,11 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     }
 
     public boolean shouldRun(PlayerItemBreakEvent context)  {
-        return new EnhancedItem(manager, context.getBrokenItem()).hasEnhancement(this);
+        return forge.create(context.getBrokenItem()).hasEnhancement(this);
     }
 
     public boolean runEffect(PlayerItemBreakEvent context) {
-        EnhancedItem enhancedItem = new EnhancedItem(manager, context.getBrokenItem());
+        EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
         enhancedItem.removeEnhancement(this);
 
         ItemStack itemStack = enhancedItem.update();

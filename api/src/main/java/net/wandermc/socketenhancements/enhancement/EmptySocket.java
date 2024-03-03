@@ -19,7 +19,7 @@ package net.wandermc.socketenhancements.enhancement;
 import net.kyori.adventure.text.TextComponent;
 
 import net.wandermc.socketenhancements.config.Settings;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * Enhancement representing an empty socket.

@@ -34,7 +34,8 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.config.Settings;
 
 /**
@@ -47,6 +48,7 @@ import net.wandermc.socketenhancements.config.Settings;
 public class EnhancementGemManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancementManager manager;
+    private final EnhancedItemForge forge;
 
     private final ItemStack dummyGem;
 
@@ -56,11 +58,12 @@ public class EnhancementGemManager implements Listener {
      * @param plugin The plugin this manager is working for
      * @param manager The current EnhancementManager
      */
-    public EnhancementGemManager(JavaPlugin plugin, EnhancementManager manager) {
+    public EnhancementGemManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
         this.plugin = plugin;
         this.manager = manager;
+        this.forge = forge;
 
-        this.dummyGem = manager.createGemOfType(manager.get(""));
+        this.dummyGem = manager.createGemOfType(forge, manager.get(""));
 
         registerRecipe();
 
@@ -109,7 +112,7 @@ public class EnhancementGemManager implements Listener {
         // Okay, we now know the player right-clicked a grindstone while sneaking 
         // and holding an item.
         
-        EnhancedItem enhancedItem = new EnhancedItem(manager, item);
+        EnhancedItem enhancedItem = forge.create(item);
         Enhancement enhancement = enhancedItem.pop();
         if (enhancement instanceof EmptySocket)
             return;
@@ -118,7 +121,7 @@ public class EnhancementGemManager implements Listener {
 
         event.getPlayer().getWorld().dropItemNaturally(
             event.getClickedBlock().getLocation(),
-            manager.createGemOfType(enhancement)
+            manager.createGemOfType(forge, enhancement)
         );
     }
 
@@ -137,7 +140,7 @@ public class EnhancementGemManager implements Listener {
                 continue;
 
             if (item.getType() == dummyGem.getType()) {
-                Enhancement enhancement = new EnhancedItem(manager, item).pop();
+                Enhancement enhancement = forge.create(item).pop();
                 if (enhancement instanceof EmptySocket) {
                     // Normal end crystal in crafting table, if the recipe still matches 
                     // hide the stone block dummy result.
@@ -150,7 +153,7 @@ public class EnhancementGemManager implements Listener {
                     enhancements.add(enhancement);
                 }
             } else
-                itemToEnhance = new EnhancedItem(manager, item.clone());
+                itemToEnhance = forge.create(item.clone());
         }
 
         // Maybe we shouldn't add an empty list to a none-existent item, idk.
@@ -179,7 +182,7 @@ public class EnhancementGemManager implements Listener {
         ItemStack placedItem = event.getPlayer().getInventory().getItem(event.getHand());
         // If placed item is an end crystal with an enhancement, aka an Enhancement Gem
         if (placedItem.getType() == dummyGem.getType() &&
-            !(new EnhancedItem(manager, placedItem).pop() instanceof EmptySocket))
+            !(forge.create(placedItem).pop() instanceof EmptySocket))
             event.setCancelled(true);
     }
 }

@@ -36,8 +36,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.config.Settings;
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.gear.EnhancedItem;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
 
 /**
  * Manages the crafting and usage of orbs of binding.
@@ -45,7 +45,7 @@ import net.wandermc.socketenhancements.gear.EnhancedItem;
  */
 public class OrbOfBindingManager implements Listener {
     private final JavaPlugin plugin;
-    private final EnhancementManager manager;
+    private final EnhancedItemForge forge;
 
     private final ItemStack orbOfBinding;
     
@@ -55,9 +55,9 @@ public class OrbOfBindingManager implements Listener {
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
      */
-    public OrbOfBindingManager(JavaPlugin plugin, EnhancementManager manager) {
+    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge) {
         this.plugin = plugin;
-        this.manager = manager;
+        this.forge = forge;
 
         this.orbOfBinding = createOrbOfBinding();
 
@@ -130,7 +130,7 @@ public class OrbOfBindingManager implements Listener {
             if (item.isSimilar(orbOfBinding))
                 orbs++;
             else
-                itemToUpgrade = new EnhancedItem(manager, item.clone());
+                itemToUpgrade = forge.create(item.clone());
         }
       
         // We only care about the event if the crafting matrix contains at least one orb 

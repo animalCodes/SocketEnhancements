@@ -18,18 +18,20 @@ package net.wandermc.socketenhancements;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.commands.*;
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancements.*;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
+import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
+import net.wandermc.socketenhancements.enhancements.*;
+import net.wandermc.socketenhancements.gear.EnhancedItemForge;
 
 /**
  * SocketEnhancements: a gear enhancement plugin for PaperMC servers.
  */
 public class SocketEnhancements extends JavaPlugin {
     private EnhancementManager enhancementManager;
+    private EnhancedItemForge enhancedItemForge;
 
     private OrbOfBindingManager orbOfBindingManager;
     private EnhancementTableManager enhancementTableManager;
@@ -37,22 +39,23 @@ public class SocketEnhancements extends JavaPlugin {
     
     public void onEnable() {
         this.enhancementManager = new EnhancementManager(this);
+        this.enhancedItemForge = new EnhancedItemForge(enhancementManager);
 
         registerEnhancements();
         enhancementManager.activateEnhancements();
 
-        getCommand("addsocket").setExecutor(new AddSocketCommand(enhancementManager));
-        getCommand("bind").setExecutor(new BindCommand(enhancementManager));
+        getCommand("addsocket").setExecutor(new AddSocketCommand(enhancedItemForge));
+        getCommand("bind").setExecutor(new BindCommand(enhancementManager, enhancedItemForge));
 
-        this.orbOfBindingManager = new OrbOfBindingManager(this, enhancementManager);
-        this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager);
-        this.enhancementGemManager = new EnhancementGemManager(this, enhancementManager);
+        this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge);
+        this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
+        this.enhancementGemManager = new EnhancementGemManager(this, enhancementManager, enhancedItemForge);
     }
 
     /**
      * Registers all SocketEnhancements core enhancements.
      */
     private void registerEnhancements() {
-        enhancementManager.store(new Protected(enhancementManager));
+        enhancementManager.store(new Protected(enhancedItemForge));
     }
 }
