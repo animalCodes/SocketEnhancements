@@ -30,12 +30,6 @@ import net.kyori.adventure.text.format.TextDecoration;
  * Class for storing values that may need to be accessed anywhere in the api and that won't change during runtime.
  */
 public class Settings {
-    // TODO store under plugin namespace (use plugin instance)
-    /**
-     * The namespace used by the api
-     */
-    public static final String NAMESPACE = "socketenhancements";
-
     /**
      * The name of Enhancement Gems
      */

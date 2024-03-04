@@ -39,7 +39,7 @@ public class SocketEnhancements extends JavaPlugin {
     
     public void onEnable() {
         this.enhancementManager = new EnhancementManager(this);
-        this.enhancedItemForge = new EnhancedItemForge(enhancementManager);
+        this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager);
 
         registerEnhancements();
         enhancementManager.activateEnhancements();

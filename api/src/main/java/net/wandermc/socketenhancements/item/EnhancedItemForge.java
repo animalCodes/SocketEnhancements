@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
 
@@ -38,17 +39,17 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
  * storing those Enhancements on items.
  */
 public class EnhancedItemForge {
-    private static final NamespacedKey socketsKey = new NamespacedKey(Settings.NAMESPACE, "sockets");
-
-    private EnhancementManager manager;
+    private final EnhancementManager manager;
+    private final NamespacedKey socketsKey;
 
     /**
      * Create an EnhancedItemForge for `plugin`.
      *
      * @param manager `plugin`'s EnhancementManager.
      */
-    public EnhancedItemForge(EnhancementManager manager) {
+    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager) {
         this.manager = manager;
+        this.socketsKey = new NamespacedKey(plugin, "sockets");
     }
 
     /**

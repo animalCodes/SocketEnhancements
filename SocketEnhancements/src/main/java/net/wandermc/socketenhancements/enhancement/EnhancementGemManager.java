@@ -73,7 +73,7 @@ public class EnhancementGemManager implements Listener {
      */
     private void registerRecipe() {
         ShapelessRecipe recipe = new ShapelessRecipe(
-                new NamespacedKey(Settings.NAMESPACE, "enhancement_gem_addition"), 
+                new NamespacedKey(plugin, "enhancement_gem_addition"), 
                 new ItemStack(Material.STONE, 1));
 
         // If an item has a socket limit, it can be enhanced
