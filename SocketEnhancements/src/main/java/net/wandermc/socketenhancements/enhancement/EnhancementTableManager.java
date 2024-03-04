@@ -29,8 +29,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * Manages the use of enchanting tables to enhance items. (referred to as "Enhancement tables")

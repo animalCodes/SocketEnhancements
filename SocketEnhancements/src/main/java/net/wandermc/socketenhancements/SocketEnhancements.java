@@ -24,7 +24,7 @@ import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
 import net.wandermc.socketenhancements.enhancements.*;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
  * SocketEnhancements: a gear enhancement plugin for PaperMC servers.

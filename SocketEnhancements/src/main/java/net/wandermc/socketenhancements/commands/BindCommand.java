@@ -25,8 +25,8 @@ import net.kyori.adventure.text.Component;
 
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
  * /bind: the default, operator-only method of binding an enhancement to an item.

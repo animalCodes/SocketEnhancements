@@ -35,8 +35,8 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.socketenhancements.config.Settings;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
  * Manages the *use* (not creation) of Enhancement Gems.

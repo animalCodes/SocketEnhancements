@@ -23,8 +23,8 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * /addsocket: the default, operator-only method of adding sockets to items.

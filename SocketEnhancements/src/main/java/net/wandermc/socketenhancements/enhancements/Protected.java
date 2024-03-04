@@ -30,8 +30,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * Protected enhancement, Stops the item from breaking but will be consumed in the process.

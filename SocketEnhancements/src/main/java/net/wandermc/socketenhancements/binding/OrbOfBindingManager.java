@@ -36,8 +36,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.config.Settings;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge;
-import net.wandermc.socketenhancements.gear.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * Manages the crafting and usage of orbs of binding.
