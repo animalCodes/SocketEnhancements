@@ -34,7 +34,6 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
@@ -61,7 +60,7 @@ public class EnhancementGemManager implements Listener {
         this.plugin = plugin;
         this.forge = forge;
 
-        this.dummyGem = forge.createGemOfType(new EmptySocket());
+        this.dummyGem = forge.createGemOfType();
 
         registerRecipe();
 

@@ -18,7 +18,6 @@ package net.wandermc.socketenhancements.enhancement;
 
 import net.kyori.adventure.text.TextComponent;
 
-import net.wandermc.socketenhancements.config.Settings;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
@@ -29,12 +28,18 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Instead, please use Protected for that purpose.
  */
 public class EmptySocket implements Enhancement {
+    private TextComponent socketMessage;
+
+    public EmptySocket(TextComponent socketMessage) {
+        this.socketMessage = socketMessage;
+    }
+    
     public String getName() {
         return "";
     }
 
     public TextComponent getSocketMessage() {
-        return Settings.EMPTY_SOCKET_MESSAGE;
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

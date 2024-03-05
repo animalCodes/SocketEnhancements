@@ -55,7 +55,6 @@ public class EnhancedItemForge {
         this.manager = manager;
         this.config = config;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
-
         config.SOCKET_LIMITS.put(SocketsConfig.ENHANCEMENT_GEM_TYPE, 1);
     }
 
@@ -92,6 +91,16 @@ public class EnhancedItemForge {
         enhancedItem.bind(enhancement);
 
         return enhancedItem.update();
+    }
+
+    /**
+     * Create a typeless enhancement gem.
+     *
+     * This gem should only be used for reference, do not give it to a player!
+     * @return An Enhancement Gem of type EmptySocket.
+     */
+    public ItemStack createGemOfType() {
+        return createGemOfType(manager.get(""));
     }
 
     /**

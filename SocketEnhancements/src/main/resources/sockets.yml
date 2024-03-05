@@ -1,3 +1,7 @@
+# Message displayed on an item's lore for each empty socket it has.
+# Uses [MiniMessage](https://docs.advntr.dev/minimessage/format.html#minimessage-format) format.
+empty_socket_message: <white><italic:false>\<Empty Socket></italic:false></white>
+
 # Socket limit used for any item not in below list
 default: 0
 

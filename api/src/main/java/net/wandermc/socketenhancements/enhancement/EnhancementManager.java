@@ -42,15 +42,17 @@ public class EnhancementManager {
     // TODO A doubly-linked list isn't very memory-efficient for this, maybe switch to ArrayList?
     private final LinkedList<AggregateEventListener<? extends Event>> listeners = new LinkedList<>();
 
-    private final EmptySocket emptySocket = new EmptySocket();
+    private final EmptySocket emptySocket;
 
     /**
      * Create an EnhancementManager for `plugin`
      *
      * @param plugin The plugin this manager will run under.
+     * @param emptySocket EmptySocket instance to use.
      */
-    public EnhancementManager(JavaPlugin plugin) {
+    public EnhancementManager(JavaPlugin plugin, EmptySocket emptySocket) {
         this.plugin = plugin;
+        this.emptySocket = emptySocket;
     }
 
     /**

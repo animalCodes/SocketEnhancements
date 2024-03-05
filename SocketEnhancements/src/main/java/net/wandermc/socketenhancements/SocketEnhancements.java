@@ -26,6 +26,7 @@ import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
+import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancements.*;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
@@ -41,12 +42,14 @@ public class SocketEnhancements extends JavaPlugin {
     private EnhancementGemManager enhancementGemManager;
     
     public void onEnable() {
-        this.enhancementManager = new EnhancementManager(this);
-
+        // Read in socket configuration from sockets.yml
         saveResource("sockets.yml", false);
-        File socketsFile = new File(getDataFolder(), "sockets.yml");
+        SocketsConfig socketsConfig = new SocketsConfig(
+            new File(getDataFolder(), "sockets.yml"));
+
+        this.enhancementManager = new EnhancementManager(this, new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
         this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager, 
-            new SocketsConfig(socketsFile));
+            socketsConfig);
 
         registerEnhancements();
         enhancementManager.activateEnhancements();

@@ -42,6 +42,10 @@ public class SocketsConfig {
      */
     public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
     /**
+     * The message displayed on an item's lore for each empty socket it has.
+     */
+    public final TextComponent EMPTY_SOCKET_MESSAGE;
+    /**
      * Socket limit used for any item not in SOCKET_LIMITS.
      */
     public final int DEFAULT_SOCKET_LIMIT;
@@ -57,6 +61,8 @@ public class SocketsConfig {
      */
     public SocketsConfig(File file) {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(file);
+
+        this.EMPTY_SOCKET_MESSAGE = (TextComponent) yamlConfig.getRichMessage("empty_socket_message", Component.text("<Empty Socket>"));
 
         this.DEFAULT_SOCKET_LIMIT = yamlConfig.getInt("default", 0);
         this.SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
