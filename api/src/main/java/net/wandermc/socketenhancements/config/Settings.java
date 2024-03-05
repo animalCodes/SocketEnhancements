@@ -16,8 +16,6 @@
  */
 package net.wandermc.socketenhancements.config;
 
-import org.bukkit.Material;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -28,15 +26,6 @@ import net.kyori.adventure.text.format.TextDecoration;
  * Class for storing values that may need to be accessed anywhere in the api and that won't change during runtime.
  */
 public class Settings {
-    /**
-     * The name of Enhancement Gems
-     */
-    public static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem", 
-            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
-    /**
-     * The type of Enhancement Gems
-     */
-    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
     /**
      * The message displayed on an item's lore for each empty socket it has.
      */

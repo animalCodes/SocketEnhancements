@@ -28,10 +28,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.config.Settings;
-import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EmptySocket;
+import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 
 /**
@@ -41,6 +44,15 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
  * storing those Enhancements on items.
  */
 public class EnhancedItemForge {
+    /**
+     * The name of Enhancement Gems
+     */
+    private static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem", 
+            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
+    /**
+     * The type of Enhancement Gems
+     */
+    private static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
     // TODO read from configuration file
     /**
      * Socket limit used for any item not in SOCKET_LIMITS
@@ -117,7 +129,7 @@ public class EnhancedItemForge {
         this.manager = manager;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
 
-        SOCKET_LIMITS.put(Settings.ENHANCEMENT_GEM_TYPE, 1);
+        SOCKET_LIMITS.put(ENHANCEMENT_GEM_TYPE, 1);
     }
 
     /**
@@ -142,10 +154,10 @@ public class EnhancedItemForge {
      * @return An Enhancement Gem.
      */
     public ItemStack createGemOfType(Enhancement enhancement) {
-        ItemStack item = new ItemStack(Settings.ENHANCEMENT_GEM_TYPE);
+        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
 
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(Settings.ENHANCEMENT_GEM_NAME);
+        meta.displayName(ENHANCEMENT_GEM_NAME);
         item.setItemMeta(meta);
 
         EnhancedItem enhancedItem = this.create(item);
