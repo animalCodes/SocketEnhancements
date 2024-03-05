@@ -107,7 +107,7 @@ public class OrbOfBindingManager implements Listener {
         // Any item with a socket limit
         upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
                 // Why is it so complicated to convert a Set to a List!?
-                Settings.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
+                forge.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
         upgradeRecipe.addIngredient(orbOfBinding);
 
         Bukkit.addRecipe(upgradeRecipe);

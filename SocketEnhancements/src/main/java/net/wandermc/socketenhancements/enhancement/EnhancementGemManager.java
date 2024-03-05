@@ -78,7 +78,7 @@ public class EnhancementGemManager implements Listener {
 
         // If an item has a socket limit, it can be enhanced
         recipe.addIngredient(new RecipeChoice.MaterialChoice(
-                Settings.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
+                forge.SOCKET_LIMITS.keySet().stream().collect(Collectors.toList())));
         recipe.addIngredient(dummyGem.getType());
 
         Bukkit.addRecipe(recipe);

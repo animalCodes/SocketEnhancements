@@ -17,7 +17,9 @@
 package net.wandermc.socketenhancements.item;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -39,6 +41,70 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
  * storing those Enhancements on items.
  */
 public class EnhancedItemForge {
+    // TODO read from configuration file
+    /**
+     * Socket limit used for any item not in SOCKET_LIMITS
+     */
+    public static final int DEFAULT_SOCKET_LIMIT = 0;
+    /**
+     * Limits for how many sockets can be applied to certain items.
+     * By default, only "gear" items can be enhanced.
+     */
+    public static final EnumMap<Material, Integer> SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
+    static {
+        SOCKET_LIMITS.put(Material.BOW, 5);
+        SOCKET_LIMITS.put(Material.CROSSBOW, 6);
+        SOCKET_LIMITS.put(Material.TRIDENT, 4);
+        SOCKET_LIMITS.put(Material.SHIELD, 4);
+        SOCKET_LIMITS.put(Material.FISHING_ROD, 2);
+        SOCKET_LIMITS.put(Material.FLINT_AND_STEEL, 2);
+        SOCKET_LIMITS.put(Material.ELYTRA, 2);
+        SOCKET_LIMITS.put(Material.IRON_SHOVEL, 3);
+        SOCKET_LIMITS.put(Material.IRON_PICKAXE, 3);
+        SOCKET_LIMITS.put(Material.IRON_AXE, 3);
+        SOCKET_LIMITS.put(Material.IRON_HOE, 3);
+        SOCKET_LIMITS.put(Material.IRON_SWORD, 3);
+        SOCKET_LIMITS.put(Material.IRON_HELMET, 3);
+        SOCKET_LIMITS.put(Material.IRON_CHESTPLATE, 3);
+        SOCKET_LIMITS.put(Material.IRON_LEGGINGS, 3);
+        SOCKET_LIMITS.put(Material.IRON_BOOTS, 3);
+        SOCKET_LIMITS.put(Material.GOLDEN_SHOVEL, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_PICKAXE, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_AXE, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_HOE, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_SWORD, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_HELMET, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_CHESTPLATE, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_LEGGINGS, 6);
+        SOCKET_LIMITS.put(Material.GOLDEN_BOOTS, 6);
+        SOCKET_LIMITS.put(Material.DIAMOND_SHOVEL, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_PICKAXE, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_AXE, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_HOE, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_SWORD, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_HELMET, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_CHESTPLATE, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_LEGGINGS, 5);
+        SOCKET_LIMITS.put(Material.DIAMOND_BOOTS, 5);
+        SOCKET_LIMITS.put(Material.NETHERITE_SHOVEL, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_PICKAXE, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_AXE, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_HOE, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_SWORD, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_HELMET, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_CHESTPLATE, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_LEGGINGS, 6);
+        SOCKET_LIMITS.put(Material.NETHERITE_BOOTS, 6);
+        SOCKET_LIMITS.put(Material.CHAINMAIL_HELMET, 3);
+        SOCKET_LIMITS.put(Material.CHAINMAIL_CHESTPLATE, 3);
+        SOCKET_LIMITS.put(Material.CHAINMAIL_LEGGINGS, 3);
+        SOCKET_LIMITS.put(Material.CHAINMAIL_BOOTS, 3);
+        SOCKET_LIMITS.put(Material.LEATHER_HELMET, 2);
+        SOCKET_LIMITS.put(Material.LEATHER_CHESTPLATE, 2);
+        SOCKET_LIMITS.put(Material.LEATHER_LEGGINGS, 2);
+        SOCKET_LIMITS.put(Material.LEATHER_BOOTS, 2);
+    }
+
     private final EnhancementManager manager;
     private final NamespacedKey socketsKey;
 
@@ -50,6 +116,8 @@ public class EnhancedItemForge {
     public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager) {
         this.manager = manager;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
+
+        SOCKET_LIMITS.put(Settings.ENHANCEMENT_GEM_TYPE, 1);
     }
 
     /**
@@ -155,7 +223,7 @@ public class EnhancedItemForge {
          * @return The maximum
          */
         public int getSocketLimit() {
-            return Settings.SOCKET_LIMITS.getOrDefault(item.getType(), Settings.DEFAULT_SOCKET_LIMIT);
+            return SOCKET_LIMITS.getOrDefault(item.getType(), DEFAULT_SOCKET_LIMIT);
         }
 
         /**
