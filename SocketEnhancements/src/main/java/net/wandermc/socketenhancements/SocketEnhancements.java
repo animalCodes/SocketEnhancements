@@ -16,8 +16,11 @@
  */
 package net.wandermc.socketenhancements;
 
+import java.io.File;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.wandermc.socketenhancements.config.SocketsConfig;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
@@ -39,7 +42,11 @@ public class SocketEnhancements extends JavaPlugin {
     
     public void onEnable() {
         this.enhancementManager = new EnhancementManager(this);
-        this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager);
+
+        saveResource("sockets.yml", false);
+        File socketsFile = new File(getDataFolder(), "sockets.yml");
+        this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager, 
+            new SocketsConfig(socketsFile));
 
         registerEnhancements();
         enhancementManager.activateEnhancements();
