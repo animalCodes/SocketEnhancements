@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
 
+import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -68,8 +69,7 @@ public class BindCommand implements CommandExecutor {
             }
 
             Enhancement enhancement = enhancementManager.get(args[0]);
-            // TODO check for EmptySocket instead
-            if (enhancement == null) {
+            if (enhancement instanceof EmptySocket) {
                 sender.sendMessage(Component.text("Invalid enhancement \"" + args[0] + "\""));
                 return false;
             }
