@@ -100,7 +100,7 @@ public class EnhancedItemForge {
      * @return An Enhancement Gem of type EmptySocket.
      */
     public ItemStack createGemOfType() {
-        return createGemOfType(manager.get(""));
+        return createGemOfType(manager.getEmpty());
     }
 
     /**
@@ -171,7 +171,7 @@ public class EnhancedItemForge {
          * @return Whether there is an empty socket.
          */
         public boolean hasEmptySocket() {
-            return hasEnhancement(manager.get(""));
+            return hasEnhancement(manager.getEmpty());
         }
 
         /**
@@ -194,7 +194,7 @@ public class EnhancedItemForge {
             for (int i = 0; i < sockets; i++) {
                 // Can't use `bind()` as unlike normal enhancements empty sockets can very much
                 // be 'bound' multiple times.
-                socketList.add(manager.get("").getName());
+                socketList.add(manager.getEmpty().getName());
             }
         }
 
@@ -219,7 +219,7 @@ public class EnhancedItemForge {
             if (index < 0)
                 return false;
 
-            socketList.set(index, manager.get("").getName());
+            socketList.set(index, manager.getEmpty().getName());
             return true;
         }
 
@@ -241,7 +241,7 @@ public class EnhancedItemForge {
                 removeEnhancement(enhancement);
                 return enhancement;
             } else 
-                return manager.get("");
+                return manager.getEmpty();
         }
 
         /**
@@ -258,7 +258,7 @@ public class EnhancedItemForge {
             if (hasEnhancement(enhancement))
                 return false;
 
-            int index = socketList.indexOf(manager.get("").getName());
+            int index = socketList.indexOf(manager.getEmpty().getName());
             if (index < 0)
                 // No empty sockets
                 return false;

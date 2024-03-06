@@ -134,6 +134,15 @@ public class EnhancementManager {
     }
 
     /**
+     * Get this manager's EmptySocket instance.
+     *
+     * @return An EmptySocket
+     */
+    public Enhancement getEmpty() {
+        return emptySocket;
+    }
+
+    /**
      * Gets all currently stored enhancements.
      *
      * @return All current enhancements.
