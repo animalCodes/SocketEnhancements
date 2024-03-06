@@ -87,14 +87,27 @@ public class EnhancementTableManager implements Listener {
     }
 
     /**
-     * Pick a random enhancement from `pool`.
+     * Randomises the position of the first (size/2) items of `pool`.
      *
-     * @param pool A list of Enhancements to choose from.
-     * @return The Enhancement.
+     * Note that it is likely the second half will be randomised as well,
+     * just not guaranteed.
+     *
+     * @param pool The pool to shuffle.
      */
-    private Enhancement pickRandomEnhancement(ArrayList<Enhancement> pool) {
-        double random = Math.random();
-        return pool.get((int)Math.floor(random * pool.size()));
+    private void shufflePool(ArrayList<Enhancement> pool) {
+        int half = (int)Math.ceil(pool.size() / 2);
+
+        Enhancement temp;
+        int newIndex;
+        // Iterate over first half of pool
+        for (int i = 0; i <= half; i++) {
+            // Create a random index in the second half of the pool
+            newIndex = (int)Math.floor((Math.random() * half)) + half;
+            // Swap pool[i] and pool[newIndex]
+            temp = pool.get(newIndex);
+            pool.set(newIndex, pool.get(i));
+            pool.set(i, temp);
+        }
     }
 
     /**
@@ -141,10 +154,21 @@ public class EnhancementTableManager implements Listener {
                 break;
         }
 
-        // Keep picking random enhancements until we get a valid enhancement.
-        Enhancement enhancement = pickRandomEnhancement(pool);
-        while (!item.bind(enhancement))
-            enhancement = pickRandomEnhancement(pool);
+        // Randomise the order of the Enhancements in pool
+        // TODO figure out when to reshuffle to balance randomness and performance
+        shufflePool(pool);
+
+        // Keep picking random enhancements until we get a valid enhancement
+        int i = 0;
+        for (; i < pool.size(); i++) {
+            if (item.bind(pool.get(i)))
+                break;
+        }
+
+        if (i >= pool.size())
+            // Reached the end of the pool without finding a valid enhancement,
+            // return out so event continues as usual.
+            return;
 
         item.update();
 
