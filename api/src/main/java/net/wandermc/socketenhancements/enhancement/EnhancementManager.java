@@ -18,7 +18,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -39,8 +39,7 @@ public class EnhancementManager {
     private final JavaPlugin plugin;
 
     private final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
-    // TODO A doubly-linked list isn't very memory-efficient for this, maybe switch to ArrayList?
-    private final LinkedList<AggregateEventListener<? extends Event>> listeners = new LinkedList<>();
+    private final ArrayList<AggregateEventListener<? extends Event>> listeners = new ArrayList<>();
 
     private final EmptySocket emptySocket;
 
@@ -73,27 +72,24 @@ public class EnhancementManager {
      * @param enhancement The enhancement to register
      */
     private <C extends Event> void registerActiveEnhancement(ActiveEnhancement<C> enhancement) {
-        AggregateEventListener<C> listener = null;
-
         for (AggregateEventListener<?> activeListener : listeners) {
             // If there's already a listener with a matching eventType, use it
             if (activeListener.getEventType() == enhancement.getEventType()) {
                 ((AggregateEventListener<C>) activeListener).add(enhancement);
-                break;
+                return;
             }
         }
 
         // No listener with a matching eventType was found, so create one
-        if (listener == null)
-            listener = new AggregateEventListener<C>(enhancement);
-
-        listeners.add(listener);
+        listeners.add(new AggregateEventListener<C>(enhancement));
     }
 
     /**
      * Activates every currently-stored Enhancement, making them available for use.
      */
     public void activateEnhancements() {
+        listeners.trimToSize();
+
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         listeners.forEach(listener -> {
             // Yuck
