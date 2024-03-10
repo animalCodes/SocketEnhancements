@@ -30,6 +30,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 public class EmptySocket implements Enhancement {
     private TextComponent socketMessage;
 
+    /**
+     * Create an EmptySocket
+     *
+     * @param socketMessage The socketMessage to use.
+     */
     public EmptySocket(TextComponent socketMessage) {
         this.socketMessage = socketMessage;
     }

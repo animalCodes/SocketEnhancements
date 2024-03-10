@@ -48,6 +48,7 @@ public class EnhancedItemForge {
     /**
      * Create an EnhancedItemForge for `plugin`.
      *
+     * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
      * @param config Socket configuration values.
      */
