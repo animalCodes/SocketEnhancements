@@ -28,6 +28,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.config.SocketsConfig;
 import net.wandermc.socketenhancements.enhancement.EmptySocket;
@@ -41,6 +44,16 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
  * storing those Enhancements on items.
  */
 public class EnhancedItemForge {
+    /**
+     * The name of Enhancement Gems.
+     */
+    public static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem",
+            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
+    /**
+     * The Material type of Enhancement Gems.
+     */
+    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
+
     private final EnhancementManager manager;
     private final SocketsConfig config;
     private final NamespacedKey socketsKey;
@@ -56,7 +69,7 @@ public class EnhancedItemForge {
         this.manager = manager;
         this.config = config;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
-        config.SOCKET_LIMITS.put(SocketsConfig.ENHANCEMENT_GEM_TYPE, 1);
+        config.SOCKET_LIMITS.put(ENHANCEMENT_GEM_TYPE, 1);
     }
 
     /**
@@ -81,10 +94,10 @@ public class EnhancedItemForge {
      * @return An Enhancement Gem.
      */
     public ItemStack createGemOfType(Enhancement enhancement) {
-        ItemStack item = new ItemStack(SocketsConfig.ENHANCEMENT_GEM_TYPE);
+        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
 
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(SocketsConfig.ENHANCEMENT_GEM_NAME);
+        meta.displayName(ENHANCEMENT_GEM_NAME);
         item.setItemMeta(meta);
 
         EnhancedItem enhancedItem = this.create(item);

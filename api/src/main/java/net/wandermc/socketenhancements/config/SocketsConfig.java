@@ -25,22 +25,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
 
 /**
  * All configuration related to sockets, by default read from sockets.yml.
  */
 public class SocketsConfig {
-    /**
-     * The name of Enhancement Gems. (final)
-     */
-    public static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem",
-            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
-    /**
-     * The type of Enhancement Gems. (final)
-     */
-    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
     /**
      * The message displayed on an item's lore for each empty socket it has.
      */
