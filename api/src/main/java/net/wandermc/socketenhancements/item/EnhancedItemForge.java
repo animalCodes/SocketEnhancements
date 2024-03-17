@@ -18,6 +18,7 @@ package net.wandermc.socketenhancements.item;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.EnumMap;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -32,7 +33,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
-import net.wandermc.socketenhancements.config.SocketsConfig;
 import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
@@ -55,21 +55,37 @@ public class EnhancedItemForge {
     public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
 
     private final EnhancementManager manager;
-    private final SocketsConfig config;
     private final NamespacedKey socketsKey;
+    private final EnumMap<Material, Integer> socketLimits;
+    private final int defaultSocketLimit;
 
     /**
      * Create an EnhancedItemForge for `plugin`.
      *
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
-     * @param config Socket configuration values.
+     * @param socketLimits Limits for how many sockets can be applied to certain items.
+     * @param defaultSocketLimit Socket limit for any item not in `socketLimits`.
      */
-    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager, SocketsConfig config) {
+    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager, EnumMap<Material, Integer> socketLimits, int defaultSocketLimit) {
         this.manager = manager;
-        this.config = config;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
-        config.SOCKET_LIMITS.put(ENHANCEMENT_GEM_TYPE, 1);
+
+        this.socketLimits = socketLimits;
+        this.defaultSocketLimit = defaultSocketLimit;
+
+        socketLimits.put(ENHANCEMENT_GEM_TYPE, 1);
+    }
+
+    /**
+     * Create an EnhancedItemForge for `plugin`.
+     *
+     * @param plugin The plugin this 'Forge is working for.
+     * @param manager `plugin`'s EnhancementManager.
+     * @param socketLimits Limits for how many sockets can be applied to certain items, with the default socket limit stored under Material.AIR.
+     */
+    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager, EnumMap<Material, Integer> socketLimits) {
+        this(plugin, manager, socketLimits, socketLimits.getOrDefault(Material.AIR, 0));
     }
 
     /**
@@ -123,7 +139,7 @@ public class EnhancedItemForge {
      * @return All enhanceable materials.
      */
     public Set<Material> getEnhanceableMaterials() {
-        return config.SOCKET_LIMITS.keySet();
+        return socketLimits.keySet();
     }
 
     /**
@@ -194,7 +210,7 @@ public class EnhancedItemForge {
          * @return The maximum
          */
         public int getSocketLimit() {
-            return config.SOCKET_LIMITS.getOrDefault(item.getType(), config.DEFAULT_SOCKET_LIMIT);
+            return socketLimits.getOrDefault(item.getType(), defaultSocketLimit);
         }
 
         /**

@@ -49,7 +49,7 @@ public class SocketEnhancements extends JavaPlugin {
 
         this.enhancementManager = new EnhancementManager(this, new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
         this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager, 
-            socketsConfig);
+            socketsConfig.SOCKET_LIMITS, socketsConfig.DEFAULT_SOCKET_LIMIT);
 
         registerEnhancements();
         enhancementManager.activateEnhancements();
