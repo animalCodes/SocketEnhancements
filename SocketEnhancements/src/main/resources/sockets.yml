@@ -2,7 +2,7 @@
 # Uses [MiniMessage](https://docs.advntr.dev/minimessage/format.html#minimessage-format) format.
 empty_socket_message: <white><italic:false>\<Empty Socket></italic:false></white>
 
-# Socket limit used for any item not in below list
+# Socket limit used for any item not in below list.
 default: 0
 
 # How many sockets can be applied to different types of items.
@@ -59,3 +59,8 @@ limits:
   NETHERITE_SWORD: 6
   SHIELD: 4
   TRIDENT: 4
+
+orbs_of_binding:
+  # Materials used to craft an orb of binding.
+  # If there are more than nine items in the list, only the first nine (valid) items will be used.
+  ingredients: ["END_CRYSTAL", "PRISMARINE_SHARD", "CHORUS_FRUIT"]

@@ -16,6 +16,7 @@
  */
 package net.wandermc.socketenhancements.binding;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 public class OrbOfBindingManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
+    private final List<Material> ingredients;
 
     private final ItemStack orbOfBinding;
     
@@ -53,10 +55,18 @@ public class OrbOfBindingManager implements Listener {
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
+     * @param ingredients The items used to craft an orb of binding, count must be > 0 and < 10.
      */
-    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge) {
+    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge, List<Material> ingredients) {
         this.plugin = plugin;
         this.forge = forge;
+        this.ingredients = ingredients;
+
+        if (ingredients.size() < 1 || ingredients.size() > 9) {
+            throw new IllegalArgumentException("Invalid ingredient list size: " 
+                + ingredients.size() + 
+                ". Must be between 1 and 9 inclusive.");
+        }
 
         this.orbOfBinding = createOrbOfBinding();
 
@@ -87,11 +97,8 @@ public class OrbOfBindingManager implements Listener {
         ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
                 new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
 
-        // Players must travel great distances to obtain an orb of binding ..
-        // TODO make recipe configurable
-        orbOfBindingRecipe.addIngredient(Material.END_CRYSTAL);
-        orbOfBindingRecipe.addIngredient(Material.PRISMARINE_SHARD);
-        orbOfBindingRecipe.addIngredient(Material.CHORUS_FRUIT);
+        for (Material ingredient : ingredients)
+            orbOfBindingRecipe.addIngredient(ingredient);
 
         Bukkit.addRecipe(orbOfBindingRecipe);
 

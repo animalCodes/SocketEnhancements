@@ -17,6 +17,7 @@
 package net.wandermc.socketenhancements.config;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 import org.bukkit.Material;
@@ -42,7 +43,11 @@ public class SocketsConfig {
      * Limits for how many sockets can be applied to certain items.
      */
     public final EnumMap<Material, Integer> SOCKET_LIMITS;
-
+    /**
+     * Ingredients used to craft an orb of binding.
+     * Length must be between 1 and 9 inclusive.
+     */
+    public final ArrayList<Material> ORB_OF_BINDING_INGREDIENTS;
     /**
      * Create a SocketsConfig with values read from `file`.
      *
@@ -57,10 +62,32 @@ public class SocketsConfig {
         this.SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
 
         ConfigurationSection limitsSection = yamlConfig.getConfigurationSection("limits");
+        // TODO deal with possibility of limitsSection or orbsOfBindingSection (below) not existing.
         for (String key : limitsSection.getKeys(false)) {
             Material material = Material.getMaterial(key);
             if (material != null)
                 SOCKET_LIMITS.put(material, limitsSection.getInt(key));
         }
+
+        this.ORB_OF_BINDING_INGREDIENTS = new ArrayList<Material>();
+
+        ConfigurationSection orbsOfBindingSection = yamlConfig.getConfigurationSection("orbs_of_binding");
+
+        for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
+            Material material = Material.getMaterial(ingredient);
+            if (material != null)
+                ORB_OF_BINDING_INGREDIENTS.add(material);
+
+            if (ORB_OF_BINDING_INGREDIENTS.size() >= 9)
+                break;
+        }
+
+        if (ORB_OF_BINDING_INGREDIENTS.size() == 0) {
+            ORB_OF_BINDING_INGREDIENTS.add(Material.END_CRYSTAL);
+            ORB_OF_BINDING_INGREDIENTS.add(Material.PRISMARINE_SHARD);
+            ORB_OF_BINDING_INGREDIENTS.add(Material.CHORUS_FRUIT);
+        }
+
+        ORB_OF_BINDING_INGREDIENTS.trimToSize();
     }
 }
