@@ -62,24 +62,27 @@ public class SocketsConfig {
         this.SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
 
         ConfigurationSection limitsSection = yamlConfig.getConfigurationSection("limits");
-        // TODO deal with possibility of limitsSection or orbsOfBindingSection (below) not existing.
-        for (String key : limitsSection.getKeys(false)) {
-            Material material = Material.getMaterial(key);
-            if (material != null)
-                SOCKET_LIMITS.put(material, limitsSection.getInt(key));
+        if (limitsSection != null) {
+            for (String key : limitsSection.getKeys(false)) {
+                Material material = Material.getMaterial(key);
+                if (material != null)
+                    SOCKET_LIMITS.put(material, limitsSection.getInt(key));
+            }
         }
 
         this.ORB_OF_BINDING_INGREDIENTS = new ArrayList<Material>();
 
         ConfigurationSection orbsOfBindingSection = yamlConfig.getConfigurationSection("orbs_of_binding");
 
-        for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
-            Material material = Material.getMaterial(ingredient);
-            if (material != null)
-                ORB_OF_BINDING_INGREDIENTS.add(material);
+        if (orbsOfBindingSection != null) {
+            for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
+                Material material = Material.getMaterial(ingredient);
+                if (material != null)
+                    ORB_OF_BINDING_INGREDIENTS.add(material);
 
-            if (ORB_OF_BINDING_INGREDIENTS.size() >= 9)
-                break;
+                if (ORB_OF_BINDING_INGREDIENTS.size() >= 9)
+                    break;
+            }
         }
 
         if (ORB_OF_BINDING_INGREDIENTS.size() == 0) {
