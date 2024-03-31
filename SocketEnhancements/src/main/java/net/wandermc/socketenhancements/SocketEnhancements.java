@@ -57,7 +57,9 @@ public class SocketEnhancements extends JavaPlugin {
         getCommand("addsocket").setExecutor(new AddSocketCommand(enhancedItemForge));
         getCommand("bind").setExecutor(new BindCommand(enhancementManager, enhancedItemForge));
 
-        this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
+        if (socketsConfig.ORBS_OF_BINDING_ENABLED)
+            this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
+
         this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
         this.enhancementGemManager = new EnhancementGemManager(this, enhancedItemForge);
     }

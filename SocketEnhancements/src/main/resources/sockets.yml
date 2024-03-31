@@ -61,6 +61,9 @@ limits:
   TRIDENT: 4
 
 orbs_of_binding:
+  # Whether orbs of binding can be crafted and applied to items.
+  # Note that if this is `false`, safety features such as not being able to place (previously obtained) orbs will be disabled.
+  enabled: true
   # Materials used to craft an orb of binding.
   # If there are more than nine items in the list, only the first nine (valid) items will be used.
   ingredients: ["END_CRYSTAL", "PRISMARINE_SHARD", "CHORUS_FRUIT"]

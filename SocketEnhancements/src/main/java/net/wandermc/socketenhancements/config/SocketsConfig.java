@@ -44,6 +44,10 @@ public class SocketsConfig {
      */
     public final EnumMap<Material, Integer> SOCKET_LIMITS;
     /**
+     * Whether Orbs of Binding can be crafted and applied to items.
+     */
+    public final boolean ORBS_OF_BINDING_ENABLED;
+    /**
      * Ingredients used to craft an orb of binding.
      * Length must be between 1 and 9 inclusive.
      */
@@ -92,5 +96,7 @@ public class SocketsConfig {
         }
 
         ORB_OF_BINDING_INGREDIENTS.trimToSize();
+
+        this.ORBS_OF_BINDING_ENABLED = orbsOfBindingSection.getBoolean("enabled", true);
     }
 }
