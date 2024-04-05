@@ -21,6 +21,7 @@ import java.io.File;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.socketenhancements.config.SocketsConfig;
+import net.wandermc.socketenhancements.config.EnhancementsConfig;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
@@ -42,10 +43,14 @@ public class SocketEnhancements extends JavaPlugin {
     private EnhancementGemManager enhancementGemManager;
     
     public void onEnable() {
-        // Read in socket configuration from sockets.yml
+        // TODO stop this from logging a warning if the file already exists
         saveResource("sockets.yml", false);
         SocketsConfig socketsConfig = new SocketsConfig(
             new File(getDataFolder(), "sockets.yml"));
+
+        saveResource("enhancements.yml", false);
+        EnhancementsConfig enhancementsConfig = new EnhancementsConfig(
+            new File(getDataFolder(), "enhancements.yml"));
 
         this.enhancementManager = new EnhancementManager(this, new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
         this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager, 
@@ -60,7 +65,9 @@ public class SocketEnhancements extends JavaPlugin {
         if (socketsConfig.ORBS_OF_BINDING_ENABLED)
             this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
 
-        this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
+        if (enhancementsConfig.ENHANCEMENT_TABLES_ENABLED)
+            this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
+
         this.enhancementGemManager = new EnhancementGemManager(this, enhancedItemForge);
     }
 
