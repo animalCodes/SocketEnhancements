@@ -27,6 +27,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 
+import net.wandermc.socketenhancements.util.ConfigUtil;
+
 /**
  * All configuration related to sockets, by default read from sockets.yml.
  */
@@ -62,7 +64,11 @@ public class SocketsConfig {
 
         this.EMPTY_SOCKET_MESSAGE = (TextComponent) yamlConfig.getRichMessage("empty_socket_message", Component.text("<Empty Socket>"));
 
-        this.DEFAULT_SOCKET_LIMIT = yamlConfig.getInt("default", 0);
+        int dsl = yamlConfig.getInt("default", 0);
+        if (dsl < 0)
+            dsl = 0;
+        this.DEFAULT_SOCKET_LIMIT = dsl;
+
         this.SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
 
         ConfigurationSection limitsSection = yamlConfig.getConfigurationSection("limits");

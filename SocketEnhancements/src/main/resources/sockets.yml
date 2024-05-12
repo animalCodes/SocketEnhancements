@@ -3,6 +3,7 @@
 empty_socket_message: <white><italic:false>\<Empty Socket></italic:false></white>
 
 # Socket limit used for any item not in below list.
+# If less than zero, will be set to zero.
 default: 0
 
 # How many sockets can be applied to different types of items.
