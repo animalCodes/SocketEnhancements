@@ -117,11 +117,13 @@ public class EnhancementTableManager implements Listener {
      */
     @EventHandler
     public void handlePrepareEnchant(PrepareItemEnchantEvent event) {
-        // By default, if the item placed in the enchantment table is enchanted, the event will be cancelled.
-        // However, we want players to be able to enhance their items regardless of whether they are enchanted,
-        // so, provided the item has an empty socket, allow the event to pass through.
-        // TODO the event may have been cancelled for reasons apart from the item being enchanted, check it is enchanted as well.
-        if (forge.create(event.getItem()).hasEmptySocket()) {
+        // By default, if the item placed in the enchantment table is enchanted,
+        // the event will be cancelled. However, we want players to be able
+        // to enhance their items regardless of whether they are enchanted,
+        // so, provided the item has an empty socket, allow the event to pass
+        // through.
+        if (forge.create(event.getItem()).hasEmptySocket() &&
+            !event.getItem().getEnchantments().isEmpty()) {
             event.setCancelled(false);
         }
     }
@@ -147,14 +149,13 @@ public class EnhancementTableManager implements Listener {
             case 1:
                 pool = this.enhancementPoolII;
                 break;
-            // If the player manages to find and press a 4th button, they'll get the 
-            // rarest pool. Good for them!
+            // If the player manages to find and press a 4th button, they'll get
+            // the rarest pool. Good for them!
             default:
                 pool = this.enhancementPoolIII;
                 break;
         }
 
-        // Randomise the order of the Enhancements in pool
         // TODO figure out when to reshuffle to balance randomness and performance
         shufflePool(pool);
 
@@ -165,10 +166,14 @@ public class EnhancementTableManager implements Listener {
                 break;
         }
 
-        if (i >= pool.size())
-            // Reached the end of the pool without finding a valid enhancement,
-            // return out so event continues as usual.
+        if (i >= pool.size()) {
+            // No valid enhancements found.
+            if (!event.getItem().getEnchantments().isEmpty()) {
+                // Item is already enchanted, let's not add any more..
+                event.setCancelled(true);
+            }
             return;
+        }
 
         item.update();
 
