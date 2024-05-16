@@ -33,8 +33,17 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Manages the use of enchanting tables to enhance items. (referred to as "Enhancement tables")
- * Note that constructing an instance of this class is sufficient to enable enhancement tables.
+ * Manages the use of enchanting tables to enhance items. (referred to as
+ * Enhancement tables")
+ *
+ * Note that constructing an instance of this class is sufficient to enable
+ * enhancement tables.
+ *
+ * When an item is enhanced through an enhancement table, a random
+ * enhancement from a pool corresponding to the button that was pressed will
+ * be bound to the item. If `additivePools` is true, the pools will contain
+ * enhancements of that rarity and lesser rarities, if it is false they will
+ * only contain enhancements of that exact rarity.
  */
 public class EnhancementTableManager implements Listener {
     private final JavaPlugin plugin;
@@ -43,7 +52,6 @@ public class EnhancementTableManager implements Listener {
 
     // Enhancements that can be picked based on which option was selected 
     // in the enchanting table.
-    // Each pool includes Enhancements of lesser rarities.
     private final ArrayList<Enhancement> enhancementPoolI;
     private final ArrayList<Enhancement> enhancementPoolII;
     private final ArrayList<Enhancement> enhancementPoolIII;
@@ -53,8 +61,11 @@ public class EnhancementTableManager implements Listener {
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
+     * @param forge The current EnhancedItemForge.
+     * @param additivePools Whether enhancement pools are additive or unique.
+     *        (see class javadoc)
      */
-    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
+    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge, boolean additivePools) {
         this.plugin = plugin;
         this.manager = manager;
         this.forge = forge;
@@ -63,15 +74,17 @@ public class EnhancementTableManager implements Listener {
         enhancementPoolII = new ArrayList();
         enhancementPoolIII = new ArrayList();
 
-        // Fill out Enhancement pools with all currently registered Enhancements.
-        // Enhancements will be placed in the pool of their rarity plus any lesser 
-        // rarity pools.
+        // Fill out enhancement pools
         for (Enhancement enhancement : manager.getAll()) {
             switch (enhancement.getRarity()) {
                 case I: 
                     enhancementPoolI.add(enhancement);
+                    if (!additivePools)
+                        break;
                 case II: 
                     enhancementPoolII.add(enhancement);
+                    if (!additivePools)
+                        break;
                 case III: 
                     enhancementPoolIII.add(enhancement);
                 default:
@@ -87,6 +100,19 @@ public class EnhancementTableManager implements Listener {
     }
 
     /**
+     * Create an EnhancementTableManager for `plugin`.
+     *
+     * Enhancement pools will be "additive".
+     *
+     * @param plugin The plugin this manager is working for.
+     * @param manager The current EnhancementManager.
+     * @param forge The current EnhancedItemForge.
+     */
+    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
+        this(plugin, manager, forge, true);
+    }
+
+    /**
      * Randomises the position of the first (size/2) items of `pool`.
      *
      * Note that it is likely the second half will be randomised as well,
@@ -95,12 +121,13 @@ public class EnhancementTableManager implements Listener {
      * @param pool The pool to shuffle.
      */
     private void shufflePool(ArrayList<Enhancement> pool) {
+        // TODO replace this method with something less shit
         int half = (int)Math.ceil(pool.size() / 2);
 
         Enhancement temp;
         int newIndex;
         // Iterate over first half of pool
-        for (int i = 0; i <= half; i++) {
+        for (int i = 0; i < half; i++) {
             // Create a random index in the second half of the pool
             newIndex = (int)Math.floor((Math.random() * half)) + half;
             // Swap pool[i] and pool[newIndex]

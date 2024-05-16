@@ -30,6 +30,10 @@ public class EnhancementsConfig {
      */
     public final boolean ENHANCEMENT_TABLES_ENABLED;
     /**
+     * Whether enhancement pools are "additive".
+     */
+    public final boolean ENHANCEMENT_TABLES_ADDITIVE_POOLS;
+    /**
      * Create a SocketsConfig with values read from `file`.
      *
      * @param file The .yml file to read from.
@@ -40,5 +44,7 @@ public class EnhancementsConfig {
         ConfigurationSection enhancementTablesSection = yamlConfig.getConfigurationSection("enhancement_tables");
 
         this.ENHANCEMENT_TABLES_ENABLED = enhancementTablesSection.getBoolean("enabled", true);
+
+        this.ENHANCEMENT_TABLES_ADDITIVE_POOLS = enhancementTablesSection.getBoolean("additive_pools", true);
     }
 }

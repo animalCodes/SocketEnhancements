@@ -1,3 +1,10 @@
 enhancement_tables:
   # Whether enchanting tables can be used to enhance items
   enabled: true
+  # When a user enhances an item in an enchanting table, an enhancement is
+  # randomly chosen from a pool corresponding to the button they pressed.(I-III)
+  # If this is true, those pools will contain enhancements of that rarity AND
+  # any enhancements of lesser rarities, so pool 'III' will also contain
+  # enhancements of rarities I and II. Otherwise, the pools will only contain
+  # enhancements of that exact rarity.
+  additive_pools: true

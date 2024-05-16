@@ -52,23 +52,31 @@ public class SocketEnhancements extends JavaPlugin {
         EnhancementsConfig enhancementsConfig = new EnhancementsConfig(
             new File(getDataFolder(), "enhancements.yml"));
 
-        this.enhancementManager = new EnhancementManager(this, new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
-        this.enhancedItemForge = new EnhancedItemForge(this, enhancementManager, 
+        this.enhancementManager = new EnhancementManager(this,
+            new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
+        this.enhancedItemForge = new EnhancedItemForge(this,
+            enhancementManager,
             socketsConfig.SOCKET_LIMITS, socketsConfig.DEFAULT_SOCKET_LIMIT);
 
         registerEnhancements();
         enhancementManager.activateEnhancements();
 
-        getCommand("addsocket").setExecutor(new AddSocketCommand(enhancedItemForge));
-        getCommand("bind").setExecutor(new BindCommand(enhancementManager, enhancedItemForge));
+        getCommand("addsocket").setExecutor(
+            new AddSocketCommand(enhancedItemForge));
+        getCommand("bind").setExecutor(
+            new BindCommand(enhancementManager, enhancedItemForge));
 
         if (socketsConfig.ORBS_OF_BINDING_ENABLED)
-            this.orbOfBindingManager = new OrbOfBindingManager(this, enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
+            this.orbOfBindingManager = new OrbOfBindingManager(this,
+                enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
 
         if (enhancementsConfig.ENHANCEMENT_TABLES_ENABLED)
-            this.enhancementTableManager = new EnhancementTableManager(this, enhancementManager, enhancedItemForge);
+            this.enhancementTableManager = new EnhancementTableManager(this,
+                enhancementManager, enhancedItemForge,
+                enhancementsConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS);
 
-        this.enhancementGemManager = new EnhancementGemManager(this, enhancedItemForge);
+        this.enhancementGemManager = new EnhancementGemManager(this,
+            enhancedItemForge);
     }
 
     /**

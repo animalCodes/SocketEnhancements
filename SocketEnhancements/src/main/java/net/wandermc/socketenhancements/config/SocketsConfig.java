@@ -27,8 +27,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 
-import net.wandermc.socketenhancements.util.ConfigUtil;
-
 /**
  * All configuration related to sockets, by default read from sockets.yml.
  */
