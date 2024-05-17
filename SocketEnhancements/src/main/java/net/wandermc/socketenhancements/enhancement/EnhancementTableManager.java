@@ -113,27 +113,20 @@ public class EnhancementTableManager implements Listener {
     }
 
     /**
-     * Randomises the position of the first (size/2) items of `pool`.
+     * Randomises the position of the elements of `list`.
      *
-     * Note that it is likely the second half will be randomised as well,
-     * just not guaranteed.
-     *
-     * @param pool The pool to shuffle.
+     * @param list The list to randomise.
      */
-    private void shufflePool(ArrayList<Enhancement> pool) {
-        // TODO replace this method with something less shit
-        int half = (int)Math.ceil(pool.size() / 2);
-
-        Enhancement temp;
-        int newIndex;
-        // Iterate over first half of pool
-        for (int i = 0; i < half; i++) {
-            // Create a random index in the second half of the pool
-            newIndex = (int)Math.floor((Math.random() * half)) + half;
-            // Swap pool[i] and pool[newIndex]
-            temp = pool.get(newIndex);
-            pool.set(newIndex, pool.get(i));
-            pool.set(i, temp);
+    private static <T> void randomise(ArrayList<T> list) {
+        int ri = 0;
+        T temp;
+        for (int i = 0; i < list.size(); i++) {
+            ri = (int)Math.floor(Math.random() * list.size());
+            if (ri != i) {
+                temp = list.get(ri);
+                list.set(ri, list.get(i));
+                list.set(i, temp);
+            }
         }
     }
 
@@ -167,7 +160,8 @@ public class EnhancementTableManager implements Listener {
         if (!item.hasEmptySocket())
             return;
 
-        // Choose pool to get enhancement from based on which button the player pressed
+        // Choose pool to get enhancement from based on which button the player
+        // pressed
         ArrayList<Enhancement> pool;
         switch (event.whichButton()) {
             case 0:
@@ -183,8 +177,7 @@ public class EnhancementTableManager implements Listener {
                 break;
         }
 
-        // TODO figure out when to reshuffle to balance randomness and performance
-        shufflePool(pool);
+        randomise(pool);
 
         // Keep picking random enhancements until we get a valid enhancement
         int i = 0;
