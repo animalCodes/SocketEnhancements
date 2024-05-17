@@ -67,7 +67,8 @@ public class EnhancedItemForge {
      * @param socketLimits Limits for how many sockets can be applied to certain items.
      * @param defaultSocketLimit Socket limit for any item not in `socketLimits`.
      */
-    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager, EnumMap<Material, Integer> socketLimits, int defaultSocketLimit) {
+    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
+        EnumMap<Material, Integer> socketLimits, int defaultSocketLimit) {
         this.manager = manager;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
 
@@ -82,16 +83,19 @@ public class EnhancedItemForge {
      *
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
-     * @param socketLimits Limits for how many sockets can be applied to certain items, with the default socket limit stored under Material.AIR.
+     * @param socketLimits Limits for how many sockets can be applied to certain
+                           items, with the default socket limit stored under
+                           Material.AIR.
      */
-    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager, EnumMap<Material, Integer> socketLimits) {
+    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
+        EnumMap<Material, Integer> socketLimits) {
         this(plugin, manager, socketLimits, socketLimits.getOrDefault(Material.AIR, 0));
     }
 
     /**
      * Create an EnhancedItem around `item`.
-     * Note that `.update()` will need to be called for any subsequent changes to be
-     * applied.
+     * Note that `.update()` will need to be called for any subsequent changes
+     * to be applied.
      * 
      * @param item The item to work on.
      * @return An EnhancedItem to manage Enhancements on `item`.
@@ -127,9 +131,10 @@ public class EnhancedItemForge {
      * Create a typeless enhancement gem.
      *
      * This gem should only be used for reference, do not give it to a player!
+     *
      * @return An Enhancement Gem of type EmptySocket.
      */
-    public ItemStack createGemOfType() {
+    public ItemStack createGem() {
         return createGemOfType(manager.getEmpty());
     }
 

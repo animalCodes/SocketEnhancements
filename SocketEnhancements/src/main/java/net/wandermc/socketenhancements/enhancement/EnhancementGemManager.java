@@ -61,7 +61,7 @@ public class EnhancementGemManager implements Listener {
         this.plugin = plugin;
         this.forge = forge;
 
-        this.dummyGem = forge.createGemOfType();
+        this.dummyGem = forge.createGem();
 
         registerRecipe();
 
