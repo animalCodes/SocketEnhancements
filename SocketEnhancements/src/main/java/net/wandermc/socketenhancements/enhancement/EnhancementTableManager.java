@@ -50,11 +50,16 @@ public class EnhancementTableManager implements Listener {
     private final EnhancementManager manager;
     private final EnhancedItemForge forge;
 
-    // Enhancements that can be picked based on which option was selected 
-    // in the enchanting table.
+    // Enhancements that can be picked based on which option was selected in the
+    // enchanting table.
+    // Counters track how many times a pool has been chosen (and presumably
+    // accessed) to avoid randomising them unnecessarily.
     private final ArrayList<Enhancement> enhancementPoolI;
+    private int iCounter = 0;
     private final ArrayList<Enhancement> enhancementPoolII;
+    private int iiCounter = 0;
     private final ArrayList<Enhancement> enhancementPoolIII;
+    private int iiiCounter = 0;
 
     /**
      * Create an EnhancementTableManager for `plugin`.
@@ -166,18 +171,34 @@ public class EnhancementTableManager implements Listener {
         switch (event.whichButton()) {
             case 0:
                 pool = this.enhancementPoolI;
+                iCounter++;
+                if (iCounter > 5) {
+                    System.out.println("Randomising I");
+                    randomise(pool);
+                    iCounter = 0;
+                }
                 break;
             case 1:
                 pool = this.enhancementPoolII;
+                iiCounter++;
+                if (iiCounter > 5) {
+                    System.out.println("Randomising II");
+                    randomise(pool);
+                    iiCounter = 0;
+                }
                 break;
             // If the player manages to find and press a 4th button, they'll get
             // the rarest pool. Good for them!
             default:
                 pool = this.enhancementPoolIII;
+                iiiCounter++;
+                if (iiiCounter > 5) {
+                    System.out.println("Randomising III");
+                    randomise(pool);
+                    iiiCounter = 0;
+                }
                 break;
         }
-
-        randomise(pool);
 
         // Keep picking random enhancements until we get a valid enhancement
         int i = 0;
