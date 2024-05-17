@@ -1,5 +1,14 @@
+# Enhancement tables are the default method of enhancing items.
+# When enabled, items can be enhanced through normal enchanting tables by
+# placing an item with an empty socket in the enchanting slot and pressing one
+# of the three enchant buttons, this will cause an Enhancement randomly chosen
+# from a pool corresponding to the button to be bound to the item.
+# Note that there is a chance no Enhancements from that pool are actually valid
+# for the item, in which case the item will be enchanted instead.
 enhancement_tables:
   # Whether enchanting tables can be used to enhance items
+  # Note that it is still perfectly possible to enchant items through enchanting
+  # tables if enabled.
   enabled: true
   # When a user enhances an item in an enchanting table, an enhancement is
   # randomly chosen from a pool corresponding to the button they pressed.(I-III)
@@ -8,3 +17,13 @@ enhancement_tables:
   # enhancements of rarities I and II. Otherwise, the pools will only contain
   # enhancements of that exact rarity.
   additive_pools: true
+
+# Enhancement gems are essentially an Enhancement in item form.
+# They are (by default) obtained by shift-right-clicking a grindstone while
+# holding an enhanced item, this will remove the last enhancement from the item
+# and drop an Enhancement gem of it's type.
+enhancement_gems:
+  # Whether enhancement gems are enabled/
+  # Note that if disabled, previously-obtained gems will be able to be placed
+  # etc. as if they were normal items.
+  enabled: true

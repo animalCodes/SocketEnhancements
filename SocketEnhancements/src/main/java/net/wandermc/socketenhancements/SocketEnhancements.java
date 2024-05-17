@@ -75,8 +75,9 @@ public class SocketEnhancements extends JavaPlugin {
                 enhancementManager, enhancedItemForge,
                 enhancementsConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS);
 
-        this.enhancementGemManager = new EnhancementGemManager(this,
-            enhancedItemForge);
+        if (enhancementsConfig.ENHANCEMENT_GEMS_ENABLED)
+            this.enhancementGemManager = new EnhancementGemManager(this,
+                enhancedItemForge);
     }
 
     /**

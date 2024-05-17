@@ -34,6 +34,10 @@ public class EnhancementsConfig {
      */
     public final boolean ENHANCEMENT_TABLES_ADDITIVE_POOLS;
     /**
+     * Whether enhancement gems can be obtained and used by players.
+     */
+    public final boolean ENHANCEMENT_GEMS_ENABLED;
+    /**
      * Create a SocketsConfig with values read from `file`.
      *
      * @param file The .yml file to read from.
@@ -41,10 +45,19 @@ public class EnhancementsConfig {
     public EnhancementsConfig(File file) {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(file);
 
-        ConfigurationSection enhancementTablesSection = yamlConfig.getConfigurationSection("enhancement_tables");
+        ConfigurationSection enhancementTablesSection = yamlConfig
+        .getConfigurationSection("enhancement_tables");
 
-        this.ENHANCEMENT_TABLES_ENABLED = enhancementTablesSection.getBoolean("enabled", true);
+        this.ENHANCEMENT_TABLES_ENABLED = enhancementTablesSection
+        .getBoolean("enabled", true);
 
-        this.ENHANCEMENT_TABLES_ADDITIVE_POOLS = enhancementTablesSection.getBoolean("additive_pools", true);
+        this.ENHANCEMENT_TABLES_ADDITIVE_POOLS = enhancementTablesSection
+        .getBoolean("additive_pools", true);
+
+        ConfigurationSection enhancementGemsSection = yamlConfig
+        .getConfigurationSection("enhancement_gems");
+
+        this.ENHANCEMENT_GEMS_ENABLED =  enhancementGemsSection
+        .getBoolean("enabled", true);
     }
 }
