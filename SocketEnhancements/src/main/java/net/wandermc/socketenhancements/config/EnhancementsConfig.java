@@ -34,6 +34,10 @@ public class EnhancementsConfig {
      */
     public final boolean ENHANCEMENT_TABLES_ADDITIVE_POOLS;
     /**
+     * How frequently enhancement pools are randomised.
+     */
+    public final int ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY;
+    /**
      * Whether enhancement gems can be obtained and used by players.
      */
     public final boolean ENHANCEMENT_GEMS_ENABLED;
@@ -53,6 +57,9 @@ public class EnhancementsConfig {
 
         this.ENHANCEMENT_TABLES_ADDITIVE_POOLS = enhancementTablesSection
         .getBoolean("additive_pools", true);
+
+        this.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY =
+        enhancementTablesSection.getInt("randomisation_frequency", 5);
 
         ConfigurationSection enhancementGemsSection = yamlConfig
         .getConfigurationSection("enhancement_gems");

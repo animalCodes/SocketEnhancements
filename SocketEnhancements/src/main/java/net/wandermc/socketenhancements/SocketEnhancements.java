@@ -73,7 +73,8 @@ public class SocketEnhancements extends JavaPlugin {
         if (enhancementsConfig.ENHANCEMENT_TABLES_ENABLED)
             this.enhancementTableManager = new EnhancementTableManager(this,
                 enhancementManager, enhancedItemForge,
-                enhancementsConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS);
+                enhancementsConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS,
+                enhancementsConfig.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY);
 
         if (enhancementsConfig.ENHANCEMENT_GEMS_ENABLED)
             this.enhancementGemManager = new EnhancementGemManager(this,

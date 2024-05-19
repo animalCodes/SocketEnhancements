@@ -61,6 +61,9 @@ public class EnhancementTableManager implements Listener {
     private final ArrayList<Enhancement> enhancementPoolIII;
     private int iiiCounter = 0;
 
+    // How frequently enhancement pools are randomised
+    private int randomisationFrequency;
+
     /**
      * Create an EnhancementTableManager for `plugin`.
      *
@@ -70,10 +73,14 @@ public class EnhancementTableManager implements Listener {
      * @param additivePools Whether enhancement pools are additive or unique.
      *        (see class javadoc)
      */
-    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge, boolean additivePools) {
+    public EnhancementTableManager(JavaPlugin plugin,EnhancementManager manager,
+        EnhancedItemForge forge, boolean additivePools,
+        int randomisationFrequency) {
         this.plugin = plugin;
         this.manager = manager;
         this.forge = forge;
+
+        this.randomisationFrequency = randomisationFrequency;
 
         enhancementPoolI = new ArrayList();
         enhancementPoolII = new ArrayList();
@@ -107,14 +114,14 @@ public class EnhancementTableManager implements Listener {
     /**
      * Create an EnhancementTableManager for `plugin`.
      *
-     * Enhancement pools will be "additive".
+     * Enhancement pools will be "additive", randomisation frequency will be 5.
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
      * @param forge The current EnhancedItemForge.
      */
     public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
-        this(plugin, manager, forge, true);
+        this(plugin, manager, forge, true, 5);
     }
 
     /**
@@ -172,8 +179,7 @@ public class EnhancementTableManager implements Listener {
             case 0:
                 pool = this.enhancementPoolI;
                 iCounter++;
-                if (iCounter > 5) {
-                    System.out.println("Randomising I");
+                if (iCounter > randomisationFrequency) {
                     randomise(pool);
                     iCounter = 0;
                 }
@@ -181,8 +187,7 @@ public class EnhancementTableManager implements Listener {
             case 1:
                 pool = this.enhancementPoolII;
                 iiCounter++;
-                if (iiCounter > 5) {
-                    System.out.println("Randomising II");
+                if (iiCounter > randomisationFrequency) {
                     randomise(pool);
                     iiCounter = 0;
                 }
@@ -192,8 +197,7 @@ public class EnhancementTableManager implements Listener {
             default:
                 pool = this.enhancementPoolIII;
                 iiiCounter++;
-                if (iiiCounter > 5) {
-                    System.out.println("Randomising III");
+                if (iiiCounter > randomisationFrequency) {
                     randomise(pool);
                     iiiCounter = 0;
                 }
@@ -229,4 +233,3 @@ public class EnhancementTableManager implements Listener {
             event.getEnchanter().setLevel(event.getEnchanter().getLevel() - 1);
     }
 }
-
