@@ -32,20 +32,36 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
- * Manages the *use* (not creation) of Enhancement Gems.
+ * Manages the creation and use of Enhancement Gems.
  *
- * To be more specific, while the EnhancedItemForge handles the creation of
- * Enhancement Gems,
- * (`.createGemOfType()`) this makes them actually usable. Allowing for them to
- * be obtained, added to items and stopping them from being placed.
+ * Enhancement gems are Enhancements in item form, allowing players to easily
+ * remove, collect and re-bind Enhancements.
  */
 public class EnhancementGemManager implements Listener {
+    /**
+     * The name of Enhancement Gems.
+     */
+    public static final TextComponent ENHANCEMENT_GEM_NAME =
+        Component.text("Enhancement Gem",
+        Style.style(TextDecoration.ITALIC.withState
+            (TextDecoration.State.FALSE)));
+    /**
+     * The Material type of Enhancement Gems.
+     */
+    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
+
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
 
@@ -55,17 +71,50 @@ public class EnhancementGemManager implements Listener {
      * Create an EnhancementGemManager for `plugin`.
      *
      * @param plugin The plugin this manager is working for
-     * @param manager The current EnhancementManager
+     * @param forge The current EnhancedItemForge
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge) {
         this.plugin = plugin;
         this.forge = forge;
 
-        this.dummyGem = forge.createGem();
+        this.dummyGem = this.createGem();
 
         registerRecipe();
 
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    /**
+     * Create an enhancement gem of type `enhancement`.
+     *
+     * An "Enhancement Gem" is an end crystal with a single socket.
+     * The enhancement in that socket is the "type" of the Enhancement Gem.
+     *
+     * @param enhancement The Enhancement the gem represents.
+     * @return An Enhancement Gem.
+     */
+    public ItemStack createGemOfType(Enhancement enhancement) {
+        EnhancedItem enhancedItem = forge.create(createGem());
+        enhancedItem.bind(enhancement);
+        return enhancedItem.update();
+    }
+
+    /**
+     * Create a typeless enhancement gem.
+     *
+     * @return An Enhancement Gem.
+     */
+    private ItemStack createGem() {
+        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
+
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(ENHANCEMENT_GEM_NAME);
+        item.setItemMeta(meta);
+
+        EnhancedItem enhancedItem = forge.create(item);
+        enhancedItem.addSockets(1);
+
+        return enhancedItem.update();
     }
 
     /**
@@ -120,7 +169,7 @@ public class EnhancementGemManager implements Listener {
 
         event.getPlayer().getWorld().dropItemNaturally(
             event.getClickedBlock().getLocation(),
-            forge.createGemOfType(enhancement)
+            createGemOfType(enhancement)
         );
     }
 

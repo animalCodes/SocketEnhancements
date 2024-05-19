@@ -29,9 +29,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
@@ -40,20 +37,10 @@ import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 /**
  * Class for the creation of EnhancedItem instances.
  *
- * Where EnhancementManager is responsible for managing Enhancements, EnhancedItem handles
- * storing those Enhancements on items.
+ * Where EnhancementManager is responsible for managing Enhancements,
+ * EnhancedItem handles storing those Enhancements on items.
  */
 public class EnhancedItemForge {
-    /**
-     * The name of Enhancement Gems.
-     */
-    public static final TextComponent ENHANCEMENT_GEM_NAME = Component.text("Enhancement Gem",
-            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)));
-    /**
-     * The Material type of Enhancement Gems.
-     */
-    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
-
     private final EnhancementManager manager;
     private final NamespacedKey socketsKey;
     private final EnumMap<Material, Integer> socketLimits;
@@ -74,8 +61,6 @@ public class EnhancedItemForge {
 
         this.socketLimits = socketLimits;
         this.defaultSocketLimit = defaultSocketLimit;
-
-        socketLimits.put(ENHANCEMENT_GEM_TYPE, 1);
     }
 
     /**
@@ -102,40 +87,6 @@ public class EnhancedItemForge {
      */
     public EnhancedItem create(ItemStack item) {
         return new EnhancedItem(item);
-    }
-
-    /**
-     * Create an enhancement gem of type `enhancement`.
-     *
-     * An "Enhancement Gem" is an end crystal with a single socket. 
-     * The enhancement in that socket is the "type" of the Enhancement Gem.
-     *
-     * @param enhancement The Enhancement the gem represents.
-     * @return An Enhancement Gem.
-     */
-    public ItemStack createGemOfType(Enhancement enhancement) {
-        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
-
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(ENHANCEMENT_GEM_NAME);
-        item.setItemMeta(meta);
-
-        EnhancedItem enhancedItem = this.create(item);
-        enhancedItem.addSockets(1);
-        enhancedItem.bind(enhancement);
-
-        return enhancedItem.update();
-    }
-
-    /**
-     * Create a typeless enhancement gem.
-     *
-     * This gem should only be used for reference, do not give it to a player!
-     *
-     * @return An Enhancement Gem of type EmptySocket.
-     */
-    public ItemStack createGem() {
-        return createGemOfType(manager.getEmpty());
     }
 
     /**
