@@ -32,6 +32,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
@@ -65,6 +67,7 @@ public class EnhancementGemManager implements Listener {
 
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
+    private final NamespacedKey gemKey;
     private final ItemEventBlocker eventBlocker;
 
     private final ItemStack dummyGem;
@@ -78,18 +81,33 @@ public class EnhancementGemManager implements Listener {
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge) {
         this.plugin = plugin;
         this.forge = forge;
+        this.gemKey = new NamespacedKey(plugin, "is_gem");
 
-        this.dummyGem = this.createGem();
+        // Stop enhancement gems from being placed
+        this.eventBlocker = new ItemEventBlocker(plugin,
+            item -> isEnhancementGem(item), BlockableAction.ENTITY_PLACE);
+
+        this.dummyGem = createGem();
 
         registerRecipe();
 
-        // Stop enhancement gems from being placed
-        this.eventBlocker = new ItemEventBlocker(plugin, item -> {
-            return item.getType() == dummyGem.getType() &&
-            !(forge.create(item).pop() instanceof EmptySocket);
-        }, BlockableAction.ENTITY_PLACE);
-
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    /**
+     * Determines whether `item` is an enhancement gem.
+     *
+     * @param item The item to check.
+     * @return Whether `item` has "is_gem" set to true in its
+               PersistentDataContainer.
+     */
+    public boolean isEnhancementGem(ItemStack item) {
+        PersistentDataContainer dataContainer = item.getItemMeta()
+        .getPersistentDataContainer();
+        if (dataContainer.has(gemKey))
+            return dataContainer.get(gemKey, PersistentDataType.BOOLEAN);
+        else
+            return false;
     }
 
     /**
@@ -117,6 +135,8 @@ public class EnhancementGemManager implements Listener {
 
         ItemMeta meta = item.getItemMeta();
         meta.displayName(ENHANCEMENT_GEM_NAME);
+        meta.getPersistentDataContainer()
+            .set(gemKey, PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
 
         EnhancedItem enhancedItem = forge.create(item);
@@ -162,7 +182,9 @@ public class EnhancementGemManager implements Listener {
         if (event.getHand() != EquipmentSlot.HAND)
             return;
         ItemStack item = event.getItem();
-        if (item == null)
+        // Don't let players remove enhancements from enhancement gems,
+        // otherwise infinite duplication glitch!
+        if (item == null || isEnhancementGem(item))
             return;
 
         // Okay, we now know the player right-clicked a grindstone while
