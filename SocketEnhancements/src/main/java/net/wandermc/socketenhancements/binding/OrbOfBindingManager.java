@@ -37,6 +37,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.events.BlockableAction;
 import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
@@ -74,7 +75,7 @@ public class OrbOfBindingManager implements Listener {
         // Stop players from placing orbs of binding.
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> item.isSimilar(this.orbOfBinding),
-            ItemEventBlocker.BlockableAction.BLOCK_PLACE);
+            BlockableAction.BLOCK_PLACE);
 
         registerRecipes();
 

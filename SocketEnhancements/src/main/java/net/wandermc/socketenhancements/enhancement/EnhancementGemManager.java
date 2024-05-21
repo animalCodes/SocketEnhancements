@@ -41,6 +41,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.events.BlockableAction;
 import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
@@ -86,7 +87,7 @@ public class EnhancementGemManager implements Listener {
         this.eventBlocker = new ItemEventBlocker(plugin, item -> {
             return item.getType() == dummyGem.getType() &&
             !(forge.create(item).pop() instanceof EmptySocket);
-        }, ItemEventBlocker.BlockableAction.ENTITY_PLACE);
+        }, BlockableAction.ENTITY_PLACE);
 
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }

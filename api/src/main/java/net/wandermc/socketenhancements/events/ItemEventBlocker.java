@@ -73,68 +73,6 @@ public class ItemEventBlocker implements Listener {
         registerHandlers(actions);
     }
 
-    /**
-     * An "action" that can be blocked by an ItemEventBlocker.
-     */
-    public static enum BlockableAction {
-        /**
-         * A block being placed.
-         */
-        BLOCK_PLACE (BlockPlaceEvent.class),
-        /**
-         * An item being used as fuel in a brewing stand.
-         */
-        BREW_FUEL (BrewingStandFuelEvent.class),
-        /**
-         * An item being used as an ingredient in a brewing stand.
-         */
-        BREW_INGREDIENT (BrewEvent.class),
-        /**
-         * An item being used as fuel in a furnace, smoker or blast furnace.
-         */
-        BURN (FurnaceBurnEvent.class),
-        /**
-         * An item being combined with another item in an anvil.
-         */
-        COMBINE (PrepareAnvilEvent.class),
-        /**
-         * An item being placed on a campfire.
-         */
-        COOK (PlayerInteractEvent.class),
-        /**
-         * An item being enchanted.
-         */
-        ENCHANT (PrepareItemEnchantEvent.class),
-        /**
-         * An entity being placed.
-         *
-         * Used for end crystals, item frames and the like.
-         */
-        ENTITY_PLACE (EntityPlaceEvent.class),
-        /**
-         * An item being repaired / disenchanted in a grindstone.
-         */
-        GRIND (PrepareGrindstoneEvent.class),
-        /**
-         * An item being smelted in a furnace, smoker or blast furnace.
-         */
-        SMELT (FurnaceSmeltEvent.class),
-        /**
-         * An item being used in any crafting recipe.
-         */
-        USE_IN_RECIPE(PrepareItemCraftEvent.class);
-
-        private final Class<? extends Event> eventType;
-
-        BlockableAction(Class<? extends Event> eventType) {
-            this.eventType = eventType;
-        }
-
-        public Class<? extends Event> eventType() {
-            return this.eventType;
-        }
-    }
-
     private void registerHandlers(BlockableAction ...actions) {
         for (BlockableAction action : actions) {
             // Try to find the handler method for this action
