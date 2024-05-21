@@ -24,7 +24,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -38,6 +37,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
  * Manages the crafting and usage of orbs of binding.
@@ -46,10 +46,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 public class OrbOfBindingManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
-    private final List<Material> ingredients;
+    private final ItemEventBlocker eventBlocker;
 
     private final ItemStack orbOfBinding;
-    
+    private final List<Material> ingredients;
+
     /**
      * Create an OrbOfBindingManager for `plugin`.
      *
@@ -69,6 +70,11 @@ public class OrbOfBindingManager implements Listener {
         }
 
         this.orbOfBinding = createOrbOfBinding();
+
+        // Stop players from placing orbs of binding.
+        this.eventBlocker = new ItemEventBlocker(plugin,
+            item -> item.isSimilar(this.orbOfBinding),
+            ItemEventBlocker.BlockableAction.BLOCK_PLACE);
 
         registerRecipes();
 
@@ -152,16 +158,5 @@ public class OrbOfBindingManager implements Listener {
             // In case item can't have the orbs added, hide dummy result item.
             event.getInventory().setResult(new ItemStack(Material.AIR));
         }
-    }
-
-    /**
-     * Stop players from placing orbs of binding.
-     *
-     * @param event The event
-     */
-    @EventHandler
-    public void handlePlace(BlockPlaceEvent event) {
-        if (event.getItemInHand().isSimilar(orbOfBinding))
-            event.setCancelled(true);
     }
 }

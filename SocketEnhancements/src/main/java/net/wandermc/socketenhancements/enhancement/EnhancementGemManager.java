@@ -25,7 +25,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -42,6 +41,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
  * Manages the creation and use of Enhancement Gems.
@@ -64,6 +64,7 @@ public class EnhancementGemManager implements Listener {
 
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
+    private final ItemEventBlocker eventBlocker;
 
     private final ItemStack dummyGem;
 
@@ -80,6 +81,12 @@ public class EnhancementGemManager implements Listener {
         this.dummyGem = this.createGem();
 
         registerRecipe();
+
+        // Stop enhancement gems from being placed
+        this.eventBlocker = new ItemEventBlocker(plugin, item -> {
+            return item.getType() == dummyGem.getType() &&
+            !(forge.create(item).pop() instanceof EmptySocket);
+        }, ItemEventBlocker.BlockableAction.ENTITY_PLACE);
 
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -220,19 +227,5 @@ public class EnhancementGemManager implements Listener {
         }
 
         event.getInventory().setResult(itemToEnhance.update());
-    }
-
-    /**
-     * Stop players from placing enhancement gems.
-     *
-     * @param event The event
-     */
-    @EventHandler
-    public void handlePlace(EntityPlaceEvent event) {
-        ItemStack placedItem = event.getPlayer().getInventory().getItem(event.getHand());
-        // If placed item is an end crystal with an enhancement, aka an Enhancement Gem
-        if (placedItem.getType() == dummyGem.getType() &&
-            !(forge.create(placedItem).pop() instanceof EmptySocket))
-            event.setCancelled(true);
     }
 }
