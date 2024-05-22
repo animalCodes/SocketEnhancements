@@ -83,8 +83,8 @@ public class ItemEventBlocker implements Listener {
                         handler = this.getClass().getMethod("blockBlockPlace",
                             action.eventType());
                         break;
-                    case BREW_FUEL:
-                        handler = this.getClass().getMethod("blockBrewFuel",
+                    case FUEL_BREWING:
+                        handler = this.getClass().getMethod("blockFuelBrewing",
                             action.eventType());
                         break;
                     case BREW_INGREDIENT:
@@ -164,7 +164,7 @@ public class ItemEventBlocker implements Listener {
     /**
      * Prevents a matching item from being used as fuel in a brewing stand.
      */
-    public void blockBrewFuel(BrewingStandFuelEvent event) {
+    public void blockFuelBrewing(BrewingStandFuelEvent event) {
         if (itemChecker.test(event.getFuel()))
             event.setCancelled(true);
     }

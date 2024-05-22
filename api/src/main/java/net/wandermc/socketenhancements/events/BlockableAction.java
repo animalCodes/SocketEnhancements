@@ -1,5 +1,10 @@
 package net.wandermc.socketenhancements.events;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -12,6 +17,13 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.CampfireRecipe;
+import org.bukkit.inventory.CookingRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 /**
  * An "action" that can be blocked by an ItemEventBlocker.
@@ -20,45 +32,45 @@ public enum BlockableAction {
     /**
      * A block being placed.
      */
-    BLOCK_PLACE (BlockPlaceEvent.class),
+    BLOCK_PLACE(BlockPlaceEvent.class),
     /**
      * An item being used as fuel in a brewing stand.
      */
-    BREW_FUEL (BrewingStandFuelEvent.class),
+    FUEL_BREWING(BrewingStandFuelEvent.class),
     /**
      * An item being used as an ingredient in a brewing stand.
      */
-    BREW_INGREDIENT (BrewEvent.class),
+    BREW_INGREDIENT(BrewEvent.class),
     /**
      * An item being used as fuel in a furnace, smoker or blast furnace.
      */
-    BURN (FurnaceBurnEvent.class),
+    BURN(FurnaceBurnEvent.class),
     /**
      * An item being combined with another item in an anvil.
      */
-    COMBINE (PrepareAnvilEvent.class),
+    COMBINE(PrepareAnvilEvent.class),
     /**
      * An item being placed on a campfire.
      */
-    COOK (PlayerInteractEvent.class),
+    COOK(PlayerInteractEvent.class),
     /**
      * An item being enchanted.
      */
-    ENCHANT (PrepareItemEnchantEvent.class),
+    ENCHANT(PrepareItemEnchantEvent.class),
     /**
      * An entity being placed.
      *
      * Used for end crystals, item frames and the like.
      */
-    ENTITY_PLACE (EntityPlaceEvent.class),
+    ENTITY_PLACE(EntityPlaceEvent.class),
     /**
      * An item being repaired / disenchanted in a grindstone.
      */
-    GRIND (PrepareGrindstoneEvent.class),
+    GRIND(PrepareGrindstoneEvent.class),
     /**
      * An item being smelted in a furnace, smoker or blast furnace.
      */
-    SMELT (FurnaceSmeltEvent.class),
+    SMELT(FurnaceSmeltEvent.class),
     /**
      * An item being used in any crafting recipe.
      */
@@ -73,5 +85,233 @@ public enum BlockableAction {
     public Class<? extends Event> eventType() {
         return this.eventType;
     }
-}
 
+    /**
+     * Determine whether the action "PLACE_BLOCK" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBlockPlace(Material mat) {
+        return mat.isBlock();
+    }
+
+    /**
+     * Determine whether the action "FUEL_BREWING" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canFuelBrewing(Material mat) {
+        return mat == Material.BLAZE_POWDER;
+    }
+
+    /**
+     * Determine whether the action "BREW_INGREDIENT" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBrewIngredient(Material mat) {
+        switch (mat) {
+            case NETHER_WART, REDSTONE, GLOWSTONE_DUST, FERMENTED_SPIDER_EYE,
+            GUNPOWDER, DRAGON_BREATH, SUGAR, RABBIT_FOOT,
+            GLISTERING_MELON_SLICE, SPIDER_EYE, PUFFERFISH, MAGMA_CREAM,
+            GOLDEN_CARROT, BLAZE_POWDER, GHAST_TEAR, TURTLE_HELMET,
+            PHANTOM_MEMBRANE:
+            /* Upcoming, included for completeness
+            BREEZE_ROD, STONE, COBWEB, SLIME_BLOCK:
+            */
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Determine whether the action "BURN" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBurn(Material mat) {
+        return mat.isFuel();
+    }
+
+    /**
+     * Determine whether the action "COMBINE" can be performed on `mat`.
+     *
+     * Any item can be renamed in an anvil, so this will return true unless the
+     * material is AIR.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canCombine(Material mat) {
+        return mat != Material.AIR;
+    }
+
+    /**
+     * Determine whether the action "COOK" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canCook(Material mat) {
+        switch (mat) {
+            case BEEF, CHICKEN, RABBIT, PORKCHOP, MUTTON, COD, SALMON, POTATO,
+            KELP:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Determine whether the action "ENCHANT" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canEnchant(Material mat) {
+        if (mat.getMaxDurability() > 0) {
+            switch (mat) {
+                case SHIELD, FLINT_AND_STEEL, SHEARS, ELYTRA:
+                    break;
+                default:
+                    return true;
+            }
+        } else if (mat == Material.BOOK)
+            return true;
+        return false;
+    }
+
+    /**
+     * Determine whether the action "ENTITY_PLACE" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canEntityPlace(Material mat) {
+        if (mat == Material.ARMOR_STAND || mat == Material.END_CRYSTAL)
+            return true;
+        else {
+            // This is probably a terrible idea, but I *really* can't be
+            // bothered to write a huge switch/case.
+            if (mat.toString().contains("BOAT") ||
+                mat.toString().contains("MINECART"))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether the action "GRIND" can be performed on `mat`.
+     *
+     * As any item can have an enchantment applied to it, any item can have an
+     * enchantment *removed* from it. So provided `mat` isn't AIR, this will
+     * return true.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canGrind(Material mat) {
+        return mat != Material.AIR;
+    }
+
+    /**
+     * Determine whether the action "SMELT" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canSmelt(Material mat) {
+        Iterator<Recipe> iterator = Bukkit.recipeIterator();
+        Recipe recipe;
+        while (iterator.hasNext()) {
+            recipe = iterator.next();
+            if (recipe instanceof CookingRecipe &&
+                !(recipe instanceof CampfireRecipe)) {
+                    if (((CookingRecipe<?>)recipe)
+                        .getInputChoice().test(new ItemStack(mat)))
+                            return true;
+                }
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether the action "USE_IN_RECIPE" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canUseInRecipe(Material mat) {
+        Iterator<Recipe> iterator = Bukkit.recipeIterator();
+        Recipe recipe;
+        while (iterator.hasNext()) {
+            recipe = iterator.next();
+            if (recipe instanceof ShapelessRecipe) {
+                for (RecipeChoice choice : ((ShapelessRecipe)recipe)
+                    .getChoiceList()) {
+                    if (choice.test(new ItemStack(mat)))
+                        return true;
+                }
+            } else if (recipe instanceof ShapedRecipe) {
+                for (RecipeChoice choice : ((ShapedRecipe)recipe)
+                    .getChoiceMap().values()) {
+                    if (choice == null)
+                        continue; // Apparently this is possible
+                    if (choice.test(new ItemStack(mat)))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determine all BlockableActions that can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return All actions that can be formed on `mat`.
+     */
+    public static ArrayList<BlockableAction> getValidActions(Material mat) {
+        ArrayList<BlockableAction> actions = new ArrayList<>();
+
+        if (canBlockPlace(mat))
+            actions.add(BLOCK_PLACE);
+
+        if (canFuelBrewing(mat))
+            actions.add(FUEL_BREWING);
+
+        if (canBrewIngredient(mat))
+            actions.add(BREW_INGREDIENT);
+
+        if (canBurn(mat))
+            actions.add(BURN);
+
+        if (canCombine(mat))
+            actions.add(COMBINE);
+
+        if (canCook(mat))
+            actions.add(COOK);
+
+        if (canEnchant(mat))
+            actions.add(ENCHANT);
+
+        if (canEntityPlace(mat))
+            actions.add(ENTITY_PLACE);
+
+        if (canGrind(mat))
+            actions.add(GRIND);
+
+        if (canSmelt(mat))
+            actions.add(SMELT);
+
+        if (canUseInRecipe(mat))
+            actions.add(USE_IN_RECIPE);
+
+        return actions;
+    }
+}
