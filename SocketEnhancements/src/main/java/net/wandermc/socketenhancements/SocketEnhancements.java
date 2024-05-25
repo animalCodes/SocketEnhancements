@@ -78,7 +78,7 @@ public class SocketEnhancements extends JavaPlugin {
 
         if (enhancementsConfig.ENHANCEMENT_GEMS_ENABLED)
             this.enhancementGemManager = new EnhancementGemManager(this,
-                enhancedItemForge);
+                enhancedItemForge, enhancementsConfig.ENHANCEMENT_GEMS_TYPE);
     }
 
     /**

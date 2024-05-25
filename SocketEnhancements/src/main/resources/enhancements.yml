@@ -31,3 +31,6 @@ enhancement_gems:
   # Note that if disabled, previously-obtained gems will be able to be placed
   # etc. as if they were normal items.
   enabled: true
+  # The Material type of enhancement gems
+  # Changing this value will break any previously obtained enhancement gems.
+  material: "END_CRYSTAL"

@@ -60,16 +60,13 @@ public class EnhancementGemManager implements Listener {
         Component.text("Enhancement Gem",
         Style.style(TextDecoration.ITALIC.withState
             (TextDecoration.State.FALSE)));
-    /**
-     * The Material type of Enhancement Gems.
-     */
-    public static final Material ENHANCEMENT_GEM_TYPE = Material.END_CRYSTAL;
 
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
     private final NamespacedKey gemKey;
     private final ItemEventBlocker eventBlocker;
 
+    private final Material enhancementGemType;
     private final ItemStack dummyGem;
 
     /**
@@ -78,14 +75,25 @@ public class EnhancementGemManager implements Listener {
      * @param plugin The plugin this manager is working for
      * @param forge The current EnhancedItemForge
      */
-    public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge) {
+    public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge,
+        Material enhancementGemType) {
         this.plugin = plugin;
         this.forge = forge;
+
         this.gemKey = new NamespacedKey(plugin, "is_gem");
 
+        this.enhancementGemType = enhancementGemType;
+
+        BlockableAction[] javaIsDumb = {};
         // Stop enhancement gems from being placed
         this.eventBlocker = new ItemEventBlocker(plugin,
-            item -> isEnhancementGem(item), BlockableAction.ENTITY_PLACE);
+            item -> {
+                if (item == null)
+                    return false;
+                else
+                    return isEnhancementGem(item);},
+            BlockableAction.getValidActions
+            (enhancementGemType).toArray(javaIsDumb));
 
         this.dummyGem = createGem();
 
@@ -94,8 +102,9 @@ public class EnhancementGemManager implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+
     /**
-     * Determines whether `item` is an enhancement gem.
+     * Determine whether `item` is an enhancement gem.
      *
      * @param item The item to check.
      * @return Whether `item` has "is_gem" set to true in its
@@ -131,7 +140,7 @@ public class EnhancementGemManager implements Listener {
      * @return An Enhancement Gem.
      */
     private ItemStack createGem() {
-        ItemStack item = new ItemStack(ENHANCEMENT_GEM_TYPE);
+        ItemStack item = new ItemStack(enhancementGemType);
 
         ItemMeta meta = item.getItemMeta();
         meta.displayName(ENHANCEMENT_GEM_NAME);
@@ -217,21 +226,9 @@ public class EnhancementGemManager implements Listener {
             if (item == null) // Empty slots are represented by null
                 continue;
 
-            if (item.getType() == dummyGem.getType()) {
+            if (isEnhancementGem(item)) {
                 Enhancement enhancement = forge.create(item).pop();
-                if (enhancement instanceof EmptySocket) {
-                    // Normal end crystal in crafting table, if the recipe still
-                    // matches hide the stone block dummy result.
-                    ItemStack result = event.getInventory().getResult();
-
-                    if (result != null && result.getType() == Material.STONE)
-                        event.getInventory().setResult(
-                            new ItemStack(Material.AIR));
-                    // Prevent normal end crystal from being consumed if recipe is crafted.
-                    return;
-                } else {
-                    enhancements.add(enhancement);
-                }
+                enhancements.add(enhancement);
             } else
                 itemToEnhance = forge.create(item.clone());
         }

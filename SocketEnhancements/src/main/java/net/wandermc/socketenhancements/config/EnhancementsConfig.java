@@ -20,6 +20,7 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.Material;
 
 /**
  * Generic configuration related to enhancements, by default read from enhancements.yml.
@@ -41,6 +42,10 @@ public class EnhancementsConfig {
      * Whether enhancement gems can be obtained and used by players.
      */
     public final boolean ENHANCEMENT_GEMS_ENABLED;
+    /**
+     * The Material type of enhancement gems.
+     */
+    public final Material ENHANCEMENT_GEMS_TYPE;
     /**
      * Create a SocketsConfig with values read from `file`.
      *
@@ -66,5 +71,12 @@ public class EnhancementsConfig {
 
         this.ENHANCEMENT_GEMS_ENABLED =  enhancementGemsSection
         .getBoolean("enabled", true);
+
+        Material material = Material.getMaterial(enhancementGemsSection
+            .getString("material", "END_CRYSTAL"));
+        if (material != null)
+            this.ENHANCEMENT_GEMS_TYPE = material;
+        else
+            this.ENHANCEMENT_GEMS_TYPE = Material.END_CRYSTAL;
     }
 }
