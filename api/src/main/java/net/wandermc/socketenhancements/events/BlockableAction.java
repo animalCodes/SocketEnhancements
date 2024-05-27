@@ -199,6 +199,7 @@ public enum BlockableAction {
             // This is probably a terrible idea, but I *really* can't be
             // bothered to write a huge switch/case.
             if (mat.toString().contains("BOAT") ||
+                mat.toString().contains("RAFT") ||
                 mat.toString().contains("MINECART"))
                 return true;
         }
