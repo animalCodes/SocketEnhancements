@@ -102,11 +102,10 @@ public class AggregateEventListener<C extends Event> implements Listener {
      *
      * @param event The event
      */
-    @EventHandler // Please don't touch this line
+    @EventHandler
     public void handle(C event) {
         enhancements.forEach(enhancement -> {
-            if (enhancement.shouldRun(event))
-                enhancement.runEffect(event);
+            enhancement.run(event);
         });
     }
 }

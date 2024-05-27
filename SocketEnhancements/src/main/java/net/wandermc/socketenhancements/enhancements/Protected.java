@@ -65,14 +65,13 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
     public boolean isValidItem(EnhancedItem item) {
         // If an item can take damage, it can break.
-        return item.update().getItemMeta() instanceof Damageable;
+        return item.update().getItemMeta() instanceof Damageable
     }
 
-    public boolean shouldRun(PlayerItemBreakEvent context)  {
-        return forge.create(context.getBrokenItem()).hasEnhancement(this);
-    }
+    public boolean run(PlayerItemBreakEvent context) {
+        if (!forge.create(context.getBrokenItem()).hasEnhancement(this))
+            return false;
 
-    public boolean runEffect(PlayerItemBreakEvent context) {
         EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
         enhancedItem.removeEnhancement(this);
 

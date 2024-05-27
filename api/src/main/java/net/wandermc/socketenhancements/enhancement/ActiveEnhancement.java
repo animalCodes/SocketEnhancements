@@ -23,23 +23,15 @@ import org.bukkit.event.Event;
  */
 public interface ActiveEnhancement<C extends Event> extends Enhancement {
     /**
-     * Determines whether the enhancement's effect should be run.
-     *
-     * @param context The event to check.
-     * @return Whether the enhancement's effect should be run.
-     */
-    public boolean shouldRun(C context);
-
-    /**
-     * Runs this Enhancement's effect.
+     * Check context and run this Enhancement's effect.
      *
      * @param context The event being handled.
-     * @return Whether the effect was run successfully.
+     * @return Whether the effect was run successfully, if at all.
      */
-    public boolean runEffect(C context);
+    public boolean run(C context);
 
     /**
-     * Returns the class of the Event on which this enhancement should be run.
+     * Return the class of the Event on which this enhancement should be run.
      *
      * @return Whether the effect was run successfully.
      */
