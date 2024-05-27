@@ -49,7 +49,7 @@ public class SocketEnhancements extends JavaPlugin {
             new File(getDataFolder(), "sockets.yml"));
 
         saveResource("enhancements.yml", false);
-        EnhancementsConfig enhancementsConfig = new EnhancementsConfig(
+        EnhancementsConfig eConfig = new EnhancementsConfig(
             new File(getDataFolder(), "enhancements.yml"));
 
         this.enhancementManager = new EnhancementManager(this,
@@ -70,15 +70,16 @@ public class SocketEnhancements extends JavaPlugin {
             this.orbOfBindingManager = new OrbOfBindingManager(this,
                 enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
 
-        if (enhancementsConfig.ENHANCEMENT_TABLES_ENABLED)
+        if (eConfig.ENHANCEMENT_TABLES_ENABLED)
             this.enhancementTableManager = new EnhancementTableManager(this,
                 enhancementManager, enhancedItemForge,
-                enhancementsConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS,
-                enhancementsConfig.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY);
+                eConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS,
+                eConfig.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY);
 
-        if (enhancementsConfig.ENHANCEMENT_GEMS_ENABLED)
+        if (eConfig.ENHANCEMENT_GEMS_ENABLED)
             this.enhancementGemManager = new EnhancementGemManager(this,
-                enhancedItemForge, enhancementsConfig.ENHANCEMENT_GEMS_TYPE);
+                enhancedItemForge, eConfig.ENHANCEMENT_GEMS_BLOCK_TYPE,
+                eConfig.ENHANCEMENT_GEMS_TYPE);
     }
 
     /**

@@ -23,14 +23,17 @@ enhancement_tables:
   randomisation_frequency: 5
 
 # Enhancement gems are essentially an Enhancement in item form.
-# They are (by default) obtained by shift-right-clicking a grindstone while
-# holding an enhanced item, this will remove the last enhancement from the item
-# and drop an Enhancement gem of it's type.
+# They are obtained by shift-"use"ing a block of type block_type while holding
+# an enhanced item, this will remove the last enhancement from the item and
+# drop an Enhancement gem of it's type.
 enhancement_gems:
   # Whether enhancement gems are enabled/
   # Note that if disabled, previously-obtained gems will be able to be placed
   # etc. as if they were normal items.
   enabled: true
+  # The Material type of the block that must be interacted with to get an
+  # enhancement gem.
+  block: "GRINDSTONE"
   # The Material type of enhancement gems
   # Changing this value will break any previously obtained enhancement gems.
   material: "END_CRYSTAL"

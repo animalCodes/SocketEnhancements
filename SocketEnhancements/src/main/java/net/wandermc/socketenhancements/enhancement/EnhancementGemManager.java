@@ -66,6 +66,7 @@ public class EnhancementGemManager implements Listener {
     private final NamespacedKey gemKey;
     private final ItemEventBlocker eventBlocker;
 
+    private final Material blockType;
     private final Material enhancementGemType;
     private final ItemStack dummyGem;
 
@@ -76,16 +77,16 @@ public class EnhancementGemManager implements Listener {
      * @param forge The current EnhancedItemForge
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge,
-        Material enhancementGemType) {
+        Material blockType, Material enhancementGemType) {
         this.plugin = plugin;
         this.forge = forge;
 
         this.gemKey = new NamespacedKey(plugin, "is_gem");
 
+        this.blockType = blockType;
         this.enhancementGemType = enhancementGemType;
 
         BlockableAction[] javaIsDumb = {};
-        // Stop enhancement gems from being placed
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> {
                 if (item == null)
@@ -101,7 +102,6 @@ public class EnhancementGemManager implements Listener {
 
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
-
 
     /**
      * Determine whether `item` is an enhancement gem.
@@ -122,8 +122,9 @@ public class EnhancementGemManager implements Listener {
     /**
      * Create an enhancement gem of type `enhancement`.
      *
-     * An "Enhancement Gem" is an end crystal with a single socket.
-     * The enhancement in that socket is the "type" of the Enhancement Gem.
+     * An "Enhancement Gem" is an item of type `this.enhancementGemType` with
+     * a single socket. The enhancement in that socket is the "type" of the
+     * Enhancement Gem.
      *
      * @param enhancement The Enhancement the gem represents.
      * @return An Enhancement Gem.
@@ -172,8 +173,8 @@ public class EnhancementGemManager implements Listener {
     }
 
     /**
-     * Convert a bound Enhancement to an Enhancement Gem when interacting with a
-     * grindstone.
+     * Convert a bound Enhancement to an Enhancement Gem when interacting with
+     * the appropriate block.
      * 
      * Default 'interaction' is right-clicking while sneaking.
      *
@@ -184,7 +185,7 @@ public class EnhancementGemManager implements Listener {
         // TODO make interaction configurable
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
-        if (event.getClickedBlock().getType() != Material.GRINDSTONE)
+        if (event.getClickedBlock().getType() != blockType)
             return;
         if (!event.getPlayer().isSneaking())
             return;
@@ -195,9 +196,6 @@ public class EnhancementGemManager implements Listener {
         // otherwise infinite duplication glitch!
         if (item == null || isEnhancementGem(item))
             return;
-
-        // Okay, we now know the player right-clicked a grindstone while
-        // sneaking and holding an item.
 
         EnhancedItem enhancedItem = forge.create(item);
         Enhancement enhancement = enhancedItem.pop();

@@ -43,6 +43,10 @@ public class EnhancementsConfig {
      */
     public final boolean ENHANCEMENT_GEMS_ENABLED;
     /**
+     * The Material type of the block used to create enhancement gems.
+     */
+    public final Material ENHANCEMENT_GEMS_BLOCK_TYPE;
+    /**
      * The Material type of enhancement gems.
      */
     public final Material ENHANCEMENT_GEMS_TYPE;
@@ -72,10 +76,17 @@ public class EnhancementsConfig {
         this.ENHANCEMENT_GEMS_ENABLED =  enhancementGemsSection
         .getBoolean("enabled", true);
 
-        Material material = Material.getMaterial(enhancementGemsSection
-            .getString("material", "END_CRYSTAL"));
-        if (material != null)
-            this.ENHANCEMENT_GEMS_TYPE = material;
+        Material blockMaterial = Material.getMaterial(enhancementGemsSection
+        .getString("block", "GRINDSTONE"));
+        if (blockMaterial != null)
+            this.ENHANCEMENT_GEMS_BLOCK_TYPE = blockMaterial;
+        else
+            this.ENHANCEMENT_GEMS_BLOCK_TYPE = Material.GRINDSTONE;
+
+        Material gemMaterial = Material.getMaterial(enhancementGemsSection
+        .getString("material", "END_CRYSTAL"));
+        if (gemMaterial != null)
+            this.ENHANCEMENT_GEMS_TYPE = gemMaterial;
         else
             this.ENHANCEMENT_GEMS_TYPE = Material.END_CRYSTAL;
     }
