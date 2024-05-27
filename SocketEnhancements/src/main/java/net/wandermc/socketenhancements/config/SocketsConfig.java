@@ -53,6 +53,10 @@ public class SocketsConfig {
      */
     public final ArrayList<Material> ORB_OF_BINDING_INGREDIENTS;
     /**
+     * Material type of orbs of binding.
+     */
+    public final Material ORB_OF_BINDING_TYPE;
+    /**
      * Create a SocketsConfig with values read from `file`.
      *
      * @param file The .yml file to read from.
@@ -80,7 +84,18 @@ public class SocketsConfig {
 
         this.ORB_OF_BINDING_INGREDIENTS = new ArrayList<Material>();
 
-        ConfigurationSection orbsOfBindingSection = yamlConfig.getConfigurationSection("orbs_of_binding");
+        ConfigurationSection orbsOfBindingSection = yamlConfig
+        .getConfigurationSection("orbs_of_binding");
+
+        this.ORBS_OF_BINDING_ENABLED = orbsOfBindingSection
+        .getBoolean("enabled", true);
+
+        Material orbType = Material.getMaterial(orbsOfBindingSection
+        .getString("material", "CONDUIT"));
+        if (orbType == null)
+            this.ORB_OF_BINDING_TYPE = Material.CONDUIT;
+        else
+            this.ORB_OF_BINDING_TYPE = orbType;
 
         if (orbsOfBindingSection != null) {
             for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
@@ -100,7 +115,5 @@ public class SocketsConfig {
         }
 
         ORB_OF_BINDING_INGREDIENTS.trimToSize();
-
-        this.ORBS_OF_BINDING_ENABLED = orbsOfBindingSection.getBoolean("enabled", true);
     }
 }

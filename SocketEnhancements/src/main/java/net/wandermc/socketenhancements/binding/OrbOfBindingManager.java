@@ -50,6 +50,7 @@ public class OrbOfBindingManager implements Listener {
     private final ItemEventBlocker eventBlocker;
 
     private final ItemStack orbOfBinding;
+    private final Material orbOfBindingType;
     private final List<Material> ingredients;
 
     /**
@@ -59,10 +60,11 @@ public class OrbOfBindingManager implements Listener {
      * @param manager The current EnhancementManager.
      * @param ingredients The items used to craft an orb of binding, count must be > 0 and < 10.
      */
-    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge, List<Material> ingredients) {
+    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge, List<Material> ingredients, Material orbOfBindingType) {
         this.plugin = plugin;
         this.forge = forge;
         this.ingredients = ingredients;
+        this.orbOfBindingType = orbOfBindingType;
 
         if (ingredients.size() < 1 || ingredients.size() > 9) {
             throw new IllegalArgumentException("Invalid ingredient list size: " 
@@ -72,10 +74,14 @@ public class OrbOfBindingManager implements Listener {
 
         this.orbOfBinding = createOrbOfBinding();
 
-        // Stop players from placing orbs of binding.
+        BlockableAction[] a = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
-            item -> item.isSimilar(this.orbOfBinding),
-            BlockableAction.BLOCK_PLACE);
+            item -> {
+                if (item == null)
+                    return false;
+                else
+                    return item.isSimilar(this.orbOfBinding);},
+            BlockableAction.getValidActions(orbOfBindingType).toArray(a));
 
         registerRecipes();
 
@@ -88,7 +94,7 @@ public class OrbOfBindingManager implements Listener {
      * @return An Orb of Binding ItemStack.
      */
     private ItemStack createOrbOfBinding() {
-        ItemStack orb = new ItemStack(Material.CONDUIT);
+        ItemStack orb = new ItemStack(orbOfBindingType);
         ItemMeta meta = orb.getItemMeta();
         meta.displayName(Component.text("Orb of Binding", 
             Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE))));
@@ -112,8 +118,9 @@ public class OrbOfBindingManager implements Listener {
 
         // Recipe for adding an orb of binding to an item.
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
-                // Paper won't let me set the result to AIR, so in the (hopefully impossible) case where the recipe 
-                // matches and the handler doesn't pick up on it, there will be a random stone block result..
+                // Paper won't let me set the result to AIR, so in the
+                // case where the recipe matches and the handler doesn't pick up
+                // on it, there will be a random stone block result..
                 new NamespacedKey(plugin, "orb_of_binding_upgrade"), 
                 new ItemStack(Material.STONE, 1));
 
@@ -146,12 +153,13 @@ public class OrbOfBindingManager implements Listener {
                 itemToUpgrade = forge.create(item.clone());
         }
       
-        // We only care about the event if the crafting matrix contains at least one orb 
-        // of binding and another item.
+        // We only care about the event if the crafting matrix contains at least
+        // one orb of binding and another item.
         if (orbs < 1 || itemToUpgrade == null)
             return;
 
-        if (itemToUpgrade.getSocketLimit() >= itemToUpgrade.getSockets() + orbs) {
+        if (itemToUpgrade.getSocketLimit() >=
+            itemToUpgrade.getSockets() + orbs) {
             // Item exists and can have `orbs` sockets added, do so.
             itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.update());

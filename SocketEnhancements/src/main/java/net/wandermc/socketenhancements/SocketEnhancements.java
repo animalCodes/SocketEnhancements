@@ -68,7 +68,8 @@ public class SocketEnhancements extends JavaPlugin {
 
         if (socketsConfig.ORBS_OF_BINDING_ENABLED)
             this.orbOfBindingManager = new OrbOfBindingManager(this,
-                enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS);
+                enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS,
+                socketsConfig.ORB_OF_BINDING_TYPE);
 
         if (eConfig.ENHANCEMENT_TABLES_ENABLED)
             this.enhancementTableManager = new EnhancementTableManager(this,
