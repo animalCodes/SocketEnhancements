@@ -111,6 +111,10 @@ public class ItemEventBlocker implements Listener {
                         handler = this.getClass().getMethod("blockEntityPlace",
                             action.eventType());
                         break;
+                    case ENTITY_SPAWN:
+                        handler = this.getClass().getMethod("blockEntitySpawn",
+                            action.eventType());
+                        break;
                     case GRIND:
                         handler = this.getClass().getMethod("blockGrind",
                             action.eventType());
@@ -229,6 +233,16 @@ public class ItemEventBlocker implements Listener {
     public void blockEntityPlace(EntityPlaceEvent event) {
         if (itemChecker.test(
             event.getPlayer().getInventory().getItem(event.getHand())))
+            event.setCancelled(true);
+    }
+
+    /**
+     * Prevents an entity from being placed if the spawning item matches.
+     */
+    public void blockEntitySpawn(PlayerInteractEvent event) {
+        if ((event.hasItem() && itemChecker.test(event.getItem())) &&
+            (event.getAction() == Action.RIGHT_CLICK_AIR
+            || event.getAction() == Action.RIGHT_CLICK_BLOCK))
             event.setCancelled(true);
     }
 

@@ -64,6 +64,10 @@ public enum BlockableAction {
      */
     ENTITY_PLACE(EntityPlaceEvent.class),
     /**
+     * An entity being spawned.
+     */
+    ENTITY_SPAWN(PlayerInteractEvent.class),
+    /**
      * An item being repaired / disenchanted in a grindstone.
      */
     GRIND(PrepareGrindstoneEvent.class),
@@ -207,6 +211,24 @@ public enum BlockableAction {
     }
 
     /**
+     * Determine whether the action "ENTITY_SPAWN" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canEntitySpawn(Material mat) {
+        switch (mat) {
+            case EGG, ENDER_EYE, ENDER_PEARL, ITEM_FRAME,
+            GLOW_ITEM_FRAME, PAINTING, SPLASH_POTION, LINGERING_POTION:
+                return true;
+            default: break;
+        }
+        if (mat.toString().contains("SPAWN_EGG"))
+            return true;
+        return false;
+    }
+
+    /**
      * Determine whether the action "GRIND" can be performed on `mat`.
      *
      * As any item can have an enchantment applied to it, any item can have an
@@ -303,6 +325,9 @@ public enum BlockableAction {
 
         if (canEntityPlace(mat))
             actions.add(ENTITY_PLACE);
+
+        if (canEntitySpawn(mat))
+            actions.add(ENTITY_SPAWN);
 
         if (canGrind(mat))
             actions.add(GRIND);
