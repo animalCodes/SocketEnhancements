@@ -16,6 +16,7 @@
  */
 package net.wandermc.socketenhancements.enhancements;
 
+import org.bukkit.Material;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -65,7 +66,9 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
 
     public boolean isValidItem(EnhancedItem item) {
         // If an item can take damage, it can break.
+        // Unless it's an elytra..
         return item.update().getItemMeta() instanceof Damageable
+            && item.update().getType() != Material.ELYTRA;
     }
 
     public boolean run(PlayerItemBreakEvent context) {
