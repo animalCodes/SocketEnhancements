@@ -120,6 +120,8 @@ public class Boost implements ActiveEnhancement<PlayerInteractEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
+        if (item.hasEnhancement("blink"))
+            return false;
         return item.update().getItemMeta() instanceof Damageable
             && item.update().getType() != Material.ELYTRA;
     }

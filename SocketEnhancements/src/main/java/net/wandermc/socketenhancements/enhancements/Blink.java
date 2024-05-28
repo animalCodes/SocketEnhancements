@@ -165,7 +165,7 @@ public class Blink implements ActiveEnhancement<PlayerInteractEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return true;
+        return !item.hasEnhancement("boost");
     }
 
     public Class<PlayerInteractEvent> getEventType() {
