@@ -191,7 +191,17 @@ public class EnhancedItemForge {
          * @return Whether it's bound.
          */
         public boolean hasEnhancement(Enhancement enhancement) {
-            return socketList.contains(enhancement.getName());
+            return hasEnhancement(enhancement.getName());
+        }
+
+        /**
+         * Returns whether the item has `enhancementName` currently bound to it.
+         *
+         * @param enhancement The name of the enhancement to look for.
+         * @return Whether it's bound.
+         */
+        public boolean hasEnhancement(String enhancementName) {
+            return socketList.contains(enhancementName);
         }
 
         /**
@@ -201,7 +211,17 @@ public class EnhancedItemForge {
          * @return Whether the enhancement was present.
          */
         public boolean removeEnhancement(Enhancement enhancement) {
-            int index = socketList.indexOf(enhancement.getName());
+            return removeEnhancement(enhancement.getName());
+        }
+
+        /**
+         * Removes `enhancementName` from the item.
+         *
+         * @param enhancement The name of the enhancement to remove.
+         * @return Whether the enhancement was present.
+         */
+        public boolean removeEnhancement(String enhancementName) {
+            int index = socketList.indexOf(enhancementName);
             if (index < 0)
                 return false;
 
@@ -228,6 +248,16 @@ public class EnhancedItemForge {
                 return enhancement;
             } else 
                 return manager.getEmpty();
+        }
+
+        /**
+         * Attempts to bind `enhancementName` to the item.
+         *
+         * @param enhancement The name of the enhancement to bind.
+         * @return Whether the binding was successful.
+         */
+        public boolean bind(String enhancementName) {
+            return bind(manager.get(enhancementName));
         }
 
         /**
