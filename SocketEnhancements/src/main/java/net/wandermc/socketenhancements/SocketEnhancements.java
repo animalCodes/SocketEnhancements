@@ -88,5 +88,6 @@ public class SocketEnhancements extends JavaPlugin {
      */
     private void registerEnhancements() {
         enhancementManager.store(new Protected(enhancedItemForge));
+        enhancementManager.store(new Blink(enhancedItemForge));
     }
 }
