@@ -12,8 +12,8 @@ commands:
     usage: "/addsocket {n} or /addsocket"
     permission: socketenhancements.command.addsocket
   bind:
-    description: "Binds given enhancement to item held in main hand."
-    usage: "/bind {enhancement}"
+    description: "Binds given list of enhancements to item held in main hand."
+    usage: "/bind {enhancements}"
     permission: socketenhancements.command.bind
 
 
