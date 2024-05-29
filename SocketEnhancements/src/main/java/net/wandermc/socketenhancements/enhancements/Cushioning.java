@@ -1,0 +1,89 @@
+/*
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+package net.wandermc.socketenhancements.enhancements;
+
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
+
+import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+
+/**
+ * Cushioning enhancement, halves damage taken from flying into walls.
+ */
+public class Cushioning implements ActiveEnhancement<EntityDamageEvent> {
+    private EnhancedItemForge forge;
+    
+    /**
+     * Create a Cushioning enhancement
+     * 
+     * @param forge The current EnhancedItemForge
+     */
+    public Cushioning(EnhancedItemForge forge) {
+        this.forge = forge;
+    }
+
+    public boolean run(EntityDamageEvent context) {
+        if (context.getCause() != DamageCause.FLY_INTO_WALL)
+            return false;
+        if (context.getEntity() instanceof Player player) {
+            ItemStack helmet = player.getInventory().getHelmet();
+            if (helmet != null && forge.create(helmet).hasEnhancement(this)) {
+                context.setDamage(context.getDamage() / 2);
+                player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getName() {
+        return "cushioning";
+    }
+
+    public TextComponent getSocketMessage() {
+        // "<Cushioning>" where the text "Cushioning" is gray and the "< >"s are white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+        .append(Component.text("Cushioning", NamedTextColor.GRAY))
+        .append(Component.text(">", NamedTextColor.WHITE));
+    }
+
+    public EnhancementRarity getRarity() {
+        return EnhancementRarity.I;
+    }
+
+    public boolean isValidItem(EnhancedItem item) {
+        return item.update().getType().toString().contains("HELMET");
+    }
+
+    public Class<EntityDamageEvent> getEventType() {
+        return EntityDamageEvent.class;
+    }
+}
