@@ -60,6 +60,7 @@ limits:
   NETHERITE_SWORD: 6
   SHIELD: 4
   TRIDENT: 4
+  TURTLE_HELMET: 3
 
 orbs_of_binding:
   # Whether orbs of binding can be crafted and applied to items.
