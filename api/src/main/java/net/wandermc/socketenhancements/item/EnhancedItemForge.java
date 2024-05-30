@@ -143,6 +143,15 @@ public class EnhancedItemForge {
         }
 
         /**
+         * Get the ItemStack this instance is holding.
+         *
+         * @return The ItemStack
+         */
+        public ItemStack getItemStack() {
+            return item;
+        }
+
+        /**
          * Gets how many sockets are currently on the item.
          *
          * @return The number of sockets

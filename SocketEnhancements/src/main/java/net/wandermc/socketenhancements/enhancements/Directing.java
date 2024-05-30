@@ -105,7 +105,7 @@ public class Directing implements ActiveEnhancement<EntityDamageByEntityEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.update().getType().toString().contains("HELMET");
+        return item.getItemStack().getType().toString().contains("HELMET");
     }
 
     public Class<EntityDamageByEntityEvent> getEventType() {

@@ -80,7 +80,7 @@ public class Cushioning implements ActiveEnhancement<EntityDamageEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.update().getType().toString().contains("HELMET");
+        return item.getItemStack().getType().toString().contains("HELMET");
     }
 
     public Class<EntityDamageEvent> getEventType() {

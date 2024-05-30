@@ -125,7 +125,7 @@ public class Explosive implements ActiveEnhancement<BlockBreakEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.update().getType().toString().contains("PICKAXE");
+        return item.getItemStack().getType().toString().contains("PICKAXE");
     }
 
     public Class<BlockBreakEvent> getEventType() {

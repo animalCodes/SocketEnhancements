@@ -67,8 +67,8 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     public boolean isValidItem(EnhancedItem item) {
         // If an item can take damage, it can break.
         // Unless it's an elytra..
-        return item.update().getItemMeta() instanceof Damageable
-            && item.update().getType() != Material.ELYTRA;
+        return item.getItemStack().getItemMeta() instanceof Damageable
+            && item.getItemStack().getType() != Material.ELYTRA;
     }
 
     public boolean run(PlayerItemBreakEvent context) {
