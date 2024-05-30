@@ -54,25 +54,26 @@ public class BindCommand implements CommandExecutor {
      * @param sender The player doing the binding.
      * @param item The item being modified.
      * @param enhancement The enhancement to bind.
+     * @return Whether the binding was successful.
      */
-    private void bind(CommandSender sender, EnhancedItem item,
+    private boolean bind(CommandSender sender, EnhancedItem item,
         Enhancement enhancement) {
             if (!item.hasEmptySocket()) {
                 sender.sendMessage(
                     Component.text("No empty sockets available."));
-                return;
+                return false;
             }
 
             if (!enhancement.isValidItem(item)) {
                 sender.sendMessage(Component.text("\"" + enhancement.getName() +
                     "\" cannot be bound to this item."));
-                return;
+                return false;
             }
 
             if (item.hasEnhancement(enhancement)) {
                 sender.sendMessage(Component.text("This item already has \"" +
                         enhancement.getName() + "\"."));
-                return;
+                return false;
             }
 
             // EnhancedItem.bind() also does most of the above checks, oh well.
@@ -81,6 +82,7 @@ public class BindCommand implements CommandExecutor {
             sender.sendMessage(Component.text("Bound \"" +
                 enhancement.getName() + "\" to held item."));
 
+            return true;
     }
 
     @Override
@@ -94,16 +96,28 @@ public class BindCommand implements CommandExecutor {
 
             EnhancedItem item = forge.create(player.getInventory().getItemInMainHand());
 
-            // TODO if no enhancements are given, pick a random one
             if (args.length < 1) {
                 sender.sendMessage(Component.text("No enhancement given."));
-                return false;
+                sender.sendMessage(
+                    Component.text("Trying all registered enhancements..."));
+
+                for (Enhancement enhancement : enhancementManager.getAll()) {
+                        if (bind(sender, item, enhancement)) {
+                            item.update();
+                            return true;
+                        }
+                }
+
+                sender.sendMessage(
+                    Component.text("Couldn't find a valid enhancement."));
+
+                return true;
             }
 
             for (int i = 0; i < args.length; i++) {
                 Enhancement enhancement = enhancementManager.get(args[i]);
                 if (enhancement instanceof EmptySocket) {
-                    sender.sendMessage(Component.text("Invalid enhancement \"" +
+                    sender.sendMessage(Component.text("Unknown enhancement \"" +
                         args[0] + "\""));
                     return false;
                 }
