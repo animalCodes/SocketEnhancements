@@ -92,5 +92,6 @@ public class SocketEnhancements extends JavaPlugin {
         enhancementManager.store(new Boost(enhancedItemForge));
         enhancementManager.store(new Cushioning(enhancedItemForge));
         enhancementManager.store(new Directing(enhancedItemForge));
+        enhancementManager.store(new Explosive(enhancedItemForge));
     }
 }
