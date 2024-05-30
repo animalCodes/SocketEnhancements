@@ -84,8 +84,12 @@ public class EnhancedItemForge {
      * 
      * @param item The item to work on.
      * @return An EnhancedItem to manage Enhancements on `item`.
+     * @throws IllegalArgumentException if `item` as null ItemMeta.
      */
     public EnhancedItem create(ItemStack item) {
+        if (item.getItemMeta() == null)
+            throw new IllegalArgumentException("Item has null ItemMeta, "+
+                "possibly because it's AIR.");
         return new EnhancedItem(item);
     }
 

@@ -76,7 +76,9 @@ public class Explosive implements ActiveEnhancement<BlockBreakEvent> {
     public boolean run(BlockBreakEvent context) {
         ItemStack pickaxe = context.getPlayer().getInventory()
             .getItemInMainHand();
-        if (pickaxe == null || !forge.create(pickaxe).hasEnhancement(this))
+
+        if (pickaxe.getType() == Material.AIR ||
+            !forge.create(pickaxe).hasEnhancement(this))
             return false;
 
         context.getPlayer().spawnParticle(
