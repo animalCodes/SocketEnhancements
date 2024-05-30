@@ -78,14 +78,14 @@ public class EnhancementsConfig {
 
         Material blockMaterial = Material.getMaterial(enhancementGemsSection
         .getString("block", "GRINDSTONE"));
-        if (blockMaterial != null)
+        if (blockMaterial != null && blockMaterial != Material.AIR)
             this.ENHANCEMENT_GEMS_BLOCK_TYPE = blockMaterial;
         else
             this.ENHANCEMENT_GEMS_BLOCK_TYPE = Material.GRINDSTONE;
 
         Material gemMaterial = Material.getMaterial(enhancementGemsSection
         .getString("material", "END_CRYSTAL"));
-        if (gemMaterial != null)
+        if (gemMaterial != null && gemMaterial != Material.AIR)
             this.ENHANCEMENT_GEMS_TYPE = gemMaterial;
         else
             this.ENHANCEMENT_GEMS_TYPE = Material.END_CRYSTAL;

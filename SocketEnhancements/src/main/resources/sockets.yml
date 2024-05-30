@@ -7,7 +7,7 @@ empty_socket_message: <white><italic:false>\<Empty Socket></italic:false></white
 default: 0
 
 # How many sockets can be applied to different types of items.
-# Each key must be a valid org.bukkit.Material
+# Each key must be a valid org.bukkit.Material, but cannot be AIR.
 limits:
   BOW: 5
   CHAINMAIL_BOOTS: 3
@@ -67,6 +67,7 @@ orbs_of_binding:
   # Note that if this is `false`, safety features such as not being able to place (previously obtained) orbs will be disabled.
   enabled: true
   # Material type of orbs of binding.
+  # Cannot be AIR
   material: CONDUIT
   # Materials used to craft an orb of binding.
   # If there are more than nine items in the list, only the first nine (valid) items will be used.

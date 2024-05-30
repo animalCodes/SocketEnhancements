@@ -33,7 +33,9 @@ enhancement_gems:
   enabled: true
   # The Material type of the block that must be interacted with to get an
   # enhancement gem.
+  # Cannot be AIR
   block: "GRINDSTONE"
   # The Material type of enhancement gems
   # Changing this value will break any previously obtained enhancement gems.
+  # Cannot be AIR
   material: "END_CRYSTAL"

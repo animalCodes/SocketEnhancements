@@ -77,7 +77,7 @@ public class SocketsConfig {
         if (limitsSection != null) {
             for (String key : limitsSection.getKeys(false)) {
                 Material material = Material.getMaterial(key);
-                if (material != null)
+                if (material != null && material != Material.AIR)
                     SOCKET_LIMITS.put(material, limitsSection.getInt(key));
             }
         }
@@ -92,7 +92,7 @@ public class SocketsConfig {
 
         Material orbType = Material.getMaterial(orbsOfBindingSection
         .getString("material", "CONDUIT"));
-        if (orbType == null)
+        if (orbType == null || orbType == Material.AIR)
             this.ORB_OF_BINDING_TYPE = Material.CONDUIT;
         else
             this.ORB_OF_BINDING_TYPE = orbType;
@@ -100,7 +100,7 @@ public class SocketsConfig {
         if (orbsOfBindingSection != null) {
             for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
                 Material material = Material.getMaterial(ingredient);
-                if (material != null)
+                if (material != null && material != Material.AIR)
                     ORB_OF_BINDING_INGREDIENTS.add(material);
 
                 if (ORB_OF_BINDING_INGREDIENTS.size() >= 9)
