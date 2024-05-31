@@ -19,6 +19,7 @@ package net.wandermc.socketenhancements.events;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -106,6 +107,9 @@ public class AggregateEventListener<C extends Event> implements Listener {
     public void handle(C event) {
         enhancements.forEach(enhancement -> {
             enhancement.run(event);
+            if (event instanceof Cancellable cancellable)
+                if (cancellable.isCancelled())
+                    return;
         });
     }
 }

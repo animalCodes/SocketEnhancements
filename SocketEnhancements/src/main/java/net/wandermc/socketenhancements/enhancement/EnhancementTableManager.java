@@ -165,7 +165,7 @@ public class EnhancementTableManager implements Listener {
      *
      * @param event The event.
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void handleEnchant(EnchantItemEvent event) {
         EnhancedItem item = forge.create(event.getItem());
 

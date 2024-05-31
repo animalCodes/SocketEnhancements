@@ -180,7 +180,7 @@ public class EnhancementGemManager implements Listener {
      *
      * @param event The event
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void handleInteract(PlayerInteractEvent event) {
         // TODO make interaction configurable
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
@@ -215,7 +215,7 @@ public class EnhancementGemManager implements Listener {
      *
      * @param event The event
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void handleCraft(PrepareItemCraftEvent event) {
         // Find gems and item to be enhanced in crafting "matrix"
         ArrayList<Enhancement> enhancements = new ArrayList<>();

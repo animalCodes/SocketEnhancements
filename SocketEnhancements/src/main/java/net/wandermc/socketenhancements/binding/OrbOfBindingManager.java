@@ -138,7 +138,7 @@ public class OrbOfBindingManager implements Listener {
      *
      * @param event The event
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void handleCraft(PrepareItemCraftEvent event) {
         // Try to find orbs of binding and item being bound in crafting table
         int orbs = 0;
