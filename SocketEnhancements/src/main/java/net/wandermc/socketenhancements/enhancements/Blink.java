@@ -90,9 +90,9 @@ public class Blink implements ActiveEnhancement<PlayerInteractEvent> {
      * Determines whether `context` matches the conditions for a blink.
      *
      * The conditions are as follows: Player must have interacted with the air
-     * or a block while sneaking and holding an item with this enhancement, the
-     * player must also have at least COST experience points OR be in creative
-     * and not have blindness.
+     * while sneaking and holding an item with this enhancement, the player
+     * must not have blindness and have at least COST experience points OR be
+     * in creative.
      *
      * @param context The context to check.
      * @return Whether this enhancement's effect should be run.
@@ -101,8 +101,7 @@ public class Blink implements ActiveEnhancement<PlayerInteractEvent> {
         Player player = context.getPlayer();
 
         if (!(player.isSneaking() &&
-            (context.getAction() == Action.RIGHT_CLICK_AIR ||
-            context.getAction() == Action.RIGHT_CLICK_BLOCK)))
+            context.getAction() == Action.RIGHT_CLICK_AIR))
             return false;
 
         if (!(context.hasItem() &&
