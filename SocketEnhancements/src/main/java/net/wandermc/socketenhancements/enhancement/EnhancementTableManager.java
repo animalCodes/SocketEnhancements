@@ -32,6 +32,8 @@ import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
+import static net.wandermc.socketenhancements.util.Dice.randomise;
+
 /**
  * Manages the use of enchanting tables to enhance items. (referred to as
  * Enhancement tables")
@@ -122,24 +124,6 @@ public class EnhancementTableManager implements Listener {
      */
     public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
         this(plugin, manager, forge, true, 5);
-    }
-
-    /**
-     * Randomises the position of the elements of `list`.
-     *
-     * @param list The list to randomise.
-     */
-    private static <T> void randomise(ArrayList<T> list) {
-        int ri = 0;
-        T temp;
-        for (int i = 0; i < list.size(); i++) {
-            ri = (int)Math.floor(Math.random() * list.size());
-            if (ri != i) {
-                temp = list.get(ri);
-                list.set(ri, list.get(i));
-                list.set(i, temp);
-            }
-        }
     }
 
     /**
