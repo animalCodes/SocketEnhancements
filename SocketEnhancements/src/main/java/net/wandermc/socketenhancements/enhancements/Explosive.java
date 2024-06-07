@@ -16,12 +16,14 @@
  */
 package net.wandermc.socketenhancements.enhancements;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
@@ -102,8 +104,17 @@ public class Explosive implements ActiveEnhancement<BlockBreakEvent> {
         }
 
         if (pickaxe.getItemMeta() instanceof Damageable meta) {
-            // Bypasses unbreaking, it is an explosion after all.
-            meta.setDamage(meta.getDamage()+damage);
+            int itemDamage = meta.getDamage() + damage;
+
+            PlayerItemDamageEvent event = new PlayerItemDamageEvent(
+                // From what I can tell, the first damage field is how much
+                // damage the item should take and the second is how much
+                // it would have taken before unbreaking was applied. We're
+                // ignoring unbreaking so we can just use the same value.
+                context.getPlayer(), pickaxe, itemDamage, itemDamage);
+            Bukkit.getPluginManager().callEvent(event);
+
+            meta.setDamage(event.getDamage());
             pickaxe.setItemMeta(meta);
         }
 
