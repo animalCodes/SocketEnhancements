@@ -24,11 +24,7 @@ import net.wandermc.socketenhancements.config.SocketsConfig;
 import net.wandermc.socketenhancements.config.EnhancementsConfig;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
-import net.wandermc.socketenhancements.enhancement.EnhancementGemManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementTableManager;
-import net.wandermc.socketenhancements.enhancement.EmptySocket;
-import net.wandermc.socketenhancements.enhancements.*;
+import net.wandermc.socketenhancements.enhancement.*;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**

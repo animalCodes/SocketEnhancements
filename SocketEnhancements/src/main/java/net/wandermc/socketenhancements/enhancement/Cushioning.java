@@ -14,13 +14,14 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.socketenhancements.enhancements;
+package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
-import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.Particle;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -35,28 +36,42 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Protected enhancement, Stops the item from breaking but will be consumed in the process.
+ * Cushioning enhancement, halves damage taken from flying into walls.
  */
-public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
+public class Cushioning implements ActiveEnhancement<EntityDamageEvent> {
     private EnhancedItemForge forge;
     
     /**
-     * Create a Protected enhancement
+     * Create a Cushioning enhancement
      * 
      * @param forge The current EnhancedItemForge
      */
-    public Protected(EnhancedItemForge forge) {
+    public Cushioning(EnhancedItemForge forge) {
         this.forge = forge;
     }
 
+    public boolean run(EntityDamageEvent context) {
+        if (context.getCause() != DamageCause.FLY_INTO_WALL)
+            return false;
+        if (context.getEntity() instanceof Player player) {
+            ItemStack helmet = player.getInventory().getHelmet();
+            if (helmet != null && forge.create(helmet).hasEnhancement(this)) {
+                context.setDamage(context.getDamage() / 2);
+                player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getName() {
-        return "protected";
+        return "cushioning";
     }
 
     public TextComponent getSocketMessage() {
-        // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
+        // "<Cushioning>" where the text "Cushioning" is gray and the "< >"s are white.
         return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Protected", NamedTextColor.DARK_GRAY))
+        .append(Component.text("Cushioning", NamedTextColor.GRAY))
         .append(Component.text(">", NamedTextColor.WHITE));
     }
 
@@ -65,34 +80,10 @@ public class Protected implements ActiveEnhancement<PlayerItemBreakEvent> {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        // If an item can take damage, it can break.
-        // Unless it's an elytra..
-        return item.getItemStack().getItemMeta() instanceof Damageable
-            && item.getItemStack().getType() != Material.ELYTRA;
+        return item.getItemStack().getType().toString().contains("HELMET");
     }
 
-    public boolean run(PlayerItemBreakEvent context) {
-        if (!forge.create(context.getBrokenItem()).hasEnhancement(this))
-            return false;
-
-        EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
-        enhancedItem.removeEnhancement(this);
-
-        ItemStack itemStack = enhancedItem.update();
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        // Damage = how much damage item has taken so 0 damage = full durability
-        // The checker already confirmed that the item's ItemMeta is an instance 
-        // of Damageable, so this should be a safe cast.
-        ((Damageable) itemMeta).setDamage(0);
-        itemStack.setItemMeta(itemMeta);
-
-        context.getPlayer().getInventory().addItem(itemStack);
-
-        return true;
-    }
-
-    public Class<PlayerItemBreakEvent> getEventType() {
-        return PlayerItemBreakEvent.class;
+    public Class<EntityDamageEvent> getEventType() {
+        return EntityDamageEvent.class;
     }
 }
