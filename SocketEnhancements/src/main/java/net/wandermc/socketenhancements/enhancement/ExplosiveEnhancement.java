@@ -104,20 +104,7 @@ public class ExplosiveEnhancement implements
             }
         }
 
-        if (pickaxe.getItemMeta() instanceof Damageable meta) {
-            int itemDamage = meta.getDamage() + damage;
-
-            PlayerItemDamageEvent event = new PlayerItemDamageEvent(
-                // From what I can tell, the first damage field is how much
-                // damage the item should take and the second is how much
-                // it would have taken before unbreaking was applied. We're
-                // ignoring unbreaking so we can just use the same value.
-                context.getPlayer(), pickaxe, itemDamage, itemDamage);
-            Bukkit.getPluginManager().callEvent(event);
-
-            meta.setDamage(event.getDamage());
-            pickaxe.setItemMeta(meta);
-        }
+        pickaxe.damage(damage, context.getPlayer());
 
         return true;
     }

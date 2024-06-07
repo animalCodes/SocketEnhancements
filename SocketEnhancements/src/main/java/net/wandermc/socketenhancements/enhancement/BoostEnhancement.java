@@ -46,7 +46,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 public class BoostEnhancement implements 
     ActiveEnhancement<PlayerInteractEvent> {
     // How much damage will be applied to the item on use.
-    private static final int COST = 6;
+    private static final int COST = 8;
     // The flight duration the player will be boosted with.
     private static final int DURATION = 2;
     // Chance for boost to damage player.
@@ -100,19 +100,17 @@ public class BoostEnhancement implements
     }
 
     public boolean run(PlayerInteractEvent context) {
+        Player player = context.getPlayer();
         if (!contextMatches(context))
             return false;
 
         if (roll(CHANCE))
-            context.getPlayer().fireworkBoost(damageRocket);
+            player.fireworkBoost(damageRocket);
         else
-            context.getPlayer().fireworkBoost(rocket);
+            player.fireworkBoost(rocket);
 
-        Damageable itemDamageMeta = (Damageable)context.getItem().getItemMeta();
-        if (context.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            itemDamageMeta.setDamage(itemDamageMeta.getDamage()+COST);
-        }
-        context.getItem().setItemMeta(itemDamageMeta);
+        if (player.getGameMode() != GameMode.CREATIVE)
+            context.getItem().damage(COST, player);
 
         return true;
     }
