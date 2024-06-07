@@ -33,11 +33,15 @@ import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
+import static net.wandermc.socketenhancements.util.Dice.roll;
+
 /**
- * Lifesteal enhancement, On attacking another entity, gain a quarter of the
- * dealt damage as health.
+ * Lifesteal enhancement, On attacking another entity, have a CHANCE chance to
+ * gain a quarter of the dealt damage as health.
  */
 public class Lifesteal implements ActiveEnhancement<EntityDamageByEntityEvent> {
+    private static final double CHANCE = 0.5;
+
     private final EnhancedItemForge forge;
 
     public Lifesteal(EnhancedItemForge forge) {
@@ -51,6 +55,9 @@ public class Lifesteal implements ActiveEnhancement<EntityDamageByEntityEvent> {
             ItemStack weapon = attacker.getEquipment().getItemInMainHand();
             if (weapon.getType() == Material.AIR ||
                 !forge.create(weapon).hasEnhancement(this))
+                return false;
+
+            if (!roll(CHANCE))
                 return false;
 
             double maxHealth = attacker.getAttribute(
