@@ -33,16 +33,20 @@ import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
+import static net.wandermc.socketenhancements.util.Dice.roll;
+
 /**
- * Scorching enhancement, knocks back attackers and sets them on fire for a
- * brief period, scales with each enhanced armour piece.
+ * Scorching enhancement, has a chance to knock back attackers and set them on
+ * fire for a brief period, chance increases with each enhanced armour piece.
  * Think thorns + fire aspect.
  */
 public class Scorching implements ActiveEnhancement<EntityDamageByEntityEvent> {
-    // How many fire ticks to apply to the attacker per enhanced armour piece.
-    private static final int FIRE_TICKS = 20;
-    // Knockback strength applied to attacker for each enhanced armour piece.
-    private static final double KNOCKBACK = 0.25;
+    // Chance for effect to be applied per armour piece.
+    private static final double CHANCE_PER = 0.2;
+    // How many fire ticks to apply to the attacker on activation.
+    private static final int FIRE_TICKS = 40;
+    // Knockback strength applied to attacker on activation.
+    private static final double KNOCKBACK = 0.5;
 
     private EnhancedItemForge forge;
 
@@ -58,25 +62,28 @@ public class Scorching implements ActiveEnhancement<EntityDamageByEntityEvent> {
     public boolean run(EntityDamageByEntityEvent context) {
         if (context.getEntity() instanceof LivingEntity defender) {
             if (context.getDamager() instanceof LivingEntity attacker) {
+                double chance = 0;
                 for (ItemStack armourPiece : defender.getEquipment()
                     .getArmorContents()) {
                     if (armourPiece == null ||
                         armourPiece.getType() == Material.AIR)
                         continue;
 
-                    if (forge.create(armourPiece).hasEnhancement(this)) {
-                        attacker.setFireTicks(
-                            attacker.getFireTicks()+FIRE_TICKS);
-                        attacker.knockback(KNOCKBACK,
-                            // Find RELATIVE positon, so if defender is at x=70
-                            // and attacker is at x=71, we want -1.
-                            (defender.getX() == attacker.getX() ? 0 :
-                            defender.getX() - attacker.getX()),
-                            (defender.getZ() == attacker.getZ() ? 0 :
-                            defender.getZ() - attacker.getZ()));
-                    }
+                    if (forge.create(armourPiece).hasEnhancement(this))
+                        chance += CHANCE_PER;
                 }
-                return true;
+
+                if (roll(chance)) {
+                    attacker.setFireTicks(attacker.getFireTicks()+FIRE_TICKS);
+                    attacker.knockback(KNOCKBACK,
+                        // Find RELATIVE positon, so if defender is at x=70
+                        // and attacker is at x=71, we want -1.
+                        (defender.getX() == attacker.getX() ? 0 :
+                        defender.getX() - attacker.getX()),
+                        (defender.getZ() == attacker.getZ() ? 0 :
+                        defender.getZ() - attacker.getZ()));
+                    return true;
+                }
             }
         }
         return false;
