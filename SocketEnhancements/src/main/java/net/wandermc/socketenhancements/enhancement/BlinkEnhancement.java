@@ -50,7 +50,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 public class BlinkEnhancement implements
     ActiveEnhancement<PlayerInteractEvent> {
     // How many experience points this costs per use.
-    private static final int COST = 2;
+    private static final int COST = 16;
     // The maximum distance a player can teleport while using this.
     private static final int MAX_DISTANCE = 64;
     // All blocks that can be teleported through.
@@ -109,7 +109,7 @@ public class BlinkEnhancement implements
             forge.create(context.getItem()).hasEnhancement(this)))
             return false;
 
-        if (player.getLevel() < COST &&
+        if (player.calculateTotalExperiencePoints() < COST &&
             player.getGameMode() != GameMode.CREATIVE)
             return false;
 
@@ -143,7 +143,9 @@ public class BlinkEnhancement implements
         player.setRotation(yaw, pitch);
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            player.setLevel(player.getLevel()-COST);
+            // Two methods with very long names that are rather useful.
+            player.setExperienceLevelAndProgress(
+                player.calculateTotalExperiencePoints()-COST);
         }
 
         return true;
