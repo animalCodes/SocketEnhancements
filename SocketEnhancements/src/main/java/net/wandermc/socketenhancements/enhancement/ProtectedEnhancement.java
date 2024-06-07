@@ -1,0 +1,99 @@
+/*
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+package net.wandermc.socketenhancements.enhancement;
+
+import org.bukkit.Material;
+import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
+
+import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
+import net.wandermc.socketenhancements.enhancement.EnhancementManager;
+import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+
+/**
+ * Protected enhancement, Stops the item from breaking but will be consumed in the process.
+ */
+public class ProtectedEnhancement implements
+    ActiveEnhancement<PlayerItemBreakEvent> {
+    private EnhancedItemForge forge;
+    
+    /**
+     * Create a Protected enhancement
+     * 
+     * @param forge The current EnhancedItemForge
+     */
+    public ProtectedEnhancement(EnhancedItemForge forge) {
+        this.forge = forge;
+    }
+
+    public String getName() {
+        return "protected";
+    }
+
+    public TextComponent getSocketMessage() {
+        // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+        .append(Component.text("Protected", NamedTextColor.DARK_GRAY))
+        .append(Component.text(">", NamedTextColor.WHITE));
+    }
+
+    public EnhancementRarity getRarity() {
+        return EnhancementRarity.I;
+    }
+
+    public boolean isValidItem(EnhancedItem item) {
+        // If an item can take damage, it can break.
+        // Unless it's an elytra..
+        return item.getItemStack().getItemMeta() instanceof Damageable
+            && item.getItemStack().getType() != Material.ELYTRA;
+    }
+
+    public boolean run(PlayerItemBreakEvent context) {
+        if (!forge.create(context.getBrokenItem()).hasEnhancement(this))
+            return false;
+
+        EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
+        enhancedItem.removeEnhancement(this);
+
+        ItemStack itemStack = enhancedItem.update();
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        // Damage = how much damage item has taken so 0 damage = full durability
+        // The checker already confirmed that the item's ItemMeta is an instance 
+        // of Damageable, so this should be a safe cast.
+        ((Damageable) itemMeta).setDamage(0);
+        itemStack.setItemMeta(itemMeta);
+
+        context.getPlayer().getInventory().addItem(itemStack);
+
+        return true;
+    }
+
+    public Class<PlayerItemBreakEvent> getEventType() {
+        return PlayerItemBreakEvent.class;
+    }
+}

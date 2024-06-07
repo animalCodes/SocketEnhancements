@@ -40,7 +40,8 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * fire for a brief period, chance increases with each enhanced armour piece.
  * Think thorns + fire aspect.
  */
-public class Scorching implements ActiveEnhancement<EntityDamageByEntityEvent> {
+public class ScorchingEnhancement implements
+    ActiveEnhancement<EntityDamageByEntityEvent> {
     // Chance for effect to be applied per armour piece.
     private static final double CHANCE_PER = 0.2;
     // How many fire ticks to apply to the attacker on activation.
@@ -55,7 +56,7 @@ public class Scorching implements ActiveEnhancement<EntityDamageByEntityEvent> {
      * 
      * @param forge The current EnhancedItemForge
      */
-    public Scorching(EnhancedItemForge forge) {
+    public ScorchingEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 

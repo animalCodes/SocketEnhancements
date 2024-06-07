@@ -43,7 +43,8 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * firework of duration DURATION, at the cost of applying COST damage to the
  * item. There is a CHANCE chance that the rocket will damage the player.
  */
-public class Boost implements ActiveEnhancement<PlayerInteractEvent> {
+public class BoostEnhancement implements 
+    ActiveEnhancement<PlayerInteractEvent> {
     // How much damage will be applied to the item on use.
     private static final int COST = 6;
     // The flight duration the player will be boosted with.
@@ -62,7 +63,7 @@ public class Boost implements ActiveEnhancement<PlayerInteractEvent> {
 
     private final EnhancedItemForge forge;
 
-    public Boost(EnhancedItemForge forge) {
+    public BoostEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 

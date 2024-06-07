@@ -42,10 +42,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Explosive enhancement, on mining a block also destroy all neighbouring blocks
  * within a 1-block radius. (3*3 cube centered on mined block)
  */
-public class Explosive implements ActiveEnhancement<BlockBreakEvent> {
+public class ExplosiveEnhancement implements
+    ActiveEnhancement<BlockBreakEvent> {
     private final EnhancedItemForge forge;
 
-    public Explosive(EnhancedItemForge forge) {
+    public ExplosiveEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 

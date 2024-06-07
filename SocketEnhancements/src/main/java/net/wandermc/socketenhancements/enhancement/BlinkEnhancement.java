@@ -47,7 +47,8 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * looking at, provided it is near enough, at the cost of some experience points
  * and temporary blindness.
  */
-public class Blink implements ActiveEnhancement<PlayerInteractEvent> {
+public class BlinkEnhancement implements
+    ActiveEnhancement<PlayerInteractEvent> {
     // How many experience points this costs per use.
     private static final int COST = 2;
     // The maximum distance a player can teleport while using this.
@@ -66,7 +67,7 @@ public class Blink implements ActiveEnhancement<PlayerInteractEvent> {
 
     private final EnhancedItemForge forge;
 
-    public Blink(EnhancedItemForge forge) {
+    public BlinkEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 

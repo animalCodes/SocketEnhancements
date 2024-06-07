@@ -83,13 +83,13 @@ public class SocketEnhancements extends JavaPlugin {
      * Registers all SocketEnhancements core enhancements.
      */
     private void registerEnhancements() {
-        enhancementManager.store(new Protected(enhancedItemForge));
-        enhancementManager.store(new Blink(enhancedItemForge));
-        enhancementManager.store(new Boost(enhancedItemForge));
-        enhancementManager.store(new Cushioning(enhancedItemForge));
-        enhancementManager.store(new Directing(enhancedItemForge));
-        enhancementManager.store(new Explosive(enhancedItemForge));
-        enhancementManager.store(new Scorching(enhancedItemForge));
-        enhancementManager.store(new Lifesteal(enhancedItemForge));
+        enhancementManager.store(new ProtectedEnhancement(enhancedItemForge));
+        enhancementManager.store(new BlinkEnhancement(enhancedItemForge));
+        enhancementManager.store(new BoostEnhancement(enhancedItemForge));
+        enhancementManager.store(new CushioningEnhancement(enhancedItemForge));
+        enhancementManager.store(new DirectingEnhancement(enhancedItemForge));
+        enhancementManager.store(new ExplosiveEnhancement(enhancedItemForge));
+        enhancementManager.store(new ScorchingEnhancement(enhancedItemForge));
+        enhancementManager.store(new LifestealEnhancement(enhancedItemForge));
     }
 }

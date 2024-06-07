@@ -17,11 +17,12 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -36,42 +37,67 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Cushioning enhancement, halves damage taken from flying into walls.
+ * Directing enhancement, When a player is struck with lightning, simulate the
+ * effect of them eating a (normal) golden apple.
  */
-public class Cushioning implements ActiveEnhancement<EntityDamageEvent> {
+public class DirectingEnhancement implements
+    ActiveEnhancement<EntityDamageByEntityEvent> {
+    private static final PotionEffect ABSORPTION_EFFECT =
+        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 60 * 2, 1);
+    private static final PotionEffect REGENERATION_EFFECT =
+        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2);
+    private static final PotionEffect FIRE_RESISTANCE_EFFECT =
+        new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1);
+    
     private EnhancedItemForge forge;
     
     /**
-     * Create a Cushioning enhancement
+     * Create a Directing enhancement
      * 
      * @param forge The current EnhancedItemForge
      */
-    public Cushioning(EnhancedItemForge forge) {
+    public DirectingEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 
-    public boolean run(EntityDamageEvent context) {
-        if (context.getCause() != DamageCause.FLY_INTO_WALL)
+    /**
+     * Simulate the effect of `player` eating a golden apple.
+     *
+     * @param player the player to force-feed.
+     */
+    private void eatGoldenApple(Player player) {
+        player.setFoodLevel(player.getFoodLevel() + 4);
+        player.setSaturation(player.getSaturation() + 9.6f);
+        player.addPotionEffect(ABSORPTION_EFFECT);
+        player.addPotionEffect(REGENERATION_EFFECT);
+        // Getting struck by lightning sets the player on fire, which will
+        // nullify the benefits of "eating a golden apple". So give them fire
+        // resistance as well so this enhancement isn't entirely pointless.
+        player.addPotionEffect(FIRE_RESISTANCE_EFFECT);
+    }
+
+    public boolean run(EntityDamageByEntityEvent context) {
+        if (!(context.getDamager() instanceof LightningStrike))
             return false;
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
-            if (helmet != null && forge.create(helmet).hasEnhancement(this)) {
-                context.setDamage(context.getDamage() / 2);
-                player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
-                return true;
-            }
-        }
-        return false;
+            if (helmet == null || !forge.create(helmet).hasEnhancement(this))
+                return false;
+
+            eatGoldenApple(player);
+        } else
+            return false;
+        return true;
     }
 
     public String getName() {
-        return "cushioning";
+        return "directing";
     }
 
     public TextComponent getSocketMessage() {
-        // "<Cushioning>" where the text "Cushioning" is gray and the "< >"s are white.
+        // "<Directing>" where the text "Directing" is aqua and the "< >"s are white.
         return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Cushioning", NamedTextColor.GRAY))
+        .append(Component.text("Directing", NamedTextColor.AQUA))
         .append(Component.text(">", NamedTextColor.WHITE));
     }
 
@@ -83,7 +109,8 @@ public class Cushioning implements ActiveEnhancement<EntityDamageEvent> {
         return item.getItemStack().getType().toString().contains("HELMET");
     }
 
-    public Class<EntityDamageEvent> getEventType() {
-        return EntityDamageEvent.class;
+    public Class<EntityDamageByEntityEvent> getEventType() {
+        return EntityDamageByEntityEvent.class;
     }
 }
+
