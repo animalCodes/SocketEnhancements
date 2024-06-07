@@ -36,20 +36,29 @@ import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
+import static net.wandermc.socketenhancements.util.Dice.roll;
+
 /**
  * Boost enhancement, On use, boosts gliding players as if they had used a
  * firework of duration DURATION, at the cost of applying COST damage to the
- * item.
+ * item. There is a CHANCE chance that the rocket will damage the player.
  */
 public class Boost implements ActiveEnhancement<PlayerInteractEvent> {
     // How much damage will be applied to the item on use.
-    private static final int COST = 8;
+    private static final int COST = 6;
     // The flight duration the player will be boosted with.
     private static final int DURATION = 2;
+    // Chance for boost to damage player.
+    private static final double CHANCE = 0.15;
+
     // The virtual firework rocket used to boost the player.
     private static final ItemStack rocket =
         Bukkit.getServer().getItemFactory().createItemStack(
         "minecraft:firework_rocket{Fireworks:{Flight:"+DURATION+"}}");
+    // Alternative rocket, damages player when used.
+    private static final ItemStack damageRocket =
+        Bukkit.getServer().getItemFactory().createItemStack(
+        "minecraft:firework_rocket{Fireworks:{Explosions:[{Colors:[11743532],Type:4}],Flight:"+DURATION+"}}");
 
     private final EnhancedItemForge forge;
 
@@ -93,7 +102,10 @@ public class Boost implements ActiveEnhancement<PlayerInteractEvent> {
         if (!contextMatches(context))
             return false;
 
-        context.getPlayer().fireworkBoost(rocket);
+        if (roll(CHANCE))
+            context.getPlayer().fireworkBoost(damageRocket);
+        else
+            context.getPlayer().fireworkBoost(rocket);
 
         Damageable itemDamageMeta = (Damageable)context.getItem().getItemMeta();
         if (context.getPlayer().getGameMode() != GameMode.CREATIVE) {
