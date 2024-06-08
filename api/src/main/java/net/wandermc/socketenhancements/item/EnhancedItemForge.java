@@ -266,6 +266,11 @@ public class EnhancedItemForge {
         /**
          * Attempts to bind `enhancementName` to the item.
          *
+         * The following checks must pass for the binding to be successful:
+         * - This item is valid for the enhancement.
+         * - Item doesn't already have `enhancement`.
+         * - An empty socket is available.
+         *
          * @param enhancement The name of the enhancement to bind.
          * @return Whether the binding was successful.
          */
@@ -275,6 +280,11 @@ public class EnhancedItemForge {
 
         /**
          * Attempts to bind `enhancement` to the item.
+         *
+         * The following checks must pass for the binding to be successful:
+         * - This item is valid for the enhancement.
+         * - Item doesn't already have `enhancement`.
+         * - An empty socket is available.
          *
          * @param enhancement The enhancement to bind
          * @return Whether the binding was successful.
@@ -287,14 +297,41 @@ public class EnhancedItemForge {
             if (hasEnhancement(enhancement))
                 return false;
 
+            return checklessBind(enhancement);
+        }
+
+        /**
+         * Binds `enhancementName` to item without checks.
+         *
+         * Bypassed checks are whether the item is valid for this enhancement
+         * and whether the item already has the enhancement.
+         *
+         * The item must still have an empty socket.
+         *
+         * @param enhancementName the name of the Enhancement to bind.
+         * @return Whether binding was successful.
+         */
+        public boolean checklessBind(String enhancementName) {
+            return checklessBind(manager.get(enhancementName));
+        }
+
+        /**
+         * Binds `enhancement` to item without checks.
+         *
+         * Bypassed checks are whether the item is valid for this enhancement
+         * and whether the item already has the enhancement.
+         *
+         * The item must still have an empty socket.
+         *
+         * @param enhancement The Enhancement to bind.
+         * @return Whether binding was successful.
+         */
+        public boolean checklessBind(Enhancement enhancement) {
             int index = socketList.indexOf(manager.getEmpty().getName());
             if (index < 0)
-                // No empty sockets
                 return false;
             else
-                // Yes empty sockets, fill it
                 socketList.set(index, enhancement.getName());
-
             return true;
         }
 

@@ -126,13 +126,18 @@ public class EnhancementGemManager implements Listener {
      * a single socket. The enhancement in that socket is the "type" of the
      * Enhancement Gem.
      *
+     * In the event of an unsuccessful binding, an "empty" ItemStack will be
+     * returned instead.
+     *
      * @param enhancement The Enhancement the gem represents.
-     * @return An Enhancement Gem.
+     * @return An Enhancement Gem OR an empty ItemStack.
      */
     public ItemStack createGemOfType(Enhancement enhancement) {
         EnhancedItem enhancedItem = forge.create(createGem());
-        enhancedItem.bind(enhancement);
-        return enhancedItem.update();
+        if (enhancedItem.checklessBind(enhancement))
+            return enhancedItem.update();
+        else
+            return ItemStack.empty();
     }
 
     /**
@@ -202,11 +207,15 @@ public class EnhancementGemManager implements Listener {
         if (enhancement instanceof EmptySocket)
             return;
 
+        ItemStack gem = createGemOfType(enhancement);
+        if (gem.isEmpty())
+            return;
+
         enhancedItem.update();
 
         event.getPlayer().getWorld().dropItemNaturally(
             event.getClickedBlock().getLocation(),
-            createGemOfType(enhancement)
+            gem
         );
     }
 
