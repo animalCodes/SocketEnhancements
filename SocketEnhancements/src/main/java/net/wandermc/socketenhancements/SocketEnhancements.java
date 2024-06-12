@@ -91,5 +91,6 @@ public class SocketEnhancements extends JavaPlugin {
         enhancementManager.store(new ExplosiveEnhancement(enhancedItemForge));
         enhancementManager.store(new ScorchingEnhancement(enhancedItemForge));
         enhancementManager.store(new LifestealEnhancement(enhancedItemForge));
+        enhancementManager.store(new FrigidEnhancement(enhancedItemForge));
     }
 }

@@ -20,6 +20,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -36,27 +38,29 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Scorching enhancement, has a chance to knock back attackers and set them on
- * fire for a brief period, chance increases with each enhanced armour piece.
- * Think thorns + fire aspect.
+ * Frigid enhancement, has a chance to 'freeze' attackers - apply mining fatigue
+ * and slowness.
  */
-public class ScorchingEnhancement implements
+public class FrigidEnhancement implements
     ActiveEnhancement<EntityDamageByEntityEvent> {
     // Chance for effect to be applied per armour piece.
-    private static final double CHANCE_PER = 0.2;
-    // How many fire ticks to apply to the attacker on activation.
-    private static final int FIRE_TICKS = 40;
-    // Knockback strength applied to attacker on activation.
-    private static final double KNOCKBACK = 0.5;
+    private static final double CHANCE_PER = 0.15;
+    // How long to freeze the attacker for on activation
+    private static final int FREEZE_TICKS = 20;
+
+    private static final PotionEffect MINING_FATIGUE_EFFECT =
+        new PotionEffect(PotionEffectType.SLOW_DIGGING, FREEZE_TICKS, 2);
+    private static final PotionEffect SLOWNESS_EFFECT =
+        new PotionEffect(PotionEffectType.SLOW, FREEZE_TICKS, 3);
 
     private EnhancedItemForge forge;
 
     /**
-     * Create a Scorching enhancement
-     * 
+     * Create a Frigid enhancement
+     *
      * @param forge The current EnhancedItemForge
      */
-    public ScorchingEnhancement(EnhancedItemForge forge) {
+    public FrigidEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
     }
 
@@ -75,14 +79,8 @@ public class ScorchingEnhancement implements
                 }
 
                 if (roll(chance)) {
-                    attacker.setFireTicks(attacker.getFireTicks()+FIRE_TICKS);
-                    attacker.knockback(KNOCKBACK,
-                        // Find RELATIVE positon, so if defender is at x=70
-                        // and attacker is at x=71, we want -1.
-                        (defender.getX() == attacker.getX() ? 0 :
-                        defender.getX() - attacker.getX()),
-                        (defender.getZ() == attacker.getZ() ? 0 :
-                        defender.getZ() - attacker.getZ()));
+                    attacker.addPotionEffect(MINING_FATIGUE_EFFECT);
+                    attacker.addPotionEffect(SLOWNESS_EFFECT);
                     return true;
                 }
             }
@@ -91,13 +89,13 @@ public class ScorchingEnhancement implements
     }
 
     public String getName() {
-        return "scorching";
+        return "frigid";
     }
 
     public TextComponent getSocketMessage() {
-        // "<Scorching>" where the text "Scorching" is yellow and the "< >"s are white.
+        // "<Frigid>" where the text "Frigid" is aqua and the "< >"s are white.
         return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Scorching", NamedTextColor.YELLOW))
+        .append(Component.text("Frigid", NamedTextColor.AQUA))
         .append(Component.text(">", NamedTextColor.WHITE));
     }
 
@@ -106,7 +104,7 @@ public class ScorchingEnhancement implements
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        if (item.hasEnhancement("frigid"))
+        if (item.hasEnhancement("scorching"))
             return false;
         String type = item.getItemStack().getType().toString();
         return type.contains("HELMET") || type.contains("CHESTPLATE") || type.
