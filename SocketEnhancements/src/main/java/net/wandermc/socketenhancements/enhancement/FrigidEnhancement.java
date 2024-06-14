@@ -38,20 +38,16 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Frigid enhancement, has a chance to 'freeze' attackers - apply mining fatigue
- * and slowness.
+ * Frigid enhancement, has a chance to freeze and apply mining fatigue to
+ * attackers.
  */
 public class FrigidEnhancement implements
     ActiveEnhancement<EntityDamageByEntityEvent> {
     // Chance for effect to be applied per armour piece.
     private static final double CHANCE_PER = 0.15;
-    // How long to freeze the attacker for on activation
-    private static final int FREEZE_TICKS = 20;
 
     private static final PotionEffect MINING_FATIGUE_EFFECT =
-        new PotionEffect(PotionEffectType.SLOW_DIGGING, FREEZE_TICKS, 2);
-    private static final PotionEffect SLOWNESS_EFFECT =
-        new PotionEffect(PotionEffectType.SLOW, FREEZE_TICKS, 3);
+        new PotionEffect(PotionEffectType.SLOW_DIGGING, 70, 2);
 
     private EnhancedItemForge forge;
 
@@ -79,8 +75,8 @@ public class FrigidEnhancement implements
                 }
 
                 if (roll(chance)) {
+                    attacker.setFreezeTicks(attacker.getMaxFreezeTicks());
                     attacker.addPotionEffect(MINING_FATIGUE_EFFECT);
-                    attacker.addPotionEffect(SLOWNESS_EFFECT);
                     return true;
                 }
             }
