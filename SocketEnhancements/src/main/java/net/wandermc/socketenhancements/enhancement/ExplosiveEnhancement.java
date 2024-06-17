@@ -33,6 +33,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
+import static com.destroystokyo.paper.MaterialTags.PICKAXES;
+
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -126,7 +128,7 @@ public class ExplosiveEnhancement implements
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.getItemStack().getType().toString().contains("PICKAXE");
+        return PICKAXES.isTagged(item.getItemStack().getType());
     }
 
     public Class<BlockBreakEvent> getEventType() {

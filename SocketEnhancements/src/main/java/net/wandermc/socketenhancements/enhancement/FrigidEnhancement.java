@@ -29,6 +29,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
+import static com.destroystokyo.paper.MaterialTags.ARMOR;
+
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
@@ -102,9 +104,7 @@ public class FrigidEnhancement implements
     public boolean isValidItem(EnhancedItem item) {
         if (item.hasEnhancement("scorching"))
             return false;
-        String type = item.getItemStack().getType().toString();
-        return type.contains("HELMET") || type.contains("CHESTPLATE") || type.
-            contains("LEGGINGS") || type.contains("BOOTS");
+        return ARMOR.isTagged(item.getItemStack().getType());
     }
 
     public Class<EntityDamageByEntityEvent> getEventType() {

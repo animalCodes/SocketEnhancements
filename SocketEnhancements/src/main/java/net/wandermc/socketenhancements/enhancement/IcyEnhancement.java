@@ -29,6 +29,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
+import static com.destroystokyo.paper.MaterialTags.SWORDS;
+import static com.destroystokyo.paper.MaterialTags.AXES;
+
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -96,8 +99,8 @@ public class IcyEnhancement implements
 
     public boolean isValidItem(EnhancedItem item) {
         // TODO: don't allow binding if item has fire aspect
-        String type = item.getItemStack().getType().toString();
-        return (type.contains("_AXE") || type.contains("SWORD"));
+        return SWORDS.isTagged(item.getItemStack().getType()) ||
+            AXES.isTagged(item.getItemStack().getType());
     }
 
     public Class<EntityDamageByEntityEvent> getEventType() {

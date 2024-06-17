@@ -29,6 +29,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
+import static com.destroystokyo.paper.MaterialTags.HELMETS;
+
 import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
@@ -81,7 +83,7 @@ public class CushioningEnhancement implements
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.getItemStack().getType().toString().contains("HELMET");
+        return HELMETS.isTagged(item.getItemStack().getType());
     }
 
     public Class<EntityDamageEvent> getEventType() {
