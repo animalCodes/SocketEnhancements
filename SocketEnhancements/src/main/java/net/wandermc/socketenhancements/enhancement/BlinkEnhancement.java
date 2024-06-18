@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -72,19 +73,28 @@ public class BlinkEnhancement implements
     }
 
     /**
-     * Apply the "cosmetic" effects of blinking onto `player`.
+     * Apply the "cosmetic" effects of a blink succeeding or failing.
      *
-     * Specifically, blinds the player for 3 seconds, spawns "warped spore"
-     * particles at their location and plays the sound of a chorus fruit
+     * The success effects are: Blind the player for 3 seconds, spawn "warped
+     * spore" particles at their location and play the sound of a chorus fruit
      * teleport.
+     * The failure effect is: Play the sound of a shulker being hurt. (with
+     * shell closed)
      *
      * @param player the Player to apply the effects to.
+     * @param success Whether the blink succeeded or not.
      */
-    private static void applyCosmetics(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60,
-            1, false, false));
-        player.spawnParticle(Particle.WARPED_SPORE, player.getLocation(), 10);
-        player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 3, 10);
+    private static void applyCosmetics(Player player, boolean success) {
+        if (success) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
+                60, 1, false, false));
+            player.spawnParticle(Particle.WARPED_SPORE, player.getLocation(),
+                10);
+            player.playSound(player.getLocation(),
+                Sound.ITEM_CHORUS_FRUIT_TELEPORT, 3, 10);
+        } else
+            player.playSound(player.getLocation(),
+                Sound.ENTITY_SHULKER_HURT_CLOSED, 2, 10);
     }
 
     /**
@@ -119,6 +129,43 @@ public class BlinkEnhancement implements
         return true;
     }
 
+    /**
+     * Attempt to find a safe location for a player, starting at `start`.
+     *
+     * @param start The original (unsafe) location.
+     * @return A safe location, or `start` if one cannot be found.
+     */
+    private Location findSafeLocation(Location start) {
+        Location safe = start;
+
+        for (double modY = 1; modY <= MAX_DISTANCE/2; modY++) {
+            safe.setY(start.getY()+modY);
+            if (isSafe(safe))
+                return safe;
+
+            safe.setY(start.getY()-modY);
+            if (isSafe(safe))
+                return safe;
+        }
+
+        return start;
+    }
+
+    /**
+     * Determines whether `loc` is a safe location.
+     *
+     * Any location is considered 'safe' if it won't suffocate the player or is
+     * in the air, it may still dunk them in lava.
+     *
+     * @param loc The location to check.
+     * @return Whether it is safe.
+     */
+    private boolean isSafe(Location loc) {
+        return !loc.getBlock().getType().isSolid() &&
+                !loc.getBlock().getRelative(0, 1, 0).getType().isSolid() &&
+                loc.getBlock().getRelative(0, -1, 0).isSolid();
+    }
+
     public boolean run(PlayerInteractEvent context) {
         if (!contextMatches(context))
             return false;
@@ -129,16 +176,26 @@ public class BlinkEnhancement implements
             // Block player is looking at
             player.getTargetBlock(BLINK_THROUGH_BLOCKS, MAX_DISTANCE)
             // Neighbouring block nearest to player (may be air)
-            // TODO find nearest "safe" block to avoid suffocating player or
-            // dumping them in lava.
-            .getRelative(player.getFacing().getOppositeFace()).getLocation();
+            .getRelative(player.getFacing().getOppositeFace())
+                .getLocation().toCenterLocation();
 
-        // Teleporting a player resets their location, so let's save it first.
+        // Let's at least *try* not to murder the player.
+        if (!isSafe(tpLocation)) {
+            Location newLocation = findSafeLocation(tpLocation);
+            if (tpLocation.equals(newLocation)) {
+                applyCosmetics(player, false);
+                return false;
+            } else
+                tpLocation = newLocation;
+        }
+
+        // Teleporting a player resets their yaw and pitch, so let's save them
+        // first.
         float yaw = player.getLocation().getYaw();
         float pitch = player.getLocation().getPitch();
 
         player.teleport(tpLocation);
-        applyCosmetics(player);
+        applyCosmetics(player, true);
 
         player.setRotation(yaw, pitch);
 
