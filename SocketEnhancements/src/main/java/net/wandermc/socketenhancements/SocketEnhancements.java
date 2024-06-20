@@ -94,5 +94,6 @@ public class SocketEnhancements extends JavaPlugin {
         enhancementManager.store(new FrigidEnhancement(enhancedItemForge));
         enhancementManager.store(new IcyEnhancement(enhancedItemForge));
         enhancementManager.store(new WitheringEnhancement(enhancedItemForge));
+        enhancementManager.store(new UndyingEnhancement(enhancedItemForge));
     }
 }
