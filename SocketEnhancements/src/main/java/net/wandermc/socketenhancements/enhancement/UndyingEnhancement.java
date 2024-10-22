@@ -17,7 +17,10 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -69,6 +72,17 @@ public class UndyingEnhancement implements
         this.forge = forge;
     }
 
+    /**
+     * Apply the "cosmetic" effects of an undying item activating.
+     *
+     * @param player the Player to apply the effects to.
+     */
+    private static void applyCosmetics(Player player) {
+        player.spawnParticle(Particle.TOTEM, player.getLocation(),
+            10);
+        player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
+    }
+
     public boolean run(EntityDamageEvent context) {
         // Totems can't save you if the damage was caused by /kill or the void,
         // so neither can this.
@@ -95,6 +109,9 @@ public class UndyingEnhancement implements
             entity.addPotionEffect(REGENERATION_EFFECT);
             entity.addPotionEffect(FIRE_RESISTANCE_EFFECT);
             entity.addPotionEffect(ABSORPTION_EFFECT);
+
+            if (entity instanceof Player player)
+                applyCosmetics(player);
 
             context.setCancelled(true);
 
