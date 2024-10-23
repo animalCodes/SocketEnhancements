@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -52,7 +53,7 @@ public class DirectingEnhancement implements
         new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1);
     
     private EnhancedItemForge forge;
-    
+
     /**
      * Create a Directing enhancement
      * 
@@ -81,6 +82,7 @@ public class DirectingEnhancement implements
     public boolean run(EntityDamageByEntityEvent context) {
         if (!(context.getDamager() instanceof LightningStrike))
             return false;
+
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
             if (helmet == null || !forge.create(helmet).hasEnhancement(this))
@@ -89,6 +91,7 @@ public class DirectingEnhancement implements
             eatGoldenApple(player);
         } else
             return false;
+
         return true;
     }
 
@@ -97,10 +100,12 @@ public class DirectingEnhancement implements
     }
 
     public TextComponent getSocketMessage() {
-        // "<Directing>" where the text "Directing" is aqua and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Directing", NamedTextColor.AQUA))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        // "<Directing>" where the text "Directing" is aqua and the "< >"s are
+        // white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Directing", NamedTextColor.AQUA))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {
@@ -115,4 +120,3 @@ public class DirectingEnhancement implements
         return EntityDamageByEntityEvent.class;
     }
 }
-

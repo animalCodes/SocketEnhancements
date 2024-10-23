@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -25,8 +26,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  */
 public interface Enhancement {
     /**
-     * The name of this Enhancement, should be comprised of lowercase alphabetical
-     * characters, with underscores for spacing. (snake_case, [a-z_])
+     * The name of this Enhancement.
+     *
+     * Should be comprised of lowercase alphabetical characters, with
+     * underscores for spacing (snake_case, [a-z_]).
      *
      * @return The name of this enhancement.
      */
@@ -41,7 +44,9 @@ public interface Enhancement {
 
     /**
      * How rare this Enhancement is.
-     * See EnhancementRarity itself for more information on how this should be used.
+     *
+     * See EnhancementRarity itself for more information on how this should
+     * be used.
      *
      * @return The rarity.
      */
@@ -49,6 +54,7 @@ public interface Enhancement {
 
     /**
      * Whether players should be allowed to bind this Enhancement to `item`.
+     *
      * That the item has an empty socket and that it doesn't already have this
      * enhancement is implied.
      *

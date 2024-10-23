@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -108,7 +109,7 @@ public class EnhancementGemManager implements Listener {
      *
      * @param item The item to check.
      * @return Whether `item` has "is_gem" set to true in its
-               PersistentDataContainer.
+     *         PersistentDataContainer.
      */
     public boolean isEnhancementGem(ItemStack item) {
         PersistentDataContainer dataContainer = item.getItemMeta()
@@ -214,13 +215,13 @@ public class EnhancementGemManager implements Listener {
         enhancedItem.update();
 
         event.getPlayer().getWorld().dropItemNaturally(
-            event.getClickedBlock().getLocation(),
-            gem
+            event.getClickedBlock().getLocation(), gem
         );
     }
 
     /**
-     * Add Enhancements to an item when combined with Enhancement Gems in a crafting table.
+     * Add Enhancements to an item when combined with Enhancement Gems in a
+     * crafting table.
      *
      * @param event The event
      */
@@ -244,8 +245,7 @@ public class EnhancementGemManager implements Listener {
         if (enhancements.size() < 1 || itemToEnhance == null)
             return;
 
-        // Try to add all enhancements
-        // if a binding fails, don't allow the player to take the item.
+        // If a binding fails, don't allow the player to take the item.
         for (Enhancement enhancement : enhancements) {
             if (!itemToEnhance.bind(enhancement)) {
                 event.getInventory().setResult(new ItemStack(Material.AIR));

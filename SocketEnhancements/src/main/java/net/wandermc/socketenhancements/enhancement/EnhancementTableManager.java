@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -88,7 +89,6 @@ public class EnhancementTableManager implements Listener {
         enhancementPoolII = new ArrayList();
         enhancementPoolIII = new ArrayList();
 
-        // Fill out enhancement pools
         for (Enhancement enhancement : manager.getAll()) {
             switch (enhancement.getRarity()) {
                 case I: 
@@ -122,22 +122,24 @@ public class EnhancementTableManager implements Listener {
      * @param manager The current EnhancementManager.
      * @param forge The current EnhancedItemForge.
      */
-    public EnhancementTableManager(JavaPlugin plugin, EnhancementManager manager, EnhancedItemForge forge) {
+    public EnhancementTableManager(JavaPlugin plugin,
+        EnhancementManager manager, EnhancedItemForge forge) {
         this(plugin, manager, forge, true, 5);
     }
 
     /**
-     * Allow enchanted items with at least one empty socket to be enhanced in an enchanting table.
+     * Allow enchanted items with at least one empty socket to be enhanced in an
+     * enchanting table.
      *
      * @param event The event.
      */
     @EventHandler
     public void handlePrepareEnchant(PrepareItemEnchantEvent event) {
         // By default, if the item placed in the enchantment table is enchanted,
-        // the event will be cancelled. However, we want players to be able
-        // to enhance their items regardless of whether they are enchanted,
-        // so, provided the item has an empty socket, allow the event to pass
-        // through.
+        // the event will be cancelled.
+        // However, we want players to be able to enhance their items regardless
+        // of whether they are enchanted, so, provided the item has an empty
+        // socket, allow the event to pass through.
         if (forge.create(event.getItem()).hasEmptySocket() &&
             !event.getItem().getEnchantments().isEmpty()) {
             event.setCancelled(false);
@@ -145,7 +147,8 @@ public class EnhancementTableManager implements Listener {
     }
 
     /**
-     * On enchanting an item with at least one empty socket, cancel the enchantment and fill a socket.
+     * On enchanting an item with at least one empty socket, cancel the
+     * enchantment and fill a socket.
      *
      * @param event The event.
      */
@@ -156,8 +159,6 @@ public class EnhancementTableManager implements Listener {
         if (!item.hasEmptySocket())
             return;
 
-        // Choose pool to get enhancement from based on which button the player
-        // pressed
         ArrayList<Enhancement> pool;
         switch (event.whichButton()) {
             case 0:
@@ -188,7 +189,6 @@ public class EnhancementTableManager implements Listener {
                 break;
         }
 
-        // Keep picking random enhancements until we get a valid enhancement
         int i = 0;
         for (; i < pool.size(); i++) {
             if (item.bind(pool.get(i)))
@@ -210,9 +210,10 @@ public class EnhancementTableManager implements Listener {
         // (Also stops lapis and experience from being taken)
         event.setCancelled(true);
 
-        // It is possible to have 0 levels but still use an enchanting table if you are in creative,
-        // but if a player's level drops below 0 an IllegalArgumentException will be thrown.
-        // .. So let's just not decrement levels if doing so would make them negative.
+        // It is possible to have 0 levels but still use an enchanting table
+        // if you are in creative, but if a player's level drops below 0
+        // an IllegalArgumentException will be thrown... So let's just not
+        // decrement levels if doing so would make them negative.
         if (!(event.getEnchanter().getLevel() < 1))
             event.getEnchanter().setLevel(event.getEnchanter().getLevel() - 1);
     }

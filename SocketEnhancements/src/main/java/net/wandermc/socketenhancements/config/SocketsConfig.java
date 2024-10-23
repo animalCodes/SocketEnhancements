@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -62,9 +63,12 @@ public class SocketsConfig {
      * @param file The .yml file to read from.
      */
     public SocketsConfig(File file) {
-        YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(file);
+        YamlConfiguration yamlConfig =
+            YamlConfiguration.loadConfiguration(file);
 
-        this.EMPTY_SOCKET_MESSAGE = (TextComponent) yamlConfig.getRichMessage("empty_socket_message", Component.text("<Empty Socket>"));
+        this.EMPTY_SOCKET_MESSAGE = (TextComponent) yamlConfig
+            .getRichMessage("empty_socket_message",
+                Component.text("<Empty Socket>"));
 
         int dsl = yamlConfig.getInt("default", 0);
         if (dsl < 0)
@@ -73,7 +77,8 @@ public class SocketsConfig {
 
         this.SOCKET_LIMITS = new EnumMap<Material, Integer>(Material.class);
 
-        ConfigurationSection limitsSection = yamlConfig.getConfigurationSection("limits");
+        ConfigurationSection limitsSection =
+            yamlConfig.getConfigurationSection("limits");
         if (limitsSection != null) {
             for (String key : limitsSection.getKeys(false)) {
                 Material material = Material.getMaterial(key);
@@ -85,20 +90,21 @@ public class SocketsConfig {
         this.ORB_OF_BINDING_INGREDIENTS = new ArrayList<Material>();
 
         ConfigurationSection orbsOfBindingSection = yamlConfig
-        .getConfigurationSection("orbs_of_binding");
+            .getConfigurationSection("orbs_of_binding");
 
         this.ORBS_OF_BINDING_ENABLED = orbsOfBindingSection
-        .getBoolean("enabled", true);
+            .getBoolean("enabled", true);
 
         Material orbType = Material.getMaterial(orbsOfBindingSection
-        .getString("material", "CONDUIT"));
+            .getString("material", "CONDUIT"));
         if (orbType == null || orbType == Material.AIR)
             this.ORB_OF_BINDING_TYPE = Material.CONDUIT;
         else
             this.ORB_OF_BINDING_TYPE = orbType;
 
         if (orbsOfBindingSection != null) {
-            for (String ingredient : orbsOfBindingSection.getStringList("ingredients")) {
+            for (String ingredient :
+                    orbsOfBindingSection.getStringList("ingredients")) {
                 Material material = Material.getMaterial(ingredient);
                 if (material != null && material != Material.AIR)
                     ORB_OF_BINDING_INGREDIENTS.add(material);

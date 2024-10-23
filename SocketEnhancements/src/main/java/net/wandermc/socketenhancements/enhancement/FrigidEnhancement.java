@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -92,9 +93,10 @@ public class FrigidEnhancement implements
 
     public TextComponent getSocketMessage() {
         // "<Frigid>" where the text "Frigid" is aqua and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Frigid", NamedTextColor.AQUA))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Frigid", NamedTextColor.AQUA))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

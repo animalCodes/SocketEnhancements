@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -97,10 +98,12 @@ public class ScorchingEnhancement implements
     }
 
     public TextComponent getSocketMessage() {
-        // "<Scorching>" where the text "Scorching" is yellow and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Scorching", NamedTextColor.YELLOW))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        // "<Scorching>" where the text "Scorching" is yellow and the "< >"s
+        // are white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Scorching", NamedTextColor.YELLOW))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

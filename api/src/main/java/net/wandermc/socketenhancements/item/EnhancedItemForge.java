@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -51,8 +52,9 @@ public class EnhancedItemForge {
      *
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
-     * @param socketLimits Limits for how many sockets can be applied to certain items.
-     * @param defaultSocketLimit Socket limit for any item not in `socketLimits`.
+     * @param socketLimits Limits for how many sockets can be applied to certain
+     *                     items.
+     * @param defaultSocketLimit Socket limit for any other item.
      */
     public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
         EnumMap<Material, Integer> socketLimits, int defaultSocketLimit) {
@@ -69,8 +71,8 @@ public class EnhancedItemForge {
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
      * @param socketLimits Limits for how many sockets can be applied to certain
-                           items, with the default socket limit stored under
-                           Material.AIR.
+     *                     items, with the default socket limit stored under
+     *                     Material.AIR.
      */
     public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
         EnumMap<Material, Integer> socketLimits) {
@@ -79,9 +81,10 @@ public class EnhancedItemForge {
 
     /**
      * Create an EnhancedItem around `item`.
+     *
      * Note that `.update()` will need to be called for any subsequent changes
      * to be applied.
-     * 
+     *
      * @param item The item to work on.
      * @return An EnhancedItem to manage Enhancements on `item`.
      * @throws IllegalArgumentException if `item` as null ItemMeta.
@@ -95,7 +98,7 @@ public class EnhancedItemForge {
 
     /**
      * Get a set of all Material's with a socket limit defined.
-     * 
+     *
      * @return All enhanceable materials.
      */
     public Set<Material> getEnhanceableMaterials() {
@@ -103,8 +106,8 @@ public class EnhancedItemForge {
     }
 
     /**
-     * A wrapper class for reading, updating and removing sockets and enhancements
-     * from ItemStacks.
+     * A wrapper class for reading, updating and removing sockets and
+     * enhancements from ItemStacks.
      */
     public class EnhancedItem {
         private ItemStack item;
@@ -123,26 +126,28 @@ public class EnhancedItemForge {
             // Ensure the item has a socket list before doing anything with it
             PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
             if (!dataContainer.has(socketsKey))
-                dataContainer.set(socketsKey, PersistentDataType.LIST.strings(), new ArrayList<String>());
+                dataContainer.set(socketsKey, PersistentDataType.LIST.strings(),
+                     new ArrayList<String>());
+
             // A PersistentDataType.LIST is immutable, but we need to modify it.
-            // So create a new ArrayList based on the ArrayList we might have literally just
-            // stored on the item.
-            this.socketList = new ArrayList<String>(dataContainer.get(socketsKey, PersistentDataType.LIST.strings()));
+            // So create a new ArrayList based on the ArrayList we might have
+            // literally just stored on the item.
+            this.socketList = new ArrayList<String>(dataContainer
+                .get(socketsKey, PersistentDataType.LIST.strings()));
         }
 
         /**
          * Updates the item's lore to match socketList.
          */
         private void updateLore() {
-            ArrayList<Component> lore = new ArrayList<Component>(socketList.size());
+            ArrayList<Component> lore = new ArrayList<Component>(
+                socketList.size());
 
-            // socketList is the internal list used to identify how many sockets the item
-            // has and, if they are filled, what with. The lore is basically just a
-            // user-friendly version of that information.
-            socketList.forEach(socketId -> lore.add(manager.get(socketId).getSocketMessage()));
+            socketList.forEach(socketId -> lore.add(manager.get(socketId)
+                .getSocketMessage()));
 
-            // Currently, SocketEnhancements greedily resets the entire lore field, meaning
-            // any none-SE lore will be deleted. Ah well.
+            // Currently, SocketEnhancements greedily resets the entire lore
+            // field, meaning any none-SE lore will be deleted. Ah well.
             itemMeta.lore(lore);
         }
 
@@ -179,20 +184,22 @@ public class EnhancedItemForge {
          * @return The maximum
          */
         public int getSocketLimit() {
-            return socketLimits.getOrDefault(item.getType(), defaultSocketLimit);
+            return socketLimits.getOrDefault(item.getType(),
+                defaultSocketLimit);
         }
 
         /**
          * Adds the specified number of sockets to the item.
-         * Note that this will **not** check if adding the given number of sockets would
-         * push the item over it's socket limit.
+         *
+         * Note that this will **not** check if adding the given number of
+         * sockets would push the item over it's socket limit.
          * 
          * @param sockets The number of sockets to add
          */
         public void addSockets(int sockets) {
             for (int i = 0; i < sockets; i++) {
-                // Can't use `bind()` as unlike normal enhancements empty sockets can very much
-                // be 'bound' multiple times.
+                // Can't use `bind()` as unlike normal enhancements empty
+                // sockets can very much be 'bound' multiple times.
                 socketList.add(manager.getEmpty().getName());
             }
         }
@@ -341,7 +348,8 @@ public class EnhancedItemForge {
          * @return The ItemStack.
          */
         public ItemStack update() {
-            itemMeta.getPersistentDataContainer().set(socketsKey, PersistentDataType.LIST.strings(), socketList);
+            itemMeta.getPersistentDataContainer().set(socketsKey,
+                PersistentDataType.LIST.strings(), socketList);
             updateLore();
             item.setItemMeta(itemMeta);
             return item;

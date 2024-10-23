@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -55,11 +56,12 @@ public class BoostEnhancement implements
     // The virtual firework rocket used to boost the player.
     private static final ItemStack rocket =
         Bukkit.getServer().getItemFactory().createItemStack(
-        "minecraft:firework_rocket{Fireworks:{Flight:"+DURATION+"}}");
+            "minecraft:firework_rocket{Fireworks:{Flight:"+DURATION+"}}");
     // Alternative rocket, damages player when used.
     private static final ItemStack damageRocket =
         Bukkit.getServer().getItemFactory().createItemStack(
-        "minecraft:firework_rocket{Fireworks:{Explosions:[{Colors:[11743532],Type:4}],Flight:"+DURATION+"}}");
+            "minecraft:firework_rocket{Fireworks:{Explosions:[{Colors:" +
+            "[11743532],Type:4}],Flight:"+DURATION+"}}");
 
     private final EnhancedItemForge forge;
 
@@ -121,9 +123,10 @@ public class BoostEnhancement implements
 
     public TextComponent getSocketMessage() {
         // "<Boost>" where the text "Boost" is red and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Boost", NamedTextColor.DARK_RED))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Boost", NamedTextColor.DARK_RED))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

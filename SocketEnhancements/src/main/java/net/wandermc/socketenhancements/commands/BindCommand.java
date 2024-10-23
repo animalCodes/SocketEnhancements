@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -30,7 +31,8 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
- * /bind: the default, operator-only method of binding an enhancement to an item.
+ * /bind: the default, operator-only method of binding an enhancement to an
+ * item.
  */
 public class BindCommand implements CommandExecutor {
     private EnhancementManager enhancementManager;
@@ -86,7 +88,8 @@ public class BindCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command,
+        String label, String[] args) {
         if (sender instanceof Player player) {
             if (player.getInventory().getItemInMainHand().isEmpty()) {
                 sender.sendMessage(
@@ -94,7 +97,8 @@ public class BindCommand implements CommandExecutor {
                 return true;
             }
 
-            EnhancedItem item = forge.create(player.getInventory().getItemInMainHand());
+            EnhancedItem item = forge.create(player.getInventory()
+                .getItemInMainHand());
 
             if (args.length < 1) {
                 sender.sendMessage(Component.text("No enhancement given."));
@@ -102,10 +106,10 @@ public class BindCommand implements CommandExecutor {
                     Component.text("Trying all registered enhancements..."));
 
                 for (Enhancement enhancement : enhancementManager.getAll()) {
-                        if (bind(sender, item, enhancement)) {
-                            item.update();
-                            return true;
-                        }
+                    if (bind(sender, item, enhancement)) {
+                        item.update();
+                        return true;
+                    }
                 }
 
                 sender.sendMessage(
@@ -128,9 +132,9 @@ public class BindCommand implements CommandExecutor {
 
             return true;
         } else {
-            sender.sendMessage(Component.text("Only players can run this command."));
+            sender.sendMessage(
+                Component.text("Only players can run this command."));
             return true;
         }
     }
 }
-

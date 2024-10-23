@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -85,10 +86,12 @@ public class LifestealEnhancement implements
     }
 
     public TextComponent getSocketMessage() {
-        // "<Lifesteal>" where the text "Lifesteal" is red and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Lifesteal", NamedTextColor.DARK_RED))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        // "<Lifesteal>" where the text "Lifesteal" is red and the "< >"s are
+        // white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Lifesteal", NamedTextColor.DARK_RED))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

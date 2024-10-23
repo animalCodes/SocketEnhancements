@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -61,17 +62,19 @@ public class AggregateEventListener<C extends Event> implements Listener {
      * @return The handler.
      */
     public Method getHandler() {
-        // Normally I would use the EventHandler annotation along with a specific Event
-        // type argument to signify which method is the handler, but this won't work
-        // here as the handle method's argument type will only be known at runtime.
+        // Normally I would use the EventHandler annotation along with a
+        // specific Event type argument to signify which method is the handler,
+        // but this won't work here as the handle method's argument type will
+        // only be known at runtime.
         for (Method method : this.getClass().getMethods()) {
             if (method.isAnnotationPresent(EventHandler.class))
                 return method;
         }
 
-        // Honestly we should just disable the plugin here, but getting the plugin
-        // instance here would be too painful.
-        // Besides, this should only run if the EventHandler annotation is removed from the handle method.
+        // TODO figure out a proper process for this
+        // Honestly we should just disable the plugin here, but getting the
+        // plugin instance here would be too painful. Besides, this should only
+        // run if the EventHandler annotation is removed from the handle method.
         System.err.println("WARNING: unable to find AggregateEventListener's handler method, everything is about to break!");
 
         return null; // Oh boy
@@ -79,6 +82,7 @@ public class AggregateEventListener<C extends Event> implements Listener {
 
     /**
      * Adds an enhancement to this Aggregate.
+     *
      * Note that this will *not* add enhancements that are already in this
      * Aggregate.
      *

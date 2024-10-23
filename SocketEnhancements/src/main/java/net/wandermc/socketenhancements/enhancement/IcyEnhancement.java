@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -65,6 +66,7 @@ public class IcyEnhancement implements
                 if (weapon.getType() == Material.AIR ||
                     !forge.create(weapon).hasEnhancement(this))
                     return false;
+
                 if (!roll(CHANCE))
                     return false;
 
@@ -88,9 +90,10 @@ public class IcyEnhancement implements
 
     public TextComponent getSocketMessage() {
         // "<Icy>" where the text "Icy" is aqua and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Icy", NamedTextColor.AQUA))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Icy", NamedTextColor.AQUA))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

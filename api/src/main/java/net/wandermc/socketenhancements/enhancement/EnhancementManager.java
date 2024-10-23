@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -32,14 +33,17 @@ import net.wandermc.socketenhancements.events.AggregateEventListener;
 
 /**
  * Manages storing, registering and activating enhancements.
+ *
  * Only one EnhancementManager should be active at a time, as creating multiple
  * could lead to enhancements being registered multiple times.
  */
 public class EnhancementManager {
     private final JavaPlugin plugin;
 
-    private final HashMap<String, Enhancement> enhancementStore = new HashMap<String, Enhancement>();
-    private final ArrayList<AggregateEventListener<? extends Event>> listeners = new ArrayList<>();
+    private final HashMap<String, Enhancement> enhancementStore =
+        new HashMap<String, Enhancement>();
+    private final ArrayList<AggregateEventListener<? extends Event>> listeners =
+        new ArrayList<>();
 
     private final EmptySocket emptySocket;
 
@@ -66,12 +70,14 @@ public class EnhancementManager {
     }
 
     /**
-     * Registers `enhancement` with the appropriate AggregateEventListener, creating
-     * one if needed.
+     * Registers `enhancement` with the appropriate AggregateEventListener.
+     *
+     * If no matching AggregateEventListener exists, one will be created.
      *
      * @param enhancement The enhancement to register
      */
-    private <C extends Event> void registerActiveEnhancement(ActiveEnhancement<C> enhancement) {
+    private <C extends Event> void registerActiveEnhancement(
+        ActiveEnhancement<C> enhancement) {
         for (AggregateEventListener<?> activeListener : listeners) {
             // If there's already a listener with a matching eventType, use it
             if (activeListener.getEventType() == enhancement.getEventType()) {
@@ -85,25 +91,26 @@ public class EnhancementManager {
     }
 
     /**
-     * Activates every currently-stored Enhancement, making them available for use.
+     * Activates every currently-stored Enhancement.
      */
     public void activateEnhancements() {
         listeners.trimToSize();
 
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         listeners.forEach(listener -> {
-            // Yuck
             pluginManager.registerEvent(
                     listener.getEventType(),
                     listener,
                     EventPriority.NORMAL,
-                    new MethodHandleEventExecutor(listener.getEventType(), listener.getHandler()),
+                    new MethodHandleEventExecutor(listener.getEventType(),
+                         listener.getHandler()),
                     plugin);
         });
     }
 
     /**
      * Stores and registers `enhancement`.
+     *
      * Note that the enhancement will only become active after calling
      * `activateEnhancements()`
      * 
@@ -112,13 +119,16 @@ public class EnhancementManager {
     public void store(Enhancement enhancement) {
         if (enhancement instanceof ActiveEnhancement<?> activeEnhancement)
             registerActiveEnhancement(activeEnhancement);
-        // TODO log warning if enhancement isn't a valid extension of Enhancement
+
+        // TODO log warning if enhancement isn't a valid extension of
+        // Enhancement
 
         enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
 
     /**
      * Retrieves the enhancement stored under `name`.
+     *
      * If the enhancement doesn't exist, an EmptySocket will be returned
      * instead.
      *

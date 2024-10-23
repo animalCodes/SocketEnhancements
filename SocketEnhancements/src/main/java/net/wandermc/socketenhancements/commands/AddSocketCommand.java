@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -42,17 +43,22 @@ public class AddSocketCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command,
+        String label, String[] args) {
         if (sender instanceof Player player) {
             if (player.getInventory().getItemInMainHand().isEmpty()) {
-                sender.sendMessage(Component.text("Can't add a socket to nothing!"));
+                sender.sendMessage(
+                    Component.text("Can't add a socket to nothing!"));
                 return true;
             }
 
-            EnhancedItem item = forge.create(player.getInventory().getItemInMainHand());
+            EnhancedItem item = forge.create(player.getInventory()
+                .getItemInMainHand());
 
             if (item.getSockets() >= item.getSocketLimit()) {
-                sender.sendMessage(Component.text("This item already has the maximum number of sockets. (" + item.getSocketLimit() + ")"));
+                sender.sendMessage(Component.text(
+                    "This item already has the maximum number of sockets. (" +
+                     item.getSocketLimit() + ")"));
                 return true;
             }
 
@@ -61,24 +67,29 @@ public class AddSocketCommand implements CommandExecutor {
                 try {
                     numSockets = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(Component.text(args[0] + " Is not a valid number."));
+                    sender.sendMessage(Component.text(args[0] +
+                        " Is not a valid number."));
                     return false;
                 }
             }
 
             if (item.getSockets() + numSockets > item.getSocketLimit()) {
-                sender.sendMessage(Component.text("Adding that many sockets would put this item over it's socket limit. (" + item.getSocketLimit() + ")"));
+                sender.sendMessage(Component.text("Adding that many " +
+                    "sockets would put this item over it's socket limit. (" +
+                     item.getSocketLimit() + ")"));
                 return true;
             }
 
             item.addSockets(numSockets);
             item.update();
 
-            sender.sendMessage(Component.text("Added " + numSockets + " to held item."));
+            sender.sendMessage(Component.text("Added " + numSockets +
+                " to held item."));
 
             return true;
         } else {
-            sender.sendMessage(Component.text("Only players can run this command."));
+            sender.sendMessage(
+                Component.text("Only players can run this command."));
             return false;
         }
     }

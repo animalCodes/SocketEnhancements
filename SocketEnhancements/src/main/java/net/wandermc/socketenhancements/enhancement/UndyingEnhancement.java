@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -40,8 +41,8 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * Undying enhancement, if an entity takes fatal damage from any source other
- * than void or /kill while holding enhanced item, crudely imitate a weakened
- * totem of undying by:
+ * than the void or /kill while holding enhanced item, crudely imitate a
+ * weakened totem of undying by:
  *
  * Removing any active potion effects.
  * Giving them Regeneration II for 20 seconds,
@@ -132,9 +133,10 @@ public class UndyingEnhancement implements
 
     public TextComponent getSocketMessage() {
         // "<Undying>" where the text "Undying" is yellow and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Undying", NamedTextColor.YELLOW))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+            TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Undying", NamedTextColor.YELLOW))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -22,10 +23,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
  * Enhancement representing an empty socket.
+ *
  * Note that due to representing an empty socket, (rather than a filled one)
  * this breaks a few rules that normal Enhancements must adhere to, and should
- * **not** be used as a reference.
- * Instead, please use Protected for that purpose.
+ * **not** be used as a reference. Instead, please use Protected for that
+ * purpose.
  */
 public class EmptySocket implements Enhancement {
     private TextComponent socketMessage;
@@ -38,7 +40,7 @@ public class EmptySocket implements Enhancement {
     public EmptySocket(TextComponent socketMessage) {
         this.socketMessage = socketMessage;
     }
-    
+
     public String getName() {
         return "";
     }

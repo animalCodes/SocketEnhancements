@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -213,10 +214,12 @@ public class BlinkEnhancement implements
     }
 
     public TextComponent getSocketMessage() {
-        // "<Blink>" where the text "Blink" is dark purple and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Blink", NamedTextColor.DARK_PURPLE))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        // "<Blink>" where the text "Blink" is dark purple and the "< >"s are
+        // white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Blink", NamedTextColor.DARK_PURPLE))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {

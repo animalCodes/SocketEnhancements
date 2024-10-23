@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -37,7 +38,7 @@ public class SocketEnhancements extends JavaPlugin {
     private OrbOfBindingManager orbOfBindingManager;
     private EnhancementTableManager enhancementTableManager;
     private EnhancementGemManager enhancementGemManager;
-    
+
     public void onEnable() {
         // TODO stop this from logging a warning if the file already exists
         saveResource("sockets.yml", false);

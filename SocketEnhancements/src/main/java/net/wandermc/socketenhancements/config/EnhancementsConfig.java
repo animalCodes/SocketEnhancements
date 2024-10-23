@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -23,7 +24,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.Material;
 
 /**
- * Generic configuration related to enhancements, by default read from enhancements.yml.
+ * Generic configuration related to enhancements, by default read from
+ * enhancements.yml.
  */
 public class EnhancementsConfig {
     /**
@@ -56,28 +58,29 @@ public class EnhancementsConfig {
      * @param file The .yml file to read from.
      */
     public EnhancementsConfig(File file) {
-        YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(file);
+        YamlConfiguration yamlConfig =
+            YamlConfiguration.loadConfiguration(file);
 
         ConfigurationSection enhancementTablesSection = yamlConfig
-        .getConfigurationSection("enhancement_tables");
+            .getConfigurationSection("enhancement_tables");
 
         this.ENHANCEMENT_TABLES_ENABLED = enhancementTablesSection
-        .getBoolean("enabled", true);
+            .getBoolean("enabled", true);
 
         this.ENHANCEMENT_TABLES_ADDITIVE_POOLS = enhancementTablesSection
-        .getBoolean("additive_pools", true);
+            .getBoolean("additive_pools", true);
 
         this.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY =
-        enhancementTablesSection.getInt("randomisation_frequency", 5);
+            enhancementTablesSection.getInt("randomisation_frequency", 5);
 
         ConfigurationSection enhancementGemsSection = yamlConfig
-        .getConfigurationSection("enhancement_gems");
+            .getConfigurationSection("enhancement_gems");
 
         this.ENHANCEMENT_GEMS_ENABLED =  enhancementGemsSection
-        .getBoolean("enabled", true);
+            .getBoolean("enabled", true);
 
         Material blockMaterial = Material.getMaterial(enhancementGemsSection
-        .getString("block", "GRINDSTONE"));
+            .getString("block", "GRINDSTONE"));
         if (blockMaterial != null && blockMaterial != Material.AIR)
             this.ENHANCEMENT_GEMS_BLOCK_TYPE = blockMaterial;
         else

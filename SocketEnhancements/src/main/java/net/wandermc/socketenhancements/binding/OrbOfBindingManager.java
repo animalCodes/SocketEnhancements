@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -42,7 +43,8 @@ import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
  * Manages the crafting and usage of orbs of binding.
- * Note that the only requirement to enable orbs of binding is to construct one of these.
+ *
+ * The only requirement to enable orbs of binding is to construct one of these.
  */
 public class OrbOfBindingManager implements Listener {
     private final JavaPlugin plugin;
@@ -58,18 +60,19 @@ public class OrbOfBindingManager implements Listener {
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
-     * @param ingredients The items used to craft an orb of binding, count must be > 0 and < 10.
+     * @param ingredients The items used to craft an orb of binding, count must
+     *                    be > 0 and < 10.
      */
-    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge, List<Material> ingredients, Material orbOfBindingType) {
+    public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge,
+        List<Material> ingredients, Material orbOfBindingType) {
         this.plugin = plugin;
         this.forge = forge;
         this.ingredients = ingredients;
         this.orbOfBindingType = orbOfBindingType;
 
         if (ingredients.size() < 1 || ingredients.size() > 9) {
-            throw new IllegalArgumentException("Invalid ingredient list size: " 
-                + ingredients.size() + 
-                ". Must be between 1 and 9 inclusive.");
+            throw new IllegalArgumentException("Invalid ingredient list size: "
+                + ingredients.size() + ". Must be between 1 and 9 inclusive.");
         }
 
         this.orbOfBinding = createOrbOfBinding();
@@ -96,19 +99,21 @@ public class OrbOfBindingManager implements Listener {
     private ItemStack createOrbOfBinding() {
         ItemStack orb = new ItemStack(orbOfBindingType);
         ItemMeta meta = orb.getItemMeta();
-        meta.displayName(Component.text("Orb of Binding", 
-            Style.style(TextDecoration.ITALIC.withState(TextDecoration.State.FALSE))));
+        meta.displayName(Component.text("Orb of Binding", Style
+            .style(TextDecoration.ITALIC.withState(
+                TextDecoration.State.FALSE))));
         orb.setItemMeta(meta);
         return orb;
     }
 
     /**
-     * Creates and registers the recipes for crafting and applying orbs of binding.
+     * Creates and registers the recipes for crafting and applying orbs of
+     * binding.
      */
     private void registerRecipes() {
         // Recipe for crafting an actual orb of binding.
         ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
-                new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
+            new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
 
         for (Material ingredient : ingredients)
             orbOfBindingRecipe.addIngredient(ingredient);
@@ -126,15 +131,17 @@ public class OrbOfBindingManager implements Listener {
 
         // Any item with a socket limit
         upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
-                // Why is it so complicated to convert a Set to a List!?
-                forge.getEnhanceableMaterials().stream().collect(Collectors.toList())));
+            // Why is it so complicated to convert a Set to a List!?
+            forge.getEnhanceableMaterials().stream().collect(
+                Collectors.toList())));
         upgradeRecipe.addIngredient(orbOfBinding);
 
         Bukkit.addRecipe(upgradeRecipe);
     }
 
     /**
-     * Add sockets to an item when combined with one or more orbs of binding in a crafting table.
+     * Add sockets to an item when combined with one or more orbs of binding in
+     * a crafting table.
      *
      * @param event The event
      */
@@ -152,7 +159,7 @@ public class OrbOfBindingManager implements Listener {
             else
                 itemToUpgrade = forge.create(item.clone());
         }
-      
+
         // We only care about the event if the crafting matrix contains at least
         // one orb of binding and another item.
         if (orbs < 1 || itemToUpgrade == null)

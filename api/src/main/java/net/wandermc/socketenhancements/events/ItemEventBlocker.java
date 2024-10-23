@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -91,7 +92,6 @@ public class ItemEventBlocker implements Listener {
 
     private void registerHandlers(BlockableAction ...actions) {
         for (BlockableAction action : actions) {
-            // Try to find the handler method for this action
             try {
                 Method handler;
                 switch (action) {
@@ -161,7 +161,8 @@ public class ItemEventBlocker implements Listener {
         }
     }
 
-    private void registerHandler(Method handler, Class<? extends Event> eventType) {
+    private void registerHandler(Method handler,
+        Class<? extends Event> eventType) {
         plugin.getServer().getPluginManager().registerEvent(
             eventType,
             this,

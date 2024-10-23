@@ -1,5 +1,6 @@
 /*
- *    This file is part of SocketEnhancements: A gear enhancement plugin for PaperMC servers.
+ *    This file is part of SocketEnhancements: A gear enhancement plugin for
+ *    PaperMC servers.
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -35,12 +36,13 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Protected enhancement, Stops the item from breaking but will be consumed in the process.
+ * Protected enhancement, Stops the item from breaking but will be consumed in
+ * the process.
  */
 public class ProtectedEnhancement implements
     ActiveEnhancement<PlayerItemBreakEvent> {
     private EnhancedItemForge forge;
-    
+
     /**
      * Create a Protected enhancement
      * 
@@ -55,10 +57,12 @@ public class ProtectedEnhancement implements
     }
 
     public TextComponent getSocketMessage() {
-        // "<Protected>" where the text "Protected" is dark gray and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE, TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-        .append(Component.text("Protected", NamedTextColor.DARK_GRAY))
-        .append(Component.text(">", NamedTextColor.WHITE));
+        // "<Protected>" where the text "Protected" is dark gray and the "< >"s
+        // are white.
+        return Component.text("<", Style.style(NamedTextColor.WHITE,
+             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
+            .append(Component.text("Protected", NamedTextColor.DARK_GRAY))
+            .append(Component.text(">", NamedTextColor.WHITE));
     }
 
     public EnhancementRarity getRarity() {
@@ -83,7 +87,7 @@ public class ProtectedEnhancement implements
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         // Damage = how much damage item has taken so 0 damage = full durability
-        // The checker already confirmed that the item's ItemMeta is an instance 
+        // The checker already confirmed that the item's ItemMeta is an instance
         // of Damageable, so this should be a safe cast.
         ((Damageable) itemMeta).setDamage(0);
         itemStack.setItemMeta(itemMeta);
