@@ -27,9 +27,8 @@ public interface ActiveEnhancement<C extends Event> extends Enhancement {
      * Check context and run this Enhancement's effect.
      *
      * @param context The event being handled.
-     * @return Whether the effect was run successfully, if at all.
      */
-    public boolean run(C context);
+    public void run(C context);
 
     /**
      * Return the class of the Event on which this enhancement should be run.

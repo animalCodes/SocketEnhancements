@@ -101,10 +101,10 @@ public class BoostEnhancement implements
         return true;
     }
 
-    public boolean run(PlayerInteractEvent context) {
+    public void run(PlayerInteractEvent context) {
         Player player = context.getPlayer();
         if (!contextMatches(context))
-            return false;
+            return;
 
         if (roll(CHANCE))
             player.fireworkBoost(damageRocket);
@@ -113,8 +113,6 @@ public class BoostEnhancement implements
 
         if (player.getGameMode() != GameMode.CREATIVE)
             context.getItem().damage(COST, player);
-
-        return true;
     }
 
     public String getName() {

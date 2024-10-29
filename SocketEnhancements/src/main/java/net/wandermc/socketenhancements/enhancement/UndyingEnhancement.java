@@ -84,26 +84,26 @@ public class UndyingEnhancement implements
         player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
     }
 
-    public boolean run(EntityDamageEvent context) {
+    public void run(EntityDamageEvent context) {
         // Totems can't save you if the damage was caused by /kill or the void,
         // so neither can this.
         if (context.getCause() == EntityDamageEvent.DamageCause.KILL ||
             context.getCause() == EntityDamageEvent.DamageCause.VOID)
-            return false;
+            return;
 
         if (context.getEntity() instanceof LivingEntity entity) {
             if (entity.getHealth() - context.getFinalDamage() > 0)
-                return false;
+                return;
 
             // May be in offhand or mainhand
             ItemStack shield = entity.getEquipment().getItemInOffHand();
-            if (shield.getType() == Material.AIR ||
-                !forge.create(shield).hasEnhancement(this)) {
+            if (shield.isEmpty() ||
+                    !forge.create(shield).hasEnhancement(this)) {
                 shield = entity.getEquipment().getItemInMainHand();
 
-                if (shield.getType() == Material.AIR ||
-                    !forge.create(shield).hasEnhancement(this))
-                    return false;
+                if (shield.isEmpty() ||
+                        !forge.create(shield).hasEnhancement(this))
+                    return;
             }
 
             entity.clearActivePotionEffects();
@@ -120,11 +120,7 @@ public class UndyingEnhancement implements
 
             enhancedShield.removeEnhancement(this);
             enhancedShield.update();
-
-            return true;
         }
-
-        return false;
     }
 
     public String getName() {

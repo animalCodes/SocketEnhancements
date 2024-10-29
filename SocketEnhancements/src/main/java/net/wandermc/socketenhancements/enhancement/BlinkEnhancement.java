@@ -167,9 +167,9 @@ public class BlinkEnhancement implements
                 loc.getBlock().getRelative(0, -1, 0).isSolid();
     }
 
-    public boolean run(PlayerInteractEvent context) {
+    public void run(PlayerInteractEvent context) {
         if (!contextMatches(context))
-            return false;
+            return;
 
         Player player = context.getPlayer();
 
@@ -185,7 +185,7 @@ public class BlinkEnhancement implements
             Location newLocation = findSafeLocation(tpLocation);
             if (tpLocation.equals(newLocation)) {
                 applyCosmetics(player, false);
-                return false;
+                return;
             } else
                 tpLocation = newLocation;
         }
@@ -205,8 +205,6 @@ public class BlinkEnhancement implements
             player.setExperienceLevelAndProgress(
                 player.calculateTotalExperiencePoints()-COST);
         }
-
-        return true;
     }
 
     public String getName() {

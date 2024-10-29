@@ -54,18 +54,18 @@ public class CushioningEnhancement implements
         this.forge = forge;
     }
 
-    public boolean run(EntityDamageEvent context) {
+    public void run(EntityDamageEvent context) {
         if (context.getCause() != DamageCause.FLY_INTO_WALL)
-            return false;
+            return;
+
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
+
             if (helmet != null && forge.create(helmet).hasEnhancement(this)) {
                 context.setDamage(context.getDamage() / 2);
                 player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
-                return true;
             }
         }
-        return false;
     }
 
     public String getName() {

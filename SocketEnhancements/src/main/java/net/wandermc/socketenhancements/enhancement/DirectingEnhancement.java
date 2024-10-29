@@ -64,7 +64,7 @@ public class DirectingEnhancement implements
     }
 
     /**
-     * Simulate the effect of `player` eating a golden apple.
+     * Simulate the effects of `player` eating a golden apple.
      *
      * @param player the player to force-feed.
      */
@@ -79,20 +79,17 @@ public class DirectingEnhancement implements
         player.addPotionEffect(FIRE_RESISTANCE_EFFECT);
     }
 
-    public boolean run(EntityDamageByEntityEvent context) {
+    public void run(EntityDamageByEntityEvent context) {
         if (!(context.getDamager() instanceof LightningStrike))
-            return false;
+            return;
 
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
             if (helmet == null || !forge.create(helmet).hasEnhancement(this))
-                return false;
+                return;
 
             eatGoldenApple(player);
-        } else
-            return false;
-
-        return true;
+        }
     }
 
     public String getName() {

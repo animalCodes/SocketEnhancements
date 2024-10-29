@@ -76,7 +76,8 @@ public class EnhancedItemForge {
      */
     public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
         EnumMap<Material, Integer> socketLimits) {
-        this(plugin, manager, socketLimits, socketLimits.getOrDefault(Material.AIR, 0));
+        this(plugin, manager, socketLimits, socketLimits.getOrDefault(
+            Material.AIR, 0));
     }
 
     /**
@@ -87,7 +88,7 @@ public class EnhancedItemForge {
      *
      * @param item The item to work on.
      * @return An EnhancedItem to manage Enhancements on `item`.
-     * @throws IllegalArgumentException if `item` as null ItemMeta.
+     * @throws IllegalArgumentException if `item` has null ItemMeta.
      */
     public EnhancedItem create(ItemStack item) {
         if (item.getItemMeta() == null)

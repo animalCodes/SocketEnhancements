@@ -103,9 +103,9 @@ public class AggregateEventListener<C extends Event> implements Listener {
     }
 
     /**
-     * Check if each enhancement should be run and if so, run their effect.
+     * Run each stored ActiveEnhancement's effect.
      *
-     * @param event The event
+     * @param event The event.
      */
     @EventHandler
     public void handle(C event) {

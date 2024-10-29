@@ -52,6 +52,27 @@ public class ProtectedEnhancement implements
         this.forge = forge;
     }
 
+    public void run(PlayerItemBreakEvent context) {
+        EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
+
+        if (!enhancedItem.hasEnhancement(this))
+            return;
+
+        enhancedItem.removeEnhancement(this);
+
+        ItemStack itemStack = enhancedItem.update();
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (!(itemMeta instanceof Damageable))
+            return; // Technically this should never happen, as
+                    // undamageable items cannot have this enhancement.
+
+        ((Damageable) itemMeta).setDamage(0);
+        itemStack.setItemMeta(itemMeta);
+
+        context.getPlayer().getInventory().addItem(itemStack);
+    }
+
     public String getName() {
         return "protected";
     }
@@ -75,28 +96,6 @@ public class ProtectedEnhancement implements
         return item.getItemStack().getItemMeta() instanceof Damageable
             && item.getItemStack().getType() != Material.ELYTRA;
     }
-
-    public boolean run(PlayerItemBreakEvent context) {
-        if (!forge.create(context.getBrokenItem()).hasEnhancement(this))
-            return false;
-
-        EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
-        enhancedItem.removeEnhancement(this);
-
-        ItemStack itemStack = enhancedItem.update();
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        // Damage = how much damage item has taken so 0 damage = full durability
-        // The checker already confirmed that the item's ItemMeta is an instance
-        // of Damageable, so this should be a safe cast.
-        ((Damageable) itemMeta).setDamage(0);
-        itemStack.setItemMeta(itemMeta);
-
-        context.getPlayer().getInventory().addItem(itemStack);
-
-        return true;
-    }
-
     public Class<PlayerItemBreakEvent> getEventType() {
         return PlayerItemBreakEvent.class;
     }

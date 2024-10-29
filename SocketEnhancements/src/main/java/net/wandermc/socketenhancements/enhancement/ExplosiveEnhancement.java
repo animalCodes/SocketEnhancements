@@ -79,13 +79,12 @@ public class ExplosiveEnhancement implements
         return blocks;
     }
 
-    public boolean run(BlockBreakEvent context) {
+    public void run(BlockBreakEvent context) {
         ItemStack pickaxe = context.getPlayer().getInventory()
             .getItemInMainHand();
 
-        if (pickaxe.getType() == Material.AIR ||
-            !forge.create(pickaxe).hasEnhancement(this))
-            return false;
+        if (pickaxe.isEmpty() || !forge.create(pickaxe).hasEnhancement(this))
+            return;
 
         context.getPlayer().spawnParticle(
             Particle.EXPLOSION_LARGE, context.getBlock().getLocation(), 10);
@@ -108,8 +107,6 @@ public class ExplosiveEnhancement implements
         }
 
         pickaxe.damage(damage, context.getPlayer());
-
-        return true;
     }
 
     public String getName() {

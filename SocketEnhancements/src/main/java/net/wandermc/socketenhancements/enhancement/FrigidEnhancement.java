@@ -63,14 +63,14 @@ public class FrigidEnhancement implements
         this.forge = forge;
     }
 
-    public boolean run(EntityDamageByEntityEvent context) {
+    public void run(EntityDamageByEntityEvent context) {
         if (context.getEntity() instanceof LivingEntity defender) {
             if (context.getDamager() instanceof LivingEntity attacker) {
                 double chance = 0;
                 for (ItemStack armourPiece : defender.getEquipment()
                     .getArmorContents()) {
                     if (armourPiece == null ||
-                        armourPiece.getType() == Material.AIR)
+                        armourPiece.isEmpty())
                         continue;
 
                     if (forge.create(armourPiece).hasEnhancement(this))
@@ -80,11 +80,9 @@ public class FrigidEnhancement implements
                 if (roll(chance)) {
                     attacker.setFreezeTicks(attacker.getMaxFreezeTicks());
                     attacker.addPotionEffect(MINING_FATIGUE_EFFECT);
-                    return true;
                 }
             }
         }
-        return false;
     }
 
     public String getName() {

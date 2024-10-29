@@ -53,22 +53,23 @@ public class LifestealEnhancement implements
         this.forge = forge;
     }
 
-    public boolean run(EntityDamageByEntityEvent context) {
+    public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (!(context.getEntity() instanceof LivingEntity))
-                return false;
+                return;
+
             ItemStack weapon = attacker.getEquipment().getItemInMainHand();
-            if (weapon.getType() == Material.AIR ||
+            if (weapon.isEmpty() ||
                 !forge.create(weapon).hasEnhancement(this))
-                return false;
+                return;
 
             if (!roll(CHANCE))
-                return false;
+                return;
 
             double maxHealth = attacker.getAttribute(
                 Attribute.GENERIC_MAX_HEALTH).getValue();
             if (attacker.getHealth() >= maxHealth)
-                return false;
+                return;
 
             double newHealth = attacker.getHealth() +
                 (context.getFinalDamage() / 4);
@@ -76,9 +77,7 @@ public class LifestealEnhancement implements
                 newHealth = maxHealth;
 
             attacker.setHealth(newHealth);
-            return true;
         }
-        return false;
     }
 
     public String getName() {

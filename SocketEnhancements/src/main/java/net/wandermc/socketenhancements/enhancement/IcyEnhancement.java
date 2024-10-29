@@ -59,29 +59,27 @@ public class IcyEnhancement implements
         this.forge = forge;
     }
 
-    public boolean run(EntityDamageByEntityEvent context) {
+    public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (context.getEntity() instanceof LivingEntity defender) {
                 ItemStack weapon = attacker.getEquipment().getItemInMainHand();
-                if (weapon.getType() == Material.AIR ||
-                    !forge.create(weapon).hasEnhancement(this))
-                    return false;
+
+                if (weapon.isEmpty() ||
+                        !forge.create(weapon).hasEnhancement(this))
+                    return;
 
                 if (!roll(CHANCE))
-                    return false;
+                    return;
 
                 if (defender.getFireTicks() > 0) {
                     defender.setFireTicks(0);
-                    return true;
+                    return;
                 }
 
                 defender.setFreezeTicks(defender.getMaxFreezeTicks());
                 defender.addPotionEffect(MINING_FATIGUE_EFFECT);
-
-                return true;
             }
         }
-        return false;
     }
 
     public String getName() {
