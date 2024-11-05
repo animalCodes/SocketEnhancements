@@ -44,6 +44,11 @@ public class SeaCommand implements CommandExecutor {
         " SocketEnhancements will bind the first valid enhancement it finds."),
         Component.text("addsocket {n} - Add n socket(s) to item held in main" +
         " hand. If n isn't specified, 1 socket is added."),
+        Component.text("replace {enhancement1} {enhancement2} - Replace" +
+        " enhancement1 with enhancement2 on item held in main hand." +
+        " enhancement1 may be an unregistered enhancement, in which case" +
+        " this can be used to update items after an enhancement's name has" +
+        " been changed."),
         Component.text("help - Print this help.")
     };
 
@@ -67,115 +72,155 @@ public class SeaCommand implements CommandExecutor {
             return helpCommand(sender);
         }
 
-        switch (args[0].toLowerCase()) {
-            case "bind":
-                return bindCommand(sender, args);
-            case "addsocket":
-                return addSocketCommand(sender, args);
-            case "help":
-            default:
-                return helpCommand(sender);
-        }
-    }
-
-    private boolean bindCommand(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            if (player.getInventory().getItemInMainHand().isEmpty()) {
-                sender.sendMessage(
-                    Component.text("Can't bind an enhancement to nothing!"));
-                return true;
+            switch (args[0].toLowerCase()) {
+                case "bind":
+                    return bindCommand(player, args);
+                case "addsocket":
+                    return addSocketCommand(player, args);
+                case "replace":
+                    return replaceCommand(player, args);
+                case "help":
+                default:
+                    return helpCommand(sender);
             }
-
-            EnhancedItem item = forge.create(player.getInventory()
-                .getItemInMainHand());
-
-            if (args.length < 2) {
-                sender.sendMessage(Component.text("No enhancement given."));
-                sender.sendMessage(
-                    Component.text("Trying all registered enhancements..."));
-
-                for (Enhancement enhancement : enhancementManager.getAll()) {
-                    if (bind(sender, item, enhancement)) {
-                        item.update();
-                        return true;
-                    }
-                }
-
-                sender.sendMessage(
-                    Component.text("Couldn't find a valid enhancement."));
-
-                return true;
-            }
-
-            for (int i = 1; i < args.length; i++) {
-                Enhancement enhancement = enhancementManager.get(args[i]);
-                if (enhancement instanceof EmptySocket) {
-                    sender.sendMessage(Component.text("Unknown enhancement \"" +
-                        args[i] + "\""));
-                    return false;
-                }
-
-                bind(sender, item, enhancement);
-            }
-
-            item.update();
-
-            return true;
         } else {
             sender.sendMessage(
-                Component.text("Only players can run this command."));
+                Component.text("Only players can use this command."));
             return true;
         }
     }
 
-    private boolean addSocketCommand(CommandSender sender, String[] args) {
-        if (sender instanceof Player player) {
-            if (player.getInventory().getItemInMainHand().isEmpty()) {
-                sender.sendMessage(
-                    Component.text("Can't add a socket to nothing!"));
-                return true;
-            }
+    private boolean bindCommand(Player sender, String[] args) {
+        if (sender.getInventory().getItemInMainHand().isEmpty()) {
+            sender.sendMessage(
+                Component.text("Can't bind an enhancement to nothing!"));
+            return true;
+        }
 
-            EnhancedItem item = forge.create(player.getInventory()
-                .getItemInMainHand());
+        EnhancedItem item = forge.create(sender.getInventory()
+            .getItemInMainHand());
 
-            if (item.getSockets() >= item.getSocketLimit()) {
-                sender.sendMessage(Component.text(
-                    "This item already has the maximum number of sockets. (" +
-                     item.getSocketLimit() + ")"));
-                return true;
-            }
+        if (args.length < 2) {
+            sender.sendMessage(Component.text("No enhancement given."));
+            sender.sendMessage(
+                Component.text("Trying all registered enhancements..."));
 
-            int numSockets = 1;
-            if (args.length > 1) {
-                try {
-                    numSockets = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Component.text(args[1] +
-                        " Is not a valid number."));
-                    return false;
+            for (Enhancement enhancement : enhancementManager.getAll()) {
+                if (bind(sender, item, enhancement)) {
+                    item.update();
+                    return true;
                 }
             }
 
-            if (item.getSockets() + numSockets > item.getSocketLimit()) {
-                sender.sendMessage(Component.text("Adding that many " +
-                    "sockets would put this item over it's socket limit. (" +
-                     item.getSocketLimit() + ")"));
-                return true;
-            }
-
-            item.addSockets(numSockets);
-            item.update();
-
-            sender.sendMessage(Component.text("Added " + numSockets +
-                " to held item."));
+            sender.sendMessage(
+                Component.text("Couldn't find a valid enhancement."));
 
             return true;
-        } else {
+        }
+
+        for (int i = 1; i < args.length; i++) {
+            Enhancement enhancement = enhancementManager.get(args[i]);
+            if (enhancement instanceof EmptySocket) {
+                sender.sendMessage(Component.text("Unknown enhancement \"" +
+                    args[i] + "\""));
+                return false;
+            }
+
+            bind(sender, item, enhancement);
+        }
+
+        item.update();
+
+        return true;
+    }
+
+    private boolean addSocketCommand(Player sender, String[] args) {
+        if (sender.getInventory().getItemInMainHand().isEmpty()) {
             sender.sendMessage(
-                Component.text("Only players can run this command."));
+                Component.text("Can't add a socket to nothing!"));
+            return true;
+        }
+
+        EnhancedItem item = forge.create(sender.getInventory()
+            .getItemInMainHand());
+
+        if (item.getSockets() >= item.getSocketLimit()) {
+            sender.sendMessage(Component.text(
+                "This item already has the maximum number of sockets. (" +
+                 item.getSocketLimit() + ")"));
+            return true;
+        }
+
+        int numSockets = 1;
+        if (args.length > 1) {
+            try {
+                numSockets = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(Component.text(args[1] +
+                    " Is not a valid number."));
+                return false;
+            }
+        }
+
+        if (item.getSockets() + numSockets > item.getSocketLimit()) {
+            sender.sendMessage(Component.text("Adding that many " +
+                "sockets would put this item over it's socket limit. (" +
+                 item.getSocketLimit() + ")"));
+            return true;
+        }
+
+        item.addSockets(numSockets);
+        item.update();
+
+        sender.sendMessage(Component.text("Added " + numSockets +
+            " to held item."));
+
+        return true;
+    }
+
+    private boolean replaceCommand(Player sender, String[] args) {
+        if (sender.getInventory().getItemInMainHand().isEmpty()) {
+            sender.sendMessage(
+                Component.text("No item in main hand."));
+            return true;
+        }
+
+        EnhancedItem item = forge.create(sender.getInventory()
+            .getItemInMainHand());
+
+        if (args.length < 3) {
+            if (args.length < 2)
+                sender.sendMessage(Component.text("No base or replacement" +
+                    " enhancement given."));
+            else
+                sender.sendMessage(Component.text("No replacement" +
+                    " enhancement given."));
             return false;
         }
+
+        Enhancement enhancement2 = enhancementManager.get(args[2]);
+        if (enhancement2 instanceof EmptySocket) {
+            sender.sendMessage(Component.text("Unknown enhancement \"" +
+                args[2] + "\""));
+            return false;
+        }
+
+        if (!item.removeEnhancement(args[1])) {
+            sender.sendMessage(Component.text("Item doesn't have \"" +
+                args[1] + "\" bound to it."));
+            return false;
+        }
+
+        if (!item.bind(enhancement2)) {
+            sender.sendMessage(Component.text("\"" + args[2] +
+                "\" cannot be bound to item."));
+            return false;
+        }
+
+        item.update();
+
+        return true;
     }
 
     private boolean helpCommand(CommandSender sender) {
