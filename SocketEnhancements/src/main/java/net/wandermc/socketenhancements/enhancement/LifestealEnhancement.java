@@ -67,7 +67,7 @@ public class LifestealEnhancement implements
                 return;
 
             double maxHealth = attacker.getAttribute(
-                Attribute.GENERIC_MAX_HEALTH).getValue();
+                Attribute.MAX_HEALTH).getValue();
             if (attacker.getHealth() >= maxHealth)
                 return;
 

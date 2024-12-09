@@ -87,7 +87,7 @@ public class ExplosiveEnhancement implements
             return;
 
         context.getPlayer().spawnParticle(
-            Particle.EXPLOSION_LARGE, context.getBlock().getLocation(), 10);
+            Particle.EXPLOSION, context.getBlock().getLocation(), 10);
         context.getPlayer().playSound(context.getBlock().getLocation(),
             Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
 

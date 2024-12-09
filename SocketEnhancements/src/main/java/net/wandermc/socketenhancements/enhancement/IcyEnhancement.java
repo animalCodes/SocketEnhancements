@@ -51,7 +51,7 @@ public class IcyEnhancement implements
     private static final double CHANCE = 0.2;
 
     private static final PotionEffect MINING_FATIGUE_EFFECT =
-        new PotionEffect(PotionEffectType.SLOW_DIGGING, 70, 2);
+        new PotionEffect(PotionEffectType.MINING_FATIGUE, 70, 2);
 
     private final EnhancedItemForge forge;
 

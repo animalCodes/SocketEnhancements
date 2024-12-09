@@ -50,7 +50,7 @@ public class FrigidEnhancement implements
     private static final double CHANCE_PER = 0.15;
 
     private static final PotionEffect MINING_FATIGUE_EFFECT =
-        new PotionEffect(PotionEffectType.SLOW_DIGGING, 70, 2);
+        new PotionEffect(PotionEffectType.MINING_FATIGUE, 70, 2);
 
     private EnhancedItemForge forge;
 

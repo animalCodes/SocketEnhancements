@@ -79,7 +79,7 @@ public class UndyingEnhancement implements
      * @param player the Player to apply the effects to.
      */
     private static void applyCosmetics(Player player) {
-        player.spawnParticle(Particle.TOTEM, player.getLocation(),
+        player.spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation(),
             10);
         player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
     }
