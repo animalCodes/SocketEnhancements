@@ -30,9 +30,7 @@ import org.bukkit.inventory.meta.Damageable;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -121,11 +119,7 @@ public class BoostEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Boost>" where the text "Boost" is red and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Boost", NamedTextColor.DARK_RED))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<red>Boost<white>>");
     }
 
     public EnhancementRarity getRarity() {

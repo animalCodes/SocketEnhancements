@@ -28,9 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
@@ -91,11 +89,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Frigid>" where the text "Frigid" is aqua and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Frigid", NamedTextColor.AQUA))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<aqua>Frigid<white>>");
     }
 
     public EnhancementRarity getRarity() {

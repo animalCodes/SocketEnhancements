@@ -26,9 +26,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
@@ -96,12 +94,7 @@ public class ScorchingEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Scorching>" where the text "Scorching" is yellow and the "< >"s
-        // are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Scorching", NamedTextColor.YELLOW))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<yellow>Scorching<white>>");
     }
 
     public EnhancementRarity getRarity() {

@@ -31,9 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
@@ -128,11 +126,7 @@ public class UndyingEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Undying>" where the text "Undying" is yellow and the "< >"s are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-            TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Undying", NamedTextColor.YELLOW))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<yellow>Undying<white>>");
     }
 
     public EnhancementRarity getRarity() {

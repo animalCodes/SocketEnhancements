@@ -28,9 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.SWORDS;
 import static com.destroystokyo.paper.MaterialTags.AXES;
@@ -80,12 +78,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Withering>" where the text "Withering" is black and the "< >"s
-        // are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Withering", NamedTextColor.BLACK))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<black>Withering<white>>");
     }
 
     public EnhancementRarity getRarity() {

@@ -32,9 +32,7 @@ import org.bukkit.inventory.meta.Damageable;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.PICKAXES;
 
@@ -115,12 +113,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Explosive>" where the text "Explosive" is dark red and the "< >"s
-        // are white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-            TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Explosive", NamedTextColor.DARK_RED))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<dark_red>Explosive<white>>");
     }
 
     public EnhancementRarity getRarity() {

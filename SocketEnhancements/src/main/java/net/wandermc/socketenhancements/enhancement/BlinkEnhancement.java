@@ -37,9 +37,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -213,12 +211,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        // "<Blink>" where the text "Blink" is dark purple and the "< >"s are
-        // white.
-        return Component.text("<", Style.style(NamedTextColor.WHITE,
-             TextDecoration.ITALIC.withState(TextDecoration.State.FALSE)))
-            .append(Component.text("Blink", NamedTextColor.DARK_PURPLE))
-            .append(Component.text(">", NamedTextColor.WHITE));
+        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<dark_purple>Blink<white>>");
     }
 
     public EnhancementRarity getRarity() {
