@@ -23,6 +23,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,7 +38,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import static com.destroystokyo.paper.MaterialTags.PICKAXES;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -45,8 +46,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Explosive enhancement, on mining a block also destroy all neighbouring blocks
  * within a 1-block radius. (3*3 cube centered on mined block)
  */
-public class ExplosiveEnhancement implements
-    ActiveEnhancement<BlockBreakEvent> {
+public class ExplosiveEnhancement implements Enhancement, Listener {
     private final EnhancedItemForge forge;
 
     public ExplosiveEnhancement(EnhancedItemForge forge) {
@@ -79,6 +79,7 @@ public class ExplosiveEnhancement implements
         return blocks;
     }
 
+    @EventHandler
     public void run(BlockBreakEvent context) {
         ItemStack pickaxe = context.getPlayer().getInventory()
             .getItemInMainHand();

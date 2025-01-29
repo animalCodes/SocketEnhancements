@@ -19,6 +19,8 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -32,7 +34,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -44,8 +45,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * Frigid enhancement, has a chance to freeze and apply mining fatigue to
  * attackers.
  */
-public class FrigidEnhancement implements
-    ActiveEnhancement<EntityDamageByEntityEvent> {
+public class FrigidEnhancement implements Enhancement, Listener {
     // Chance for effect to be applied per armour piece.
     private static final double CHANCE_PER = 0.15;
 
@@ -63,6 +63,7 @@ public class FrigidEnhancement implements
         this.forge = forge;
     }
 
+    @EventHandler
     public void run(EntityDamageByEntityEvent context) {
         if (context.getEntity() instanceof LivingEntity defender) {
             if (context.getDamager() instanceof LivingEntity attacker) {

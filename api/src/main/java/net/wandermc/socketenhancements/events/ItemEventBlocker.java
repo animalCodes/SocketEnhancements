@@ -38,9 +38,8 @@ import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.destroystokyo.paper.event.executor.MethodHandleEventExecutor;
 
 /**
  * A helper class to easily block items from being used in certain ways.
@@ -167,7 +166,7 @@ public class ItemEventBlocker implements Listener {
             eventType,
             this,
             this.priority,
-            new MethodHandleEventExecutor(eventType, handler),
+            EventExecutor.create(handler, eventType),
             plugin,
             true
         );

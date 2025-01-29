@@ -20,6 +20,8 @@ package net.wandermc.socketenhancements.enhancement;
 import org.bukkit.Material;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +35,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import static com.destroystokyo.paper.MaterialTags.HELMETS;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -43,8 +44,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Directing enhancement, When a player is struck with lightning, simulate the
  * effect of them eating a (normal) golden apple.
  */
-public class DirectingEnhancement implements
-    ActiveEnhancement<EntityDamageByEntityEvent> {
+public class DirectingEnhancement implements Enhancement, Listener {
     private static final PotionEffect ABSORPTION_EFFECT =
         new PotionEffect(PotionEffectType.ABSORPTION, 20 * 60 * 2, 1);
     private static final PotionEffect REGENERATION_EFFECT =
@@ -79,6 +79,7 @@ public class DirectingEnhancement implements
         player.addPotionEffect(FIRE_RESISTANCE_EFFECT);
     }
 
+    @EventHandler
     public void run(EntityDamageByEntityEvent context) {
         if (!(context.getDamager() instanceof LightningStrike))
             return;

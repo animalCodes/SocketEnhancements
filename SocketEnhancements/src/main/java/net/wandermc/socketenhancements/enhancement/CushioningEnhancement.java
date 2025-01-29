@@ -20,6 +20,8 @@ package net.wandermc.socketenhancements.enhancement;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +34,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 
 import static com.destroystokyo.paper.MaterialTags.HELMETS;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -41,8 +42,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 /**
  * Cushioning enhancement, halves damage taken from flying into walls.
  */
-public class CushioningEnhancement implements
-    ActiveEnhancement<EntityDamageEvent> {
+public class CushioningEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
@@ -54,6 +54,7 @@ public class CushioningEnhancement implements
         this.forge = forge;
     }
 
+    @EventHandler
     public void run(EntityDamageEvent context) {
         if (context.getCause() != DamageCause.FLY_INTO_WALL)
             return;

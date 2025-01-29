@@ -22,6 +22,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +35,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -52,9 +53,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  *
  * And remove the enhancement.
  */
-public class UndyingEnhancement implements
-    ActiveEnhancement<EntityDamageEvent> {
-
+public class UndyingEnhancement implements Enhancement, Listener {
     private static final PotionEffect REGENERATION_EFFECT =
         new PotionEffect(PotionEffectType.REGENERATION, 400, 2);
     private static final PotionEffect FIRE_RESISTANCE_EFFECT =
@@ -84,6 +83,7 @@ public class UndyingEnhancement implements
         player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
     }
 
+    @EventHandler
     public void run(EntityDamageEvent context) {
         // Totems can't save you if the damage was caused by /kill or the void,
         // so neither can this.

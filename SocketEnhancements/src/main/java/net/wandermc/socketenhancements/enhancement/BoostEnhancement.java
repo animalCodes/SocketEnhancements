@@ -21,6 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +34,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -44,8 +45,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * firework of duration DURATION, at the cost of applying COST damage to the
  * item. There is a CHANCE chance that the rocket will damage the player.
  */
-public class BoostEnhancement implements 
-    ActiveEnhancement<PlayerInteractEvent> {
+public class BoostEnhancement implements Enhancement, Listener {
     // How much damage will be applied to the item on use.
     private static final int COST = 8;
     // The flight duration the player will be boosted with.
@@ -101,6 +101,7 @@ public class BoostEnhancement implements
         return true;
     }
 
+    @EventHandler
     public void run(PlayerInteractEvent context) {
         Player player = context.getPlayer();
         if (!contextMatches(context))

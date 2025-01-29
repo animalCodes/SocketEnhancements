@@ -19,6 +19,8 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +35,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import static com.destroystokyo.paper.MaterialTags.SWORDS;
 import static com.destroystokyo.paper.MaterialTags.AXES;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -44,8 +45,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * Withering enhancement, On attacking another entity, have a chance to apply
  * wither to them.
  */
-public class WitheringEnhancement implements
-    ActiveEnhancement<EntityDamageByEntityEvent> {
+public class WitheringEnhancement implements Enhancement, Listener {
     // Chance for enhancement to activated.
     private static final double CHANCE = 0.3;
 
@@ -58,6 +58,7 @@ public class WitheringEnhancement implements
         this.forge = forge;
     }
 
+    @EventHandler
     public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (context.getEntity() instanceof LivingEntity defender) {

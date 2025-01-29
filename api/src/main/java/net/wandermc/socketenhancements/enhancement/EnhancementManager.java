@@ -19,18 +19,11 @@ package net.wandermc.socketenhancements.enhancement;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.destroystokyo.paper.event.executor.MethodHandleEventExecutor;
-
-import net.wandermc.socketenhancements.events.AggregateEventListener;
-
 /**
  * Manages storing, registering and activating enhancements.
  *
@@ -42,8 +35,6 @@ public class EnhancementManager {
 
     private final HashMap<String, Enhancement> enhancementStore =
         new HashMap<String, Enhancement>();
-    private final ArrayList<AggregateEventListener<? extends Event>> listeners =
-        new ArrayList<>();
 
     private final EmptySocket emptySocket;
 
@@ -70,42 +61,17 @@ public class EnhancementManager {
     }
 
     /**
-     * Registers `enhancement` with the appropriate AggregateEventListener.
-     *
-     * If no matching AggregateEventListener exists, one will be created.
-     *
-     * @param enhancement The enhancement to register
-     */
-    private <C extends Event> void registerActiveEnhancement(
-        ActiveEnhancement<C> enhancement) {
-        for (AggregateEventListener<?> activeListener : listeners) {
-            // If there's already a listener with a matching eventType, use it
-            if (activeListener.getEventType() == enhancement.getEventType()) {
-                ((AggregateEventListener<C>) activeListener).add(enhancement);
-                return;
-            }
-        }
-
-        // No listener with a matching eventType was found, so create one
-        listeners.add(new AggregateEventListener<C>(enhancement));
-    }
-
-    /**
      * Activates every currently-stored Enhancement.
      */
     public void activateEnhancements() {
-        listeners.trimToSize();
-
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        listeners.forEach(listener -> {
-            pluginManager.registerEvent(
-                    listener.getEventType(),
-                    listener,
-                    EventPriority.NORMAL,
-                    new MethodHandleEventExecutor(listener.getEventType(),
-                         listener.getHandler()),
-                    plugin);
-        });
+        for (Enhancement e : enhancementStore.values()) {
+            if (e instanceof Listener listener)
+                pluginManager.registerEvents(listener, plugin);
+            else
+                plugin.getLogger().warning("Couldn't activate enhancement " + e
+                    + ". Because it is not an instance of Listener.");
+        }
     }
 
     /**
@@ -117,12 +83,6 @@ public class EnhancementManager {
      * @param enhancement The enhancement to store
      */
     public void store(Enhancement enhancement) {
-        if (enhancement instanceof ActiveEnhancement<?> activeEnhancement)
-            registerActiveEnhancement(activeEnhancement);
-
-        // TODO log warning if enhancement isn't a valid extension of
-        // Enhancement
-
         enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
 

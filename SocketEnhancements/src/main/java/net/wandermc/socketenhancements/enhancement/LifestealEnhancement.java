@@ -20,6 +20,8 @@ package net.wandermc.socketenhancements.enhancement;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,7 +34,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import static com.destroystokyo.paper.MaterialTags.SWORDS;
 import static com.destroystokyo.paper.MaterialTags.AXES;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -43,8 +44,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * Lifesteal enhancement, On attacking another entity, have a CHANCE chance to
  * gain a quarter of the dealt damage as health.
  */
-public class LifestealEnhancement implements
-    ActiveEnhancement<EntityDamageByEntityEvent> {
+public class LifestealEnhancement implements Enhancement, Listener {
     private static final double CHANCE = 0.5;
 
     private final EnhancedItemForge forge;
@@ -53,6 +53,7 @@ public class LifestealEnhancement implements
         this.forge = forge;
     }
 
+    @EventHandler
     public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (!(context.getEntity() instanceof LivingEntity))

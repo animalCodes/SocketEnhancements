@@ -18,6 +18,8 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -29,7 +31,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 
-import net.wandermc.socketenhancements.enhancement.ActiveEnhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -39,8 +40,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Protected enhancement, Stops the item from breaking but will be consumed in
  * the process.
  */
-public class ProtectedEnhancement implements
-    ActiveEnhancement<PlayerItemBreakEvent> {
+public class ProtectedEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
@@ -52,6 +52,7 @@ public class ProtectedEnhancement implements
         this.forge = forge;
     }
 
+    @EventHandler
     public void run(PlayerItemBreakEvent context) {
         EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
 
