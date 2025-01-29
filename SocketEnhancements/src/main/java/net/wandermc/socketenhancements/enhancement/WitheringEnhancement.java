@@ -50,6 +50,10 @@ public class WitheringEnhancement implements Enhancement, Listener {
     private static final PotionEffect WITHER_EFFECT =
         new PotionEffect(PotionEffectType.WITHER, 160, 1);
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<black>Withering<white>>");
+
     private final EnhancedItemForge forge;
 
     public WitheringEnhancement(EnhancedItemForge forge) {
@@ -78,7 +82,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<black>Withering<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

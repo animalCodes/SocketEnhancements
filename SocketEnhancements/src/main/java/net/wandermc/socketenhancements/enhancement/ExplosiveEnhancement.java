@@ -45,6 +45,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * within a 1-block radius. (3*3 cube centered on mined block)
  */
 public class ExplosiveEnhancement implements Enhancement, Listener {
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<dark_red>Explosive<white>>");
+
     private final EnhancedItemForge forge;
 
     public ExplosiveEnhancement(EnhancedItemForge forge) {
@@ -113,7 +117,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<dark_red>Explosive<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

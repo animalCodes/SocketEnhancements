@@ -50,6 +50,10 @@ public class FrigidEnhancement implements Enhancement, Listener {
     private static final PotionEffect MINING_FATIGUE_EFFECT =
         new PotionEffect(PotionEffectType.MINING_FATIGUE, 70, 2);
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<aqua>Frigid<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -89,7 +93,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<aqua>Frigid<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

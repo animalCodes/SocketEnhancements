@@ -39,6 +39,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * the process.
  */
 public class ProtectedEnhancement implements Enhancement, Listener {
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<dark_gray>Protected<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -77,7 +81,7 @@ public class ProtectedEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<dark_gray>Protected<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

@@ -41,6 +41,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Cushioning enhancement, halves damage taken from flying into walls.
  */
 public class CushioningEnhancement implements Enhancement, Listener {
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<gray>Cushioning<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -72,7 +76,7 @@ public class CushioningEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<gray>Cushioning<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

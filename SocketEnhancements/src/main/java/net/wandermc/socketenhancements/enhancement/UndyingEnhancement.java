@@ -59,6 +59,10 @@ public class UndyingEnhancement implements Enhancement, Listener {
     private static final PotionEffect ABSORPTION_EFFECT =
         new PotionEffect(PotionEffectType.ABSORPTION, 100, 1);
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<yellow>Undying<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -126,7 +130,7 @@ public class UndyingEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<yellow>Undying<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

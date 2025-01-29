@@ -65,6 +65,10 @@ public class BlinkEnhancement implements Enhancement, Listener {
         BLINK_THROUGH_BLOCKS = EnumSet.copyOf(materials);
     }
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<dark_purple>Blink<white>>");
+
     private final EnhancedItemForge forge;
 
     public BlinkEnhancement(EnhancedItemForge forge) {
@@ -211,7 +215,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<dark_purple>Blink<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

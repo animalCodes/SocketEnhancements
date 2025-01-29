@@ -51,6 +51,10 @@ public class BoostEnhancement implements Enhancement, Listener {
     // Chance for boost to damage player.
     private static final double CHANCE = 0.15;
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<red>Boost<white>>");
+
     // The virtual firework rocket used to boost the player.
     private static final ItemStack rocket =
         Bukkit.getServer().getItemFactory().createItemStack(
@@ -119,7 +123,7 @@ public class BoostEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<red>Boost<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

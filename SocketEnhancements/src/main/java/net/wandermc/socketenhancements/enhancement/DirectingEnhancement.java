@@ -49,7 +49,11 @@ public class DirectingEnhancement implements Enhancement, Listener {
         new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2);
     private static final PotionEffect FIRE_RESISTANCE_EFFECT =
         new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1);
-    
+
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<aqua>Directing<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -96,7 +100,7 @@ public class DirectingEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<aqua>Directing<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

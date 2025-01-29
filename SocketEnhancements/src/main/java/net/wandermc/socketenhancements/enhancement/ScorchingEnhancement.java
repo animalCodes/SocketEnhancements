@@ -50,6 +50,10 @@ public class ScorchingEnhancement implements Enhancement, Listener {
     // Knockback strength applied to attacker on activation.
     private static final double KNOCKBACK = 0.5;
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<yellow>Scorching<white>>");
+
     private EnhancedItemForge forge;
 
     /**
@@ -94,7 +98,7 @@ public class ScorchingEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<yellow>Scorching<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {

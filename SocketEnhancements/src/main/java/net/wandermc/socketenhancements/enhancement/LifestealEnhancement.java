@@ -45,6 +45,10 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 public class LifestealEnhancement implements Enhancement, Listener {
     private static final double CHANCE = 0.5;
 
+    private static final TextComponent socketMessage = (TextComponent)
+        MiniMessage.miniMessage()
+        .deserialize("<!italic><white><<red>Lifesteal<white>>");
+
     private final EnhancedItemForge forge;
 
     public LifestealEnhancement(EnhancedItemForge forge) {
@@ -84,7 +88,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
     }
 
     public TextComponent getSocketMessage() {
-        return (TextComponent) MiniMessage.miniMessage().deserialize("<!italic><white><<red>Lifesteal<white>>");
+        return socketMessage;
     }
 
     public EnhancementRarity getRarity() {
