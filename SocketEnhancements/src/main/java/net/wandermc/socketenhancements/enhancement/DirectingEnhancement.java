@@ -39,8 +39,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Directing enhancement, When a player is struck with lightning, simulate the
- * effect of them eating a (normal) golden apple.
+ * Directing enhancement.
+ *
+ * When a player is struck with lightning, simulate the effect of them eating a
+ * (normal) golden apple.
  */
 public class DirectingEnhancement implements Enhancement, Listener {
     private static final PotionEffect ABSORPTION_EFFECT =
@@ -57,9 +59,9 @@ public class DirectingEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Directing enhancement
-     * 
-     * @param forge The current EnhancedItemForge
+     * Create a Directing enhancement.
+     *
+     * @param forge The current EnhancedItemForge.
      */
     public DirectingEnhancement(EnhancedItemForge forge) {
         this.forge = forge;
@@ -68,7 +70,7 @@ public class DirectingEnhancement implements Enhancement, Listener {
     /**
      * Simulate the effects of `player` eating a golden apple.
      *
-     * @param player the player to force-feed.
+     * @param player the player to feed.
      */
     private void eatGoldenApple(Player player) {
         player.setFoodLevel(player.getFoodLevel() + 4);

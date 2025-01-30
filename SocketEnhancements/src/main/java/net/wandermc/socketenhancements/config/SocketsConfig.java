@@ -36,27 +36,33 @@ public class SocketsConfig {
      * The message displayed on an item's lore for each empty socket it has.
      */
     public final TextComponent EMPTY_SOCKET_MESSAGE;
+
     /**
      * Socket limit used for any item not in SOCKET_LIMITS.
      */
     public final int DEFAULT_SOCKET_LIMIT;
+
     /**
      * Limits for how many sockets can be applied to certain items.
      */
     public final EnumMap<Material, Integer> SOCKET_LIMITS;
+
     /**
      * Whether Orbs of Binding can be crafted and applied to items.
      */
     public final boolean ORBS_OF_BINDING_ENABLED;
+
     /**
      * Ingredients used to craft an orb of binding.
      * Length must be between 1 and 9 inclusive.
      */
     public final ArrayList<Material> ORB_OF_BINDING_INGREDIENTS;
+
     /**
      * Material type of orbs of binding.
      */
     public final Material ORB_OF_BINDING_TYPE;
+
     /**
      * Create a SocketsConfig with values read from `file`.
      *

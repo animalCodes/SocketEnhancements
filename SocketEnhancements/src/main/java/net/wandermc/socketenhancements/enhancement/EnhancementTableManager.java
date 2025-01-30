@@ -64,7 +64,7 @@ public class EnhancementTableManager implements Listener {
     private final ArrayList<Enhancement> enhancementPoolIII;
     private int iiiCounter = 0;
 
-    // How frequently enhancement pools are randomised
+    // How frequently enhancement pools are randomised.
     private int randomisationFrequency;
 
     /**
@@ -74,7 +74,7 @@ public class EnhancementTableManager implements Listener {
      * @param manager The current EnhancementManager.
      * @param forge The current EnhancedItemForge.
      * @param additivePools Whether enhancement pools are additive or unique.
-     *        (see class javadoc)
+     *        (see class Javadoc)
      */
     public EnhancementTableManager(JavaPlugin plugin,EnhancementManager manager,
         EnhancedItemForge forge, boolean additivePools,
@@ -206,8 +206,8 @@ public class EnhancementTableManager implements Listener {
 
         item.update();
 
-        // Stop enchantments from being added
-        // (Also stops lapis and experience from being taken)
+        // Stop enchantments from being added (Also stops lapis and experience
+        // from being taken)
         event.setCancelled(true);
 
         // It is possible to have 0 levels but still use an enchanting table

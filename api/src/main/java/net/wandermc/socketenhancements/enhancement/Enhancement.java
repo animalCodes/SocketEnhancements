@@ -22,7 +22,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Parent interface for different variants of Enhancements
+ * An Enhancement.
  */
 public interface Enhancement {
     /**
@@ -58,7 +58,7 @@ public interface Enhancement {
      * That the item has an empty socket and that it doesn't already have this
      * enhancement is implied.
      *
-     * @param item The item to check
+     * @param item The item to check.
      * @return Whether this enhancement can be bound to `item`.
      */
     public boolean isValidItem(EnhancedItem item);

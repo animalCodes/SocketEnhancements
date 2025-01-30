@@ -26,14 +26,11 @@
         <directory>../target</directory>
         <resources>
             <resource>
-                <!-- Allow use of pom variables in plugin.yml etc. -->
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
-            <!-- All this mess is just to include the SocketEnhancements-api 
-                 jar inside this one. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

@@ -150,7 +150,6 @@ public class ItemEventBlocker implements Listener {
                 }
                 registerHandler(handler, action.eventType());
             } catch (NoSuchMethodException exception) {
-                // No such method - this shouldn't happen!
                 plugin.getLogger().log(Level.SEVERE, this.getClass().getName()+
                     " Encountered an exception while setting up blockers.");
                 plugin.getLogger().log(Level.SEVERE,
@@ -173,7 +172,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents a block from being placed if the placed item matches.
+     * Prevent a block from being placed if the placed item matches.
      */
     public void blockBlockPlace(BlockPlaceEvent event) {
         // blockBlockBlockBlockBlockBlockBlock
@@ -182,7 +181,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents a matching item from being used as fuel in a brewing stand.
+     * Prevent a matching item from being used as fuel in a brewing stand.
      */
     public void blockFuelBrewing(BrewingStandFuelEvent event) {
         if (itemChecker.test(event.getFuel()))
@@ -190,7 +189,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents a matching item from being used as an ingredient in a brewing
+     * Prevent a matching item from being used as an ingredient in a brewing
      * stand.
      *
      * Item will appear to be applied at first, but will not be taken.
@@ -201,14 +200,15 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents matching items from being used as fuel.
+     * Prevent matching items from being used as fuel.
      */
     public void blockBurn(FurnaceBurnEvent event) {
         if (itemChecker.test(event.getFuel()))
             event.setCancelled(true);
     }
+
     /**
-     * Prevents items from being combined in an anvil if either matches.
+     * Prevent items from being combined in an anvil if either matches.
      */
     public void blockCombine(PrepareAnvilEvent event) {
         ItemStack first = event.getInventory().getFirstItem();
@@ -221,7 +221,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents matching items from being enchanted
+     * Prevent matching items from being enchanted.
      */
     public void blockEnchant(PrepareItemEnchantEvent event) {
         if (itemChecker.test(event.getItem()))
@@ -229,7 +229,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents matching items from being cooked on campfires.
+     * Prevent matching items from being cooked on campfires.
      *
      * Specifically, prevents the item from being placed on the campfire in the
      * first place.
@@ -244,7 +244,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents an entity from being placed if the placed item matches.
+     * Prevent an entity from being placed if the placed item matches.
      */
     public void blockEntityPlace(EntityPlaceEvent event) {
         if (itemChecker.test(
@@ -253,7 +253,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents an entity from being placed if the spawning item matches.
+     * Prevent an entity from being spawned if the spawning item matches.
      */
     public void blockEntitySpawn(PlayerInteractEvent event) {
         if ((event.hasItem() && itemChecker.test(event.getItem())) &&
@@ -263,7 +263,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents matching items from being repaired / having enchantments removed
+     * Prevent matching items from being repaired / having enchantments removed
      * in a grindstone.
      */
     public void blockGrind(PrepareGrindstoneEvent event) {
@@ -273,7 +273,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents matching items from being smelted in a furnace, smoker or blast
+     * Prevent matching items from being smelted in a furnace, smoker or blast
      * furnace.
      *
      * Item will appear to be smelted at first, but on completion no result
@@ -285,7 +285,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevents an item from being crafted if one of the ingredients matches.
+     * Prevent an item from being crafted if one of the ingredients matches.
      */
     public void blockUseInRecipe(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {

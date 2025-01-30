@@ -43,55 +43,65 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 /**
- * An "action" that can be blocked by an ItemEventBlocker.
+ * An "action" (event involving an item) that can be blocked by an
+ * ItemEventBlocker.
  */
 public enum BlockableAction {
     /**
      * A block being placed.
      */
     BLOCK_PLACE(BlockPlaceEvent.class),
+
     /**
      * An item being used as fuel in a brewing stand.
      */
     FUEL_BREWING(BrewingStandFuelEvent.class),
+
     /**
      * An item being used as an ingredient in a brewing stand.
      */
     BREW_INGREDIENT(BrewEvent.class),
+
     /**
      * An item being used as fuel in a furnace, smoker or blast furnace.
      */
     BURN(FurnaceBurnEvent.class),
+
     /**
      * An item being combined with another item in an anvil.
      */
     COMBINE(PrepareAnvilEvent.class),
+
     /**
      * An item being placed on a campfire.
      */
     COOK(PlayerInteractEvent.class),
+
     /**
      * An item being enchanted.
      */
     ENCHANT(PrepareItemEnchantEvent.class),
+
     /**
      * An entity being placed.
-     *
-     * Used for end crystals, item frames and the like.
      */
     ENTITY_PLACE(EntityPlaceEvent.class),
+
     /**
      * An entity being spawned.
      */
     ENTITY_SPAWN(PlayerInteractEvent.class),
+
     /**
      * An item being repaired / disenchanted in a grindstone.
      */
     GRIND(PrepareGrindstoneEvent.class),
+
     /**
      * An item being smelted in a furnace, smoker or blast furnace.
      */
     SMELT(FurnaceSmeltEvent.class),
+
     /**
      * An item being used in any crafting recipe.
      */
@@ -108,7 +118,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "PLACE_BLOCK" can be performed on `mat`.
+     * Whether the action "PLACE_BLOCK" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -118,7 +128,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "FUEL_BREWING" can be performed on `mat`.
+     * Whether the action "FUEL_BREWING" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -128,7 +138,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "BREW_INGREDIENT" can be performed on `mat`.
+     * Whether the action "BREW_INGREDIENT" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -150,7 +160,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "BURN" can be performed on `mat`.
+     * Whether the action "BURN" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -160,7 +170,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "COMBINE" can be performed on `mat`.
+     * Whether the action "COMBINE" can be performed on `mat`.
      *
      * Any item can be renamed in an anvil, so this will return true unless the
      * material is AIR.
@@ -173,7 +183,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "COOK" can be performed on `mat`.
+     * Whether the action "COOK" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -189,7 +199,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "ENCHANT" can be performed on `mat`.
+     * Whether the action "ENCHANT" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -208,7 +218,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "ENTITY_PLACE" can be performed on `mat`.
+     * Whether the action "ENTITY_PLACE" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -217,6 +227,7 @@ public enum BlockableAction {
         if (mat == Material.ARMOR_STAND || mat == Material.END_CRYSTAL)
             return true;
         else {
+            // TODO stop being lazy
             // This is probably a terrible idea, but I *really* can't be
             // bothered to write a huge switch/case.
             if (mat.toString().contains("BOAT") ||
@@ -228,7 +239,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "ENTITY_SPAWN" can be performed on `mat`.
+     * Whether the action "ENTITY_SPAWN" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -246,7 +257,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "GRIND" can be performed on `mat`.
+     * Whether the action "GRIND" can be performed on `mat`.
      *
      * As any item can have an enchantment applied to it, any item can have an
      * enchantment *removed* from it. So provided `mat` isn't AIR, this will
@@ -260,7 +271,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "SMELT" can be performed on `mat`.
+     * Whether the action "SMELT" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -281,7 +292,7 @@ public enum BlockableAction {
     }
 
     /**
-     * Determine whether the action "USE_IN_RECIPE" can be performed on `mat`.
+     * Whether the action "USE_IN_RECIPE" can be performed on `mat`.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -314,7 +325,7 @@ public enum BlockableAction {
      * Determine all BlockableActions that can be performed on `mat`.
      *
      * @param mat The Material to check.
-     * @return All actions that can be formed on `mat`.
+     * @return All actions that can be performed on `mat`.
      */
     public static ArrayList<BlockableAction> getValidActions(Material mat) {
         ArrayList<BlockableAction> actions = new ArrayList<>();

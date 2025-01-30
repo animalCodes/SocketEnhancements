@@ -18,7 +18,7 @@
 package net.wandermc.socketenhancements.enhancement;
 
 /**
- * Enum for signifying how rare (easy/hard to obtain) an Enhancement is.
+ * How rare (easy/hard to obtain) an Enhancement is.
  */
 public enum EnhancementRarity {
     /**
@@ -37,7 +37,7 @@ public enum EnhancementRarity {
     III,
 
     /**
-     * Impossible to obtain normally, mainly used for special case
+     * Impossible to obtain normally, intended for special case
      * enhancements such as EmptySocket.
      */
     IMPOSSIBLE

@@ -44,9 +44,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Blink enhancement, allows players to instantly travel to the block they are
- * looking at, provided it is near enough, at the cost of some experience points
- * and temporary blindness.
+ * Blink enhancement.
+ *
+ * Allows players to instantly travel to the block they are looking at, provided
+ * it is near enough, at the cost of some experience points and temporary
+ * blindness.
  */
 public class BlinkEnhancement implements Enhancement, Listener {
     // How many experience points this costs per use.
@@ -101,7 +103,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
     }
 
     /**
-     * Determines whether `context` matches the conditions for a blink.
+     * Determine whether `context` matches the conditions for a blink.
      *
      * The conditions are as follows: Player must have interacted with the air
      * while sneaking and holding an item with this enhancement, the player
@@ -155,10 +157,10 @@ public class BlinkEnhancement implements Enhancement, Listener {
     }
 
     /**
-     * Determines whether `loc` is a safe location.
+     * Determine whether `loc` is a safe location.
      *
-     * Any location is considered 'safe' if it won't suffocate the player or is
-     * in the air, it may still dunk them in lava.
+     * Any location is considered 'safe' if it won't suffocate the player or
+     * place them in the air, it might still dunk them in lava, for instance.
      *
      * @param loc The location to check.
      * @return Whether it is safe.
@@ -204,7 +206,6 @@ public class BlinkEnhancement implements Enhancement, Listener {
         player.setRotation(yaw, pitch);
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            // Two methods with very long names that are rather useful.
             player.setExperienceLevelAndProgress(
                 player.calculateTotalExperiencePoints()-COST);
         }

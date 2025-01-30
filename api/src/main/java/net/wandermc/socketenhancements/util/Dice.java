@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Dice {
     /**
-     * Picks a random item from none-empty `list`.
+     * Pick a random item from none-empty `list`.
      *
      * @param list The list to choose from.
      * @return A random item from `list`.
@@ -35,7 +35,7 @@ public class Dice {
     }
 
     /**
-     * Randomises the contents of `list`.
+     * Randomise the contents of `list`.
      *
      * @param list The list to randomise.
      */

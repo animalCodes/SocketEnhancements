@@ -39,9 +39,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Boost enhancement, On use, boosts gliding players as if they had used a
- * firework of duration DURATION, at the cost of applying COST damage to the
- * item. There is a CHANCE chance that the rocket will damage the player.
+ * Boost enhancement.
+ *
+ * On use, boosts gliding players as if they had used a firework of duration
+ * DURATION, at the cost of applying COST damage to the item. There is a CHANCE
+ * chance that the rocket will damage the player.
  */
 public class BoostEnhancement implements Enhancement, Listener {
     // How much damage will be applied to the item on use.
@@ -72,7 +74,7 @@ public class BoostEnhancement implements Enhancement, Listener {
     }
 
     /**
-     * Determines whether `context` matches the conditions for a boost.
+     * Determine whether `context` matches the conditions for a boost.
      *
      * The player must have interacted with the air while gliding and holding an
      * item with this bound to it, additionally, the item must have more than

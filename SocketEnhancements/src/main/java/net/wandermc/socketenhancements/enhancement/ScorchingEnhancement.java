@@ -38,7 +38,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Scorching enhancement, has a chance to knock back attackers and set them on
+ * Scorching enhancement.
+ *
+ * When wearer is attacked, has a chance to knock back attackers and set them on
  * fire for a brief period, chance increases with each enhanced armour piece.
  * Think thorns + fire aspect.
  */
@@ -57,9 +59,9 @@ public class ScorchingEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Scorching enhancement
+     * Create a Scorching enhancement.
      * 
-     * @param forge The current EnhancedItemForge
+     * @param forge The current EnhancedItemForge.
      */
     public ScorchingEnhancement(EnhancedItemForge forge) {
         this.forge = forge;

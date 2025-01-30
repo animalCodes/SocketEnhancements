@@ -48,15 +48,12 @@ import net.wandermc.socketenhancements.events.BlockableAction;
 import net.wandermc.socketenhancements.events.ItemEventBlocker;
 
 /**
- * Manages the creation and use of Enhancement Gems.
+ * A class for managing the creation and use of Enhancement Gems.
  *
  * Enhancement gems are Enhancements in item form, allowing players to easily
  * remove, collect and re-bind Enhancements.
  */
 public class EnhancementGemManager implements Listener {
-    /**
-     * The name of Enhancement Gems.
-     */
     public static final TextComponent ENHANCEMENT_GEM_NAME =
         Component.text("Enhancement Gem",
         Style.style(TextDecoration.ITALIC.withState
@@ -74,8 +71,11 @@ public class EnhancementGemManager implements Listener {
     /**
      * Create an EnhancementGemManager for `plugin`.
      *
-     * @param plugin The plugin this manager is working for
-     * @param forge The current EnhancedItemForge
+     * @param plugin The plugin this manager is working for.
+     * @param forge The current EnhancedItemForge.
+     * @param blockType The Material of the block used to extract Enhancement
+     *                  Gems.
+     * @param enhancementGemType The Material of Enhancement Gems.
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge,
         Material blockType, Material enhancementGemType) {
@@ -107,9 +107,11 @@ public class EnhancementGemManager implements Listener {
     /**
      * Determine whether `item` is an enhancement gem.
      *
+     * An item is considered an enhancement gem if it has "is_gem" set to true
+     * in its PersistentDataContainer.
+     *
      * @param item The item to check.
-     * @return Whether `item` has "is_gem" set to true in its
-     *         PersistentDataContainer.
+     * @return Whether `item` is an Enhancement Gem.
      */
     public boolean isEnhancementGem(ItemStack item) {
         PersistentDataContainer dataContainer = item.getItemMeta()
@@ -127,8 +129,8 @@ public class EnhancementGemManager implements Listener {
      * a single socket. The enhancement in that socket is the "type" of the
      * Enhancement Gem.
      *
-     * In the event of an unsuccessful binding, an "empty" ItemStack will be
-     * returned instead.
+     * In the event of an unsuccessful binding, an "empty" ItemStack
+     * (ItemStack.empty) will be returned instead.
      *
      * @param enhancement The Enhancement the gem represents.
      * @return An Enhancement Gem OR an empty ItemStack.
@@ -162,11 +164,12 @@ public class EnhancementGemManager implements Listener {
     }
 
     /**
-     * Creates and registers recipe for applying Enhancement Gems to items.
+     * Create and register the recipe for applying Enhancement Gems to items.
      */
     private void registerRecipe() {
         ShapelessRecipe recipe = new ShapelessRecipe(
                 new NamespacedKey(plugin, "enhancement_gem_addition"),
+                // Result is irrelevant as it will be overridden.
                 new ItemStack(Material.STONE, 1));
 
         // If an item has a socket limit, it can be enhanced
@@ -181,10 +184,10 @@ public class EnhancementGemManager implements Listener {
     /**
      * Convert a bound Enhancement to an Enhancement Gem when interacting with
      * the appropriate block.
-     * 
+     *
      * Default 'interaction' is right-clicking while sneaking.
      *
-     * @param event The event
+     * @param event The event.
      */
     @EventHandler(ignoreCancelled=true)
     public void handleInteract(PlayerInteractEvent event) {
@@ -198,6 +201,7 @@ public class EnhancementGemManager implements Listener {
         if (event.getHand() != EquipmentSlot.HAND)
             return;
         ItemStack item = event.getItem();
+
         // Don't let players remove enhancements from enhancement gems,
         // otherwise infinite duplication glitch!
         if (item == null || isEnhancementGem(item))
@@ -215,15 +219,14 @@ public class EnhancementGemManager implements Listener {
         enhancedItem.update();
 
         event.getPlayer().getWorld().dropItemNaturally(
-            event.getClickedBlock().getLocation(), gem
-        );
+            event.getClickedBlock().getLocation(), gem);
     }
 
     /**
      * Add Enhancements to an item when combined with Enhancement Gems in a
      * crafting table.
      *
-     * @param event The event
+     * @param event The event.
      */
     @EventHandler(ignoreCancelled=true)
     public void handleCraft(PrepareItemCraftEvent event) {
@@ -241,7 +244,6 @@ public class EnhancementGemManager implements Listener {
                 itemToEnhance = forge.create(item.clone());
         }
 
-        // Maybe we shouldn't add an empty list to a none-existent item, idk.
         if (enhancements.size() < 1 || itemToEnhance == null)
             return;
 

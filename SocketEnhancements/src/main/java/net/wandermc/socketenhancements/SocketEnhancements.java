@@ -79,7 +79,7 @@ public class SocketEnhancements extends JavaPlugin {
     }
 
     /**
-     * Registers all SocketEnhancements core enhancements.
+     * Register all SocketEnhancements core enhancements.
      */
     private void registerEnhancements() {
         enhancementManager.store(new ProtectedEnhancement(enhancedItemForge));

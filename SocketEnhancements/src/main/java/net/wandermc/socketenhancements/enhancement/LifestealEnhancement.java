@@ -39,8 +39,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Lifesteal enhancement, On attacking another entity, have a CHANCE chance to
- * gain a quarter of the dealt damage as health.
+ * Lifesteal enhancement.
+ *
+ * On attacking another entity, have a CHANCE chance to gain a quarter of the
+ * dealt damage as health.
  */
 public class LifestealEnhancement implements Enhancement, Listener {
     private static final double CHANCE = 0.5;

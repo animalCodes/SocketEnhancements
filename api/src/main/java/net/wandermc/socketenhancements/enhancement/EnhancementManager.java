@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
 /**
  * Manages storing, registering and activating enhancements.
  *
@@ -39,7 +40,7 @@ public class EnhancementManager {
     private final EmptySocket emptySocket;
 
     /**
-     * Create an EnhancementManager for `plugin`
+     * Create an EnhancementManager for `plugin`.
      *
      * @param plugin The plugin this manager will run under.
      * @param emptySocket EmptySocket instance to use.
@@ -50,9 +51,9 @@ public class EnhancementManager {
     }
 
     /**
-     * Normalises `name` to ease storage and retrieval of enhancements.
+     * Normalise `name`.
      *
-     * @param name Starting name
+     * @param name Name of Enhancement.
      * @return Normalised version of `name`
      */
     private String normaliseName(String name) {
@@ -61,7 +62,7 @@ public class EnhancementManager {
     }
 
     /**
-     * Activates every currently-stored Enhancement.
+     * Activate every currently-stored Enhancement.
      */
     public void activateEnhancements() {
         PluginManager pluginManager = Bukkit.getServer().getPluginManager();
@@ -75,25 +76,25 @@ public class EnhancementManager {
     }
 
     /**
-     * Stores and registers `enhancement`.
+     * Register `enhancement`.
      *
-     * Note that the enhancement will only become active after calling
+     * Note that the Enhancement will only become active after calling
      * `activateEnhancements()`
      * 
-     * @param enhancement The enhancement to store
+     * @param enhancement The Enhancement to store.
      */
     public void store(Enhancement enhancement) {
         enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
     }
 
     /**
-     * Retrieves the enhancement stored under `name`.
+     * Retrieve the enhancement stored under `name`.
      *
      * If the enhancement doesn't exist, an EmptySocket will be returned
      * instead.
      *
-     * @param name The name of the enhancement
-     * @return The enhancement, or an EmptySocket if it doesn't exist.
+     * @param name The name of the Enhancement.
+     * @return The Enhancement.
      */
     public Enhancement get(String name) {
         return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
@@ -102,16 +103,16 @@ public class EnhancementManager {
     /**
      * Get this manager's EmptySocket instance.
      *
-     * @return An EmptySocket
+     * @return An EmptySocket.
      */
     public Enhancement getEmpty() {
         return emptySocket;
     }
 
     /**
-     * Gets all currently stored enhancements.
+     * Get all currently stored enhancements.
      *
-     * @return All current enhancements.
+     * @return All stored enhancements.
      */
     public Collection<Enhancement> getAll() {
         return enhancementStore.values();

@@ -40,9 +40,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Icy enhancement, On attacking another entity, have a chance to
- * - Extinguish them if they are on fire.
- * - Otherwise freeze them and give them mining fatigue.
+ * Icy enhancement.
+ *
+ * On attacking another entity, have a chance to extinguish them if they are on
+ * fire. Or otherwise freeze them and give them mining fatigue.
  */
 public class IcyEnhancement implements Enhancement, Listener {
     // Chance for enhancement to activated.

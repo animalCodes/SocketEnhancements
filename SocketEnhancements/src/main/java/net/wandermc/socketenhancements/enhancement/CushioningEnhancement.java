@@ -38,7 +38,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Cushioning enhancement, halves damage taken from flying into walls.
+ * Cushioning enhancement.
+ *
+ * Halves damage taken from flying into walls.
  */
 public class CushioningEnhancement implements Enhancement, Listener {
     private static final TextComponent socketMessage = (TextComponent)
@@ -48,9 +50,9 @@ public class CushioningEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Cushioning enhancement
+     * Create a Cushioning enhancement.
      * 
-     * @param forge The current EnhancedItemForge
+     * @param forge The current EnhancedItemForge.
      */
     public CushioningEnhancement(EnhancedItemForge forge) {
         this.forge = forge;

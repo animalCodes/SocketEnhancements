@@ -40,8 +40,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Withering enhancement, On attacking another entity, have a chance to apply
- * wither to them.
+ * Withering enhancement.
+ *
+ * On attacking another entity, have a chance to apply wither to them.
  */
 public class WitheringEnhancement implements Enhancement, Listener {
     // Chance for enhancement to activated.

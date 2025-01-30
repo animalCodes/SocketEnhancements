@@ -40,8 +40,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
- * Frigid enhancement, has a chance to freeze and apply mining fatigue to
- * attackers.
+ * Frigid enhancement.
+ *
+ * When worn, has a chance to freeze and apply mining fatigue to attackers.
+ * Chance increases per enhanced armour piece.
  */
 public class FrigidEnhancement implements Enhancement, Listener {
     // Chance for effect to be applied per armour piece.
@@ -57,9 +59,9 @@ public class FrigidEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Frigid enhancement
+     * Create a Frigid enhancement.
      *
-     * @param forge The current EnhancedItemForge
+     * @param forge The current EnhancedItemForge.
      */
     public FrigidEnhancement(EnhancedItemForge forge) {
         this.forge = forge;

@@ -39,15 +39,15 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Undying enhancement, if an entity takes fatal damage from any source other
- * than the void or /kill while holding enhanced item, crudely imitate a
- * weakened totem of undying by:
+ * Undying enhancement.
  *
- * Removing any active potion effects.
- * Giving them Regeneration II for 20 seconds,
- * Fire resistance for 20 seconds and
- * Absorption I for 5 seconds.
- * Cancelling the damage event.
+ * If an entity takes fatal damage from any source other than the void or /kill
+ * while holding enhanced item, imitate a weakened totem of undying by:
+ * - Removing any active potion effects.
+ * - Giving them Regeneration II for 20 seconds,
+ * - Fire resistance for 20 seconds and
+ * - Absorption I for 5 seconds.
+ * - Cancelling the damage event.
  *
  * And remove the enhancement.
  */
@@ -66,9 +66,9 @@ public class UndyingEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Undying enhancement
+     * Create a Undying enhancement.
      * 
-     * @param forge The current EnhancedItemForge
+     * @param forge The current EnhancedItemForge.
      */
     public UndyingEnhancement(EnhancedItemForge forge) {
         this.forge = forge;

@@ -35,8 +35,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Protected enhancement, Stops the item from breaking but will be consumed in
- * the process.
+ * Protected enhancement.
+ *
+ * Stops the item from breaking but will be consumed in the process.
  */
 public class ProtectedEnhancement implements Enhancement, Listener {
     private static final TextComponent socketMessage = (TextComponent)
@@ -46,9 +47,9 @@ public class ProtectedEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Protected enhancement
+     * Create a Protected enhancement.
      * 
-     * @param forge The current EnhancedItemForge
+     * @param forge The current EnhancedItemForge.
      */
     public ProtectedEnhancement(EnhancedItemForge forge) {
         this.forge = forge;

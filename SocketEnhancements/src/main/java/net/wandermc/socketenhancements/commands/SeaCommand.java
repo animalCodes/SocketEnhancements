@@ -33,6 +33,13 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
  * /sea: SocketEnhancements administration command, has various subcommands.
+ *
+ * Subcommands:
+ * - bind {enhancements} - Bind `enhancements` to held item.
+ * - addsocket {n} - Add `n` sockets to held item.
+ * - replace {enhancement1} {enhancement2} - Replace `enhancement1` with
+ *   `enhancement2` on held item.
+ * - help - Print help.
  */
 public class SeaCommand implements CommandExecutor {
     private EnhancementManager enhancementManager;
@@ -230,7 +237,7 @@ public class SeaCommand implements CommandExecutor {
     }
 
     /**
-     * Attempts to bind enhancement to item, notifying sender of any issues.
+     * Attempt to bind enhancement to item, notifying sender of any issues.
      *
      * This does NOT update the item.
      *

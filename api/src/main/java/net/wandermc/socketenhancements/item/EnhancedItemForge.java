@@ -125,7 +125,8 @@ public class EnhancedItemForge {
             this.itemMeta = item.getItemMeta();
 
             // Ensure the item has a socket list before doing anything with it
-            PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
+            PersistentDataContainer dataContainer = itemMeta
+                .getPersistentDataContainer();
             if (!dataContainer.has(socketsKey))
                 dataContainer.set(socketsKey, PersistentDataType.LIST.strings(),
                      new ArrayList<String>());
@@ -138,7 +139,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Updates the item's lore to match socketList.
+         * Update the item's lore to match socketList.
          */
         private void updateLore() {
             ArrayList<Component> lore = new ArrayList<Component>(
@@ -155,23 +156,23 @@ public class EnhancedItemForge {
         /**
          * Get the ItemStack this instance is holding.
          *
-         * @return The ItemStack
+         * @return The ItemStack.
          */
         public ItemStack getItemStack() {
             return item;
         }
 
         /**
-         * Gets how many sockets are currently on the item.
+         * Get how many sockets are currently on the item.
          *
-         * @return The number of sockets
+         * @return The number of sockets.
          */
         public int getSockets() {
             return socketList.size();
         }
 
         /**
-         * Determines whether there is at least one empty socket on the item.
+         * Whether there is at least one empty socket on the item.
          *
          * @return Whether there is an empty socket.
          */
@@ -182,7 +183,7 @@ public class EnhancedItemForge {
         /**
          * Gets the maximum number of sockets that the item can have.
          *
-         * @return The maximum
+         * @return The maximum allowed sockets.
          */
         public int getSocketLimit() {
             return socketLimits.getOrDefault(item.getType(),
@@ -190,12 +191,12 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Adds the specified number of sockets to the item.
+         * Add the specified number of sockets to the item.
          *
          * Note that this will **not** check if adding the given number of
          * sockets would push the item over it's socket limit.
          * 
-         * @param sockets The number of sockets to add
+         * @param sockets The number of sockets to add.
          */
         public void addSockets(int sockets) {
             for (int i = 0; i < sockets; i++) {
@@ -206,9 +207,9 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Returns whether the item has `enhancement` currently bound to it.
+         * Whether the item has `enhancement` currently bound to it.
          *
-         * @param enhancement The enhancement to look for
+         * @param enhancement The Enhancement to look for.
          * @return Whether it's bound.
          */
         public boolean hasEnhancement(Enhancement enhancement) {
@@ -216,9 +217,9 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Returns whether the item has `enhancementName` currently bound to it.
+         * Whether the item has `enhancementName` currently bound to it.
          *
-         * @param enhancement The name of the enhancement to look for.
+         * @param enhancement The name of the Enhancement to look for.
          * @return Whether it's bound.
          */
         public boolean hasEnhancement(String enhancementName) {
@@ -226,9 +227,9 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Removes `enhancement` from the item.
+         * Remove `enhancement` from the item.
          *
-         * @param enhancement The enhancement to remove
+         * @param enhancement The enhancement to remove.
          * @return Whether the enhancement was present.
          */
         public boolean removeEnhancement(Enhancement enhancement) {
@@ -236,7 +237,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Removes `enhancementName` from the item.
+         * Remove `enhancementName` from the item.
          *
          * @param enhancement The name of the enhancement to remove.
          * @return Whether the enhancement was present.
@@ -251,7 +252,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Removes the last Enhancement from the item.
+         * Remove the last Enhancement from the item.
          *
          * @return The last Enhancement, or an EmptySocket if none are bound.
          */
@@ -272,7 +273,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Attempts to bind `enhancementName` to the item.
+         * Attempt to bind `enhancementName` to the item.
          *
          * The following checks must pass for the binding to be successful:
          * - This item is valid for the enhancement.
@@ -287,7 +288,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Attempts to bind `enhancement` to the item.
+         * Attempt to bind `enhancement` to the item.
          *
          * The following checks must pass for the binding to be successful:
          * - This item is valid for the enhancement.
@@ -309,7 +310,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Binds `enhancementName` to item without checks.
+         * Bind `enhancementName` to item without checks.
          *
          * Bypassed checks are whether the item is valid for this enhancement
          * and whether the item already has the enhancement.
@@ -324,7 +325,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Binds `enhancement` to item without checks.
+         * Bind `enhancement` to item without checks.
          *
          * Bypassed checks are whether the item is valid for this enhancement
          * and whether the item already has the enhancement.
@@ -344,7 +345,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Applies all enhancement/socket changes to the ItemStack.
+         * Applie all enhancement/socket changes to the ItemStack.
          * 
          * @return The ItemStack.
          */

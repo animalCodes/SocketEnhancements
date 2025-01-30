@@ -24,16 +24,16 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 /**
  * Enhancement representing an empty socket.
  *
- * Note that due to representing an empty socket, (rather than a filled one)
- * this breaks a few rules that normal Enhancements must adhere to, and should
- * **not** be used as a reference. Instead, please use Protected for that
- * purpose.
+ * Note that due to representing an empty socket. (rather than a filled one)
+ * This breaks a few rules that normal Enhancements must adhere to, and should
+ * **not** be used as a reference. If you need one, please use
+ * ProtectedEnhancement.
  */
 public class EmptySocket implements Enhancement {
     private TextComponent socketMessage;
 
     /**
-     * Create an EmptySocket
+     * Create an EmptySocket.
      *
      * @param socketMessage The socketMessage to use.
      */

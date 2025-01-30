@@ -107,11 +107,11 @@ public class OrbOfBindingManager implements Listener {
     }
 
     /**
-     * Creates and registers the recipes for crafting and applying orbs of
+     * Create and register the recipes for crafting and applying orbs of
      * binding.
      */
     private void registerRecipes() {
-        // Recipe for crafting an actual orb of binding.
+        // Recipe for crafting an orb of binding.
         ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
             new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
 
@@ -123,15 +123,11 @@ public class OrbOfBindingManager implements Listener {
 
         // Recipe for adding an orb of binding to an item.
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
-                // Paper won't let me set the result to AIR, so in the
-                // case where the recipe matches and the handler doesn't pick up
-                // on it, there will be a random stone block result..
                 new NamespacedKey(plugin, "orb_of_binding_upgrade"), 
                 new ItemStack(Material.STONE, 1));
 
         // Any item with a socket limit
         upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
-            // Why is it so complicated to convert a Set to a List!?
             forge.getEnhanceableMaterials().stream().collect(
                 Collectors.toList())));
         upgradeRecipe.addIngredient(orbOfBinding);

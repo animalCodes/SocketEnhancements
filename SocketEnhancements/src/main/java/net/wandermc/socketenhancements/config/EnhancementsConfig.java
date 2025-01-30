@@ -32,26 +32,32 @@ public class EnhancementsConfig {
      * Whether enchanting tables can be used to enhance items.
      */
     public final boolean ENHANCEMENT_TABLES_ENABLED;
+
     /**
      * Whether enhancement pools are "additive".
      */
     public final boolean ENHANCEMENT_TABLES_ADDITIVE_POOLS;
+
     /**
      * How frequently enhancement pools are randomised.
      */
     public final int ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY;
+
     /**
      * Whether enhancement gems can be obtained and used by players.
      */
     public final boolean ENHANCEMENT_GEMS_ENABLED;
+
     /**
      * The Material type of the block used to create enhancement gems.
      */
     public final Material ENHANCEMENT_GEMS_BLOCK_TYPE;
+
     /**
      * The Material type of enhancement gems.
      */
     public final Material ENHANCEMENT_GEMS_TYPE;
+
     /**
      * Create a SocketsConfig with values read from `file`.
      *
