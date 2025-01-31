@@ -42,6 +42,11 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import static org.bukkit.Tag.ITEMS_BOATS;
+
+import static com.destroystokyo.paper.MaterialTags.ENCHANTABLE;
+import static com.destroystokyo.paper.MaterialTags.SPAWN_EGGS;
+
 /**
  * An "action" (event involving an item) that can be blocked by an
  * ItemEventBlocker.
@@ -140,6 +145,9 @@ public enum BlockableAction {
     /**
      * Whether the action "BREW_INGREDIENT" can be performed on `mat`.
      *
+     * Will appear to work at first, but on completion progress bar will reset
+     * and item will remain.
+     *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
      */
@@ -149,10 +157,7 @@ public enum BlockableAction {
             GUNPOWDER, DRAGON_BREATH, SUGAR, RABBIT_FOOT,
             GLISTERING_MELON_SLICE, SPIDER_EYE, PUFFERFISH, MAGMA_CREAM,
             GOLDEN_CARROT, BLAZE_POWDER, GHAST_TEAR, TURTLE_HELMET,
-            PHANTOM_MEMBRANE:
-            /* Upcoming, included for completeness
-            BREEZE_ROD, STONE, COBWEB, SLIME_BLOCK:
-            */
+            PHANTOM_MEMBRANE, BREEZE_ROD, STONE, COBWEB, SLIME_BLOCK:
                 return true;
             default:
                 return false;
@@ -205,16 +210,7 @@ public enum BlockableAction {
      * @return Whether the action can be performed.
      */
     public static boolean canEnchant(Material mat) {
-        if (mat.getMaxDurability() > 0) {
-            switch (mat) {
-                case SHIELD, FLINT_AND_STEEL, SHEARS, ELYTRA:
-                    break;
-                default:
-                    return true;
-            }
-        } else if (mat == Material.BOOK)
-            return true;
-        return false;
+        return ENCHANTABLE.isTagged(mat);
     }
 
     /**
@@ -224,18 +220,10 @@ public enum BlockableAction {
      * @return Whether the action can be performed.
      */
     public static boolean canEntityPlace(Material mat) {
-        if (mat == Material.ARMOR_STAND || mat == Material.END_CRYSTAL)
+        if (mat == Material.ARMOR_STAND || mat == Material.END_CRYSTAL
+            || ITEMS_BOATS.isTagged(mat))
             return true;
-        else {
-            // TODO stop being lazy
-            // This is probably a terrible idea, but I *really* can't be
-            // bothered to write a huge switch/case.
-            if (mat.toString().contains("BOAT") ||
-                mat.toString().contains("RAFT") ||
-                mat.toString().contains("MINECART"))
-                return true;
-        }
-        return false;
+        return mat.toString().contains("MINECART");
     }
 
     /**
@@ -249,11 +237,8 @@ public enum BlockableAction {
             case EGG, ENDER_EYE, ENDER_PEARL, ITEM_FRAME,
             GLOW_ITEM_FRAME, PAINTING, SPLASH_POTION, LINGERING_POTION:
                 return true;
-            default: break;
+            default: return SPAWN_EGGS.isTagged(mat);
         }
-        if (mat.toString().contains("SPAWN_EGG"))
-            return true;
-        return false;
     }
 
     /**
@@ -298,6 +283,8 @@ public enum BlockableAction {
      * @return Whether the action can be performed.
      */
     public static boolean canUseInRecipe(Material mat) {
+        ItemStack matItem = new ItemStack(mat);
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
         while (iterator.hasNext()) {
@@ -305,15 +292,15 @@ public enum BlockableAction {
             if (recipe instanceof ShapelessRecipe) {
                 for (RecipeChoice choice : ((ShapelessRecipe)recipe)
                     .getChoiceList()) {
-                    if (choice.test(new ItemStack(mat)))
+                    if (choice.test(matItem))
                         return true;
                 }
             } else if (recipe instanceof ShapedRecipe) {
                 for (RecipeChoice choice : ((ShapedRecipe)recipe)
                     .getChoiceMap().values()) {
                     if (choice == null)
-                        continue; // Apparently this is possible
-                    if (choice.test(new ItemStack(mat)))
+                        continue;
+                    if (choice.test(matItem))
                         return true;
                 }
             }
