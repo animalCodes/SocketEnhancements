@@ -33,8 +33,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -47,6 +47,9 @@ import net.wandermc.socketenhancements.events.ItemEventBlocker;
  * The only requirement to enable orbs of binding is to construct one of these.
  */
 public class OrbOfBindingManager implements Listener {
+    private static final TextComponent ORB_OF_BINDING_NAME = (TextComponent)
+        MiniMessage.miniMessage().deserialize("<!italic>Orb Of Binding");
+
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
     private final ItemEventBlocker eventBlocker;
@@ -99,9 +102,7 @@ public class OrbOfBindingManager implements Listener {
     private ItemStack createOrbOfBinding() {
         ItemStack orb = new ItemStack(orbOfBindingType);
         ItemMeta meta = orb.getItemMeta();
-        meta.displayName(Component.text("Orb of Binding", Style
-            .style(TextDecoration.ITALIC.withState(
-                TextDecoration.State.FALSE))));
+        meta.displayName(ORB_OF_BINDING_NAME);
         orb.setItemMeta(meta);
         return orb;
     }

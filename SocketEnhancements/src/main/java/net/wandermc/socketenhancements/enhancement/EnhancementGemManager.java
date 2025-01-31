@@ -39,8 +39,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -54,10 +53,8 @@ import net.wandermc.socketenhancements.events.ItemEventBlocker;
  * remove, collect and re-bind Enhancements.
  */
 public class EnhancementGemManager implements Listener {
-    public static final TextComponent ENHANCEMENT_GEM_NAME =
-        Component.text("Enhancement Gem",
-        Style.style(TextDecoration.ITALIC.withState
-            (TextDecoration.State.FALSE)));
+    public static final TextComponent ENHANCEMENT_GEM_NAME = (TextComponent)
+        MiniMessage.miniMessage().deserialize("<!italic><aqua>Enhancement Gem");
 
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
