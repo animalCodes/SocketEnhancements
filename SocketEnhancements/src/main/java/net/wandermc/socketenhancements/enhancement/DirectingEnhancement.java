@@ -93,6 +93,7 @@ public class DirectingEnhancement implements Enhancement, Listener {
             if (helmet == null || !forge.create(helmet).hasEnhancement(this))
                 return;
 
+            context.setCancelled(true);
             eatGoldenApple(player);
         }
     }
