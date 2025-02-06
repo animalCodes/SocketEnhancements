@@ -141,7 +141,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
      * @return A safe location, or `start` if one cannot be found.
      */
     private Location findSafeLocation(Location start) {
-        Location safe = start;
+        Location safe = start.clone();
 
         for (double modY = 1; modY <= MAX_DISTANCE/2; modY++) {
             safe.setY(start.getY()+modY);
