@@ -48,8 +48,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * this predicate will be given an item from the event. If the predicate returns
  * `true`, the event will be blocked.
  *
- * Please note that as the ItemStack is passed directly from the event to the
- * predicate, it may be null.
+ * Any null ItemStacks given by the event will be converted into empty
+ * ItemStacks.
  */
 public class ItemEventBlocker implements Listener {
     private final JavaPlugin plugin;
@@ -181,7 +181,7 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevent a matching item from being used as fuel in a brewing stand.
+     * Prevent matching item from being used as fuel in a brewing stand.
      */
     public void blockFuelBrewing(BrewingStandFuelEvent event) {
         if (itemChecker.test(event.getFuel()))
@@ -189,13 +189,13 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevent a matching item from being used as an ingredient in a brewing
+     * Prevent matching item from being used as an ingredient in a brewing
      * stand.
      *
      * Item will appear to be applied at first, but will not be taken.
      */
     public void blockBrewIngredient(BrewEvent event) {
-        if (itemChecker.test(event.getContents().getIngredient()))
+        if (itemChecker.test(nullEmpty(event.getContents().getIngredient())))
             event.setCancelled(true);
     }
 
@@ -203,7 +203,7 @@ public class ItemEventBlocker implements Listener {
      * Prevent matching items from being used as fuel.
      */
     public void blockBurn(FurnaceBurnEvent event) {
-        if (itemChecker.test(event.getFuel()))
+        if (itemChecker.test(nullEmpty(event.getFuel())))
             event.setCancelled(true);
     }
 
@@ -215,8 +215,8 @@ public class ItemEventBlocker implements Listener {
         ItemStack second = event.getInventory().getSecondItem();
         // If we just checked whether one of the items matched, we'd end up
         // catching rename events as well.
-        if ((itemChecker.test(first) && second != null)
-            || (itemChecker.test(second) && first != null))
+        if ((itemChecker.test(nullEmpty(first)) && second != null)
+            || (itemChecker.test(nullEmpty(second)) && first != null))
             event.setResult(null);
     }
 
@@ -224,7 +224,7 @@ public class ItemEventBlocker implements Listener {
      * Prevent matching items from being enchanted.
      */
     public void blockEnchant(PrepareItemEnchantEvent event) {
-        if (itemChecker.test(event.getItem()))
+        if (itemChecker.test((event.getItem())))
             event.setCancelled(true);
     }
 
@@ -235,20 +235,20 @@ public class ItemEventBlocker implements Listener {
      * first place.
      */
     public void blockCook(PlayerInteractEvent event) {
-        if (event.hasBlock() && event.getAction() == Action.RIGHT_CLICK_BLOCK &&
-            (event.getClickedBlock().getType() == Material.CAMPFIRE
-            || event.getClickedBlock().getType() == Material.SOUL_CAMPFIRE)) {
-                if (event.hasItem() && itemChecker.test(event.getItem()))
-                    event.setCancelled(true);
-            }
+        if (event.hasBlock() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+            && (event.getClickedBlock().getType() == Material.CAMPFIRE
+                || event.getClickedBlock().getType() == Material.SOUL_CAMPFIRE)
+            && (event.hasItem()
+                && itemChecker.test(nullEmpty(event.getItem()))))
+            {event.setCancelled(true);}
     }
 
     /**
      * Prevent an entity from being placed if the placed item matches.
      */
     public void blockEntityPlace(EntityPlaceEvent event) {
-        if (itemChecker.test(
-            event.getPlayer().getInventory().getItem(event.getHand())))
+        if (itemChecker.test(nullEmpty(
+            event.getPlayer().getInventory().getItem(event.getHand()))))
             event.setCancelled(true);
     }
 
@@ -256,7 +256,7 @@ public class ItemEventBlocker implements Listener {
      * Prevent an entity from being spawned if the spawning item matches.
      */
     public void blockEntitySpawn(PlayerInteractEvent event) {
-        if ((event.hasItem() && itemChecker.test(event.getItem())) &&
+        if ((event.hasItem() && itemChecker.test(nullEmpty(event.getItem()))) &&
             (event.getAction() == Action.RIGHT_CLICK_AIR
             || event.getAction() == Action.RIGHT_CLICK_BLOCK))
             event.setCancelled(true);
@@ -267,8 +267,8 @@ public class ItemEventBlocker implements Listener {
      * in a grindstone.
      */
     public void blockGrind(PrepareGrindstoneEvent event) {
-        if (itemChecker.test(event.getInventory().getUpperItem())
-            || itemChecker.test(event.getInventory().getLowerItem()))
+        if (itemChecker.test(nullEmpty(event.getInventory().getUpperItem()))
+            || itemChecker.test(nullEmpty(event.getInventory().getLowerItem())))
             event.setResult(null);
     }
 
@@ -280,7 +280,7 @@ public class ItemEventBlocker implements Listener {
      * will appear and the item won't be taken.
      */
     public void blockSmelt(FurnaceSmeltEvent event) {
-        if (itemChecker.test(event.getSource()))
+        if (itemChecker.test(nullEmpty(event.getSource())))
             event.setCancelled(true);
     }
 
@@ -288,11 +288,18 @@ public class ItemEventBlocker implements Listener {
      * Prevent an item from being crafted if one of the ingredients matches.
      */
     public void blockUseInRecipe(PrepareItemCraftEvent event) {
-        for (ItemStack item : event.getInventory().getMatrix()) {
-            if (itemChecker.test(item)) {
+        for (ItemStack item : (event.getInventory().getMatrix())) {
+            if (itemChecker.test(nullEmpty(item))) {
                 event.getInventory().setResult(null);
                 return;
             }
         }
+    }
+
+    /**
+     * If itemStack is null, return `ItemStack.empty()`. Otherwise itemStack.
+     */
+    private ItemStack nullEmpty(ItemStack itemStack) {
+        return (itemStack == null) ? ItemStack.empty() : itemStack;
     }
 }

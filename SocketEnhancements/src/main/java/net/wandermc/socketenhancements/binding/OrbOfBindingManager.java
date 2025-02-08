@@ -83,10 +83,7 @@ public class OrbOfBindingManager implements Listener {
         BlockableAction[] a = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> {
-                if (item == null)
-                    return false;
-                else
-                    return item.isSimilar(this.orbOfBinding);},
+                return item.isSimilar(this.orbOfBinding);},
             BlockableAction.getValidActions(orbOfBindingType).toArray(a));
 
         registerRecipes();

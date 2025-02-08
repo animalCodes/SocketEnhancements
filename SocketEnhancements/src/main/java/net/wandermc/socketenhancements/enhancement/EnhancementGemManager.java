@@ -87,10 +87,7 @@ public class EnhancementGemManager implements Listener {
         BlockableAction[] javaIsDumb = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> {
-                if (item == null)
-                    return false;
-                else
-                    return isEnhancementGem(item);},
+                return isEnhancementGem(item);},
             BlockableAction.getValidActions
             (enhancementGemType).toArray(javaIsDumb));
 
