@@ -33,14 +33,14 @@ public interface Enhancement {
      *
      * @return The name of this enhancement.
      */
-    public String getName();
+    public String name();
 
     /**
      * The lore message that will be displayed on items with this Enhancement.
      *
      * @return The socket message.
      */
-    public TextComponent getSocketMessage();
+    public TextComponent socketMessage();
 
     /**
      * How rare this Enhancement is.
@@ -50,7 +50,7 @@ public interface Enhancement {
      *
      * @return The rarity.
      */
-    public EnhancementRarity getRarity();
+    public EnhancementRarity rarity();
 
     /**
      * Whether players should be allowed to bind this Enhancement to `item`.

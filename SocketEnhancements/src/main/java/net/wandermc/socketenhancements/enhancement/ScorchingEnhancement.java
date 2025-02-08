@@ -95,21 +95,21 @@ public class ScorchingEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "scorching";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         if (item.hasEnhancement("frigid"))
             return false;
-        return ARMOR.isTagged(item.getItemStack().getType());
+        return ARMOR.isTagged(item.itemStack().getType());
     }
 }

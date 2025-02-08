@@ -126,7 +126,7 @@ public class OrbOfBindingManager implements Listener {
 
         // Any item with a socket limit
         upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
-            forge.getEnhanceableMaterials().stream().collect(
+            forge.enhanceableMaterials().stream().collect(
                 Collectors.toList())));
         upgradeRecipe.addIngredient(orbOfBinding);
 
@@ -159,8 +159,8 @@ public class OrbOfBindingManager implements Listener {
         if (orbs < 1 || itemToUpgrade == null)
             return;
 
-        if (itemToUpgrade.getSocketLimit() >=
-            itemToUpgrade.getSockets() + orbs) {
+        if (itemToUpgrade.socketLimit() >=
+            itemToUpgrade.sockets() + orbs) {
             // Item exists and can have `orbs` sockets added, do so.
             itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.update());

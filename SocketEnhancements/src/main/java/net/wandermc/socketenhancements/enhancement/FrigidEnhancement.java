@@ -90,25 +90,21 @@ public class FrigidEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "frigid";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         if (item.hasEnhancement("scorching"))
             return false;
-        return ARMOR.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<EntityDamageByEntityEvent> getEventType() {
-        return EntityDamageByEntityEvent.class;
+        return ARMOR.isTagged(item.itemStack().getType());
     }
 }

@@ -98,11 +98,11 @@ public class EnhancedItemForge {
     }
 
     /**
-     * Get a set of all Material's with a socket limit defined.
+     * All Material's with a socket limit defined.
      *
      * @return All enhanceable materials.
      */
-    public Set<Material> getEnhanceableMaterials() {
+    public Set<Material> enhanceableMaterials() {
         return socketLimits.keySet();
     }
 
@@ -146,7 +146,7 @@ public class EnhancedItemForge {
                 socketList.size());
 
             socketList.forEach(socketId -> lore.add(manager.get(socketId)
-                .getSocketMessage()));
+                .socketMessage()));
 
             // Currently, SocketEnhancements greedily resets the entire lore
             // field, meaning any none-SE lore will be deleted. Ah well.
@@ -154,20 +154,20 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Get the ItemStack this instance is holding.
+         * The ItemStack this instance is holding.
          *
          * @return The ItemStack.
          */
-        public ItemStack getItemStack() {
+        public ItemStack itemStack() {
             return item;
         }
 
         /**
-         * Get how many sockets are currently on the item.
+         * How many sockets are currently on the item.
          *
          * @return The number of sockets.
          */
-        public int getSockets() {
+        public int sockets() {
             return socketList.size();
         }
 
@@ -177,15 +177,15 @@ public class EnhancedItemForge {
          * @return Whether there is an empty socket.
          */
         public boolean hasEmptySocket() {
-            return hasEnhancement(manager.getEmpty());
+            return hasEnhancement(manager.empty());
         }
 
         /**
-         * Gets the maximum number of sockets that the item can have.
+         * The maximum number of sockets that the item can have.
          *
          * @return The maximum allowed sockets.
          */
-        public int getSocketLimit() {
+        public int socketLimit() {
             return socketLimits.getOrDefault(item.getType(),
                 defaultSocketLimit);
         }
@@ -202,7 +202,7 @@ public class EnhancedItemForge {
             for (int i = 0; i < sockets; i++) {
                 // Can't use `bind()` as unlike normal enhancements empty
                 // sockets can very much be 'bound' multiple times.
-                socketList.add(manager.getEmpty().getName());
+                socketList.add(manager.empty().name());
             }
         }
 
@@ -213,7 +213,7 @@ public class EnhancedItemForge {
          * @return Whether it's bound.
          */
         public boolean hasEnhancement(Enhancement enhancement) {
-            return hasEnhancement(enhancement.getName());
+            return hasEnhancement(enhancement.name());
         }
 
         /**
@@ -233,7 +233,7 @@ public class EnhancedItemForge {
          * @return Whether the enhancement was present.
          */
         public boolean removeEnhancement(Enhancement enhancement) {
-            return removeEnhancement(enhancement.getName());
+            return removeEnhancement(enhancement.name());
         }
 
         /**
@@ -247,7 +247,7 @@ public class EnhancedItemForge {
             if (index < 0)
                 return false;
 
-            socketList.set(index, manager.getEmpty().getName());
+            socketList.set(index, manager.empty().name());
             return true;
         }
 
@@ -269,7 +269,7 @@ public class EnhancedItemForge {
                 removeEnhancement(enhancement);
                 return enhancement;
             } else 
-                return manager.getEmpty();
+                return manager.empty();
         }
 
         /**
@@ -336,16 +336,16 @@ public class EnhancedItemForge {
          * @return Whether binding was successful.
          */
         public boolean checklessBind(Enhancement enhancement) {
-            int index = socketList.indexOf(manager.getEmpty().getName());
+            int index = socketList.indexOf(manager.empty().name());
             if (index < 0)
                 return false;
             else
-                socketList.set(index, enhancement.getName());
+                socketList.set(index, enhancement.name());
             return true;
         }
 
         /**
-         * Applie all enhancement/socket changes to the ItemStack.
+         * Apply all enhancement/socket changes to the ItemStack.
          * 
          * @return The ItemStack.
          */

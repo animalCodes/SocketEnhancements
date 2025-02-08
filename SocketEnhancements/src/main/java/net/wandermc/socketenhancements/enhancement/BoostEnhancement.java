@@ -120,26 +120,22 @@ public class BoostEnhancement implements Enhancement, Listener {
             context.getItem().damage(COST, player);
     }
 
-    public String getName() {
+    public String name() {
         return "boost";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.III;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         if (item.hasEnhancement("blink"))
             return false;
-        return item.getItemStack().getItemMeta() instanceof Damageable
-            && item.getItemStack().getType() != Material.ELYTRA;
-    }
-
-    public Class<PlayerInteractEvent> getEventType() {
-        return PlayerInteractEvent.class;
+        return item.itemStack().getItemMeta() instanceof Damageable
+            && item.itemStack().getType() != Material.ELYTRA;
     }
 }

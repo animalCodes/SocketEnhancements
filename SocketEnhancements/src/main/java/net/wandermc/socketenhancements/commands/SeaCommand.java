@@ -152,10 +152,10 @@ public class SeaCommand implements CommandExecutor {
         EnhancedItem item = forge.create(sender.getInventory()
             .getItemInMainHand());
 
-        if (item.getSockets() >= item.getSocketLimit()) {
+        if (item.sockets() >= item.socketLimit()) {
             sender.sendMessage(Component.text(
                 "This item already has the maximum number of sockets. (" +
-                 item.getSocketLimit() + ")"));
+                 item.socketLimit() + ")"));
             return true;
         }
 
@@ -170,10 +170,10 @@ public class SeaCommand implements CommandExecutor {
             }
         }
 
-        if (item.getSockets() + numSockets > item.getSocketLimit()) {
+        if (item.sockets() + numSockets > item.socketLimit()) {
             sender.sendMessage(Component.text("Adding that many " +
                 "sockets would put this item over it's socket limit. (" +
-                 item.getSocketLimit() + ")"));
+                 item.socketLimit() + ")"));
             return true;
         }
 
@@ -255,14 +255,14 @@ public class SeaCommand implements CommandExecutor {
         }
 
         if (!enhancement.isValidItem(item)) {
-            sender.sendMessage(Component.text("\"" + enhancement.getName() +
+            sender.sendMessage(Component.text("\"" + enhancement.name() +
                 "\" cannot be bound to this item."));
             return false;
         }
 
         if (item.hasEnhancement(enhancement)) {
             sender.sendMessage(Component.text("This item already has \"" +
-                    enhancement.getName() + "\"."));
+                    enhancement.name() + "\"."));
             return false;
         }
 
@@ -270,7 +270,7 @@ public class SeaCommand implements CommandExecutor {
         item.bind(enhancement);
 
         sender.sendMessage(Component.text("Bound \"" +
-            enhancement.getName() + "\" to held item."));
+            enhancement.name() + "\" to held item."));
 
         return true;
     }

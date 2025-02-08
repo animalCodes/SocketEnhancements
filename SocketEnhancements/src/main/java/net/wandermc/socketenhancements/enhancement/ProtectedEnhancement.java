@@ -77,25 +77,22 @@ public class ProtectedEnhancement implements Enhancement, Listener {
         context.getPlayer().getInventory().addItem(itemStack);
     }
 
-    public String getName() {
+    public String name() {
         return "protected";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         // If an item can take damage, it can break.
         // Unless it's an elytra..
-        return item.getItemStack().getItemMeta() instanceof Damageable
-            && item.getItemStack().getType() != Material.ELYTRA;
-    }
-    public Class<PlayerItemBreakEvent> getEventType() {
-        return PlayerItemBreakEvent.class;
+        return item.itemStack().getItemMeta() instanceof Damageable
+            && item.itemStack().getType() != Material.ELYTRA;
     }
 }

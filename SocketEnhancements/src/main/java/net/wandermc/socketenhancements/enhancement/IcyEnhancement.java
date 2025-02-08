@@ -86,25 +86,21 @@ public class IcyEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "icy";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.II;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         // TODO: don't allow binding if item has fire aspect
-        return SWORDS.isTagged(item.getItemStack().getType()) ||
-            AXES.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<EntityDamageByEntityEvent> getEventType() {
-        return EntityDamageByEntityEvent.class;
+        return SWORDS.isTagged(item.itemStack().getType()) ||
+            AXES.isTagged(item.itemStack().getType());
     }
 }

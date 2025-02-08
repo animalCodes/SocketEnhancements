@@ -125,23 +125,19 @@ public class UndyingEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "undying";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.III;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.getItemStack().getType() == Material.SHIELD;
-    }
-
-    public Class<EntityDamageEvent> getEventType() {
-        return EntityDamageEvent.class;
+        return item.itemStack().getType() == Material.SHIELD;
     }
 }

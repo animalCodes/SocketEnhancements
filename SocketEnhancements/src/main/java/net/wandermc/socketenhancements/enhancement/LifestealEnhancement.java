@@ -85,24 +85,20 @@ public class LifestealEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "lifesteal";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.III;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return SWORDS.isTagged(item.getItemStack().getType()) ||
-            AXES.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<EntityDamageByEntityEvent> getEventType() {
-        return EntityDamageByEntityEvent.class;
+        return SWORDS.isTagged(item.itemStack().getType()) ||
+            AXES.isTagged(item.itemStack().getType());
     }
 }

@@ -90,7 +90,7 @@ public class EnhancementTableManager implements Listener {
         enhancementPoolIII = new ArrayList();
 
         for (Enhancement enhancement : manager.getAll()) {
-            switch (enhancement.getRarity()) {
+            switch (enhancement.rarity()) {
                 case I: 
                     enhancementPoolI.add(enhancement);
                     if (!additivePools)

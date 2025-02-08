@@ -84,7 +84,7 @@ public class EnhancementManager {
      * @param enhancement The Enhancement to store.
      */
     public void store(Enhancement enhancement) {
-        enhancementStore.put(normaliseName(enhancement.getName()), enhancement);
+        enhancementStore.put(normaliseName(enhancement.name()), enhancement);
     }
 
     /**
@@ -105,7 +105,7 @@ public class EnhancementManager {
      *
      * @return An EmptySocket.
      */
-    public Enhancement getEmpty() {
+    public Enhancement empty() {
         return emptySocket;
     }
 

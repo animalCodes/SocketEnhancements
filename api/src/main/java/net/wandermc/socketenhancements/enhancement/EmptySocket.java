@@ -41,19 +41,19 @@ public class EmptySocket implements Enhancement {
         this.socketMessage = socketMessage;
     }
 
-    public String getName() {
+    public String name() {
         return "";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.IMPOSSIBLE;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.getSocketLimit() > item.getSockets();
+        return item.socketLimit() > item.sockets();
     }
 }

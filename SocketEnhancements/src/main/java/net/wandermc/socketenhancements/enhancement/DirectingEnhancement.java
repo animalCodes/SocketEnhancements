@@ -98,23 +98,19 @@ public class DirectingEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "directing";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return HELMETS.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<EntityDamageByEntityEvent> getEventType() {
-        return EntityDamageByEntityEvent.class;
+        return HELMETS.isTagged(item.itemStack().getType());
     }
 }

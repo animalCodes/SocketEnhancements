@@ -86,8 +86,7 @@ public class EnhancementGemManager implements Listener {
 
         BlockableAction[] javaIsDumb = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
-            item -> {
-                return isEnhancementGem(item);},
+            item -> isEnhancementGem(item),
             BlockableAction.getValidActions
             (enhancementGemType).toArray(javaIsDumb));
 
@@ -168,7 +167,7 @@ public class EnhancementGemManager implements Listener {
 
         // If an item has a socket limit, it can be enhanced
         recipe.addIngredient(new RecipeChoice.MaterialChoice(
-                forge.getEnhanceableMaterials().stream().collect(Collectors.
+                forge.enhanceableMaterials().stream().collect(Collectors.
                     toList())));
         recipe.addIngredient(dummyGem.getType());
 

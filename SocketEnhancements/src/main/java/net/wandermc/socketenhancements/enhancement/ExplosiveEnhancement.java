@@ -114,23 +114,19 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         pickaxe.damage(damage, context.getPlayer());
     }
 
-    public String getName() {
+    public String name() {
         return "explosive";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return PICKAXES.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<BlockBreakEvent> getEventType() {
-        return BlockBreakEvent.class;
+        return PICKAXES.isTagged(item.itemStack().getType());
     }
 }

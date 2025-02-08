@@ -211,23 +211,19 @@ public class BlinkEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "blink";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.III;
     }
 
     public boolean isValidItem(EnhancedItem item) {
         return !item.hasEnhancement("boost");
-    }
-
-    public Class<PlayerInteractEvent> getEventType() {
-        return PlayerInteractEvent.class;
     }
 }

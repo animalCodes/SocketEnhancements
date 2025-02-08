@@ -73,23 +73,19 @@ public class CushioningEnhancement implements Enhancement, Listener {
         }
     }
 
-    public String getName() {
+    public String name() {
         return "cushioning";
     }
 
-    public TextComponent getSocketMessage() {
+    public TextComponent socketMessage() {
         return socketMessage;
     }
 
-    public EnhancementRarity getRarity() {
+    public EnhancementRarity rarity() {
         return EnhancementRarity.I;
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return HELMETS.isTagged(item.getItemStack().getType());
-    }
-
-    public Class<EntityDamageEvent> getEventType() {
-        return EntityDamageEvent.class;
+        return HELMETS.isTagged(item.itemStack().getType());
     }
 }
