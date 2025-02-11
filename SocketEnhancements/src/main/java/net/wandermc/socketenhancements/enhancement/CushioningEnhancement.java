@@ -66,7 +66,7 @@ public class CushioningEnhancement implements Enhancement, Listener {
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
 
-            if (helmet != null && forge.create(helmet).hasEnhancement(this)) {
+            if (helmet != null && forge.create(helmet).has(this)) {
                 context.setDamage(context.getDamage() / 2);
                 player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
             }

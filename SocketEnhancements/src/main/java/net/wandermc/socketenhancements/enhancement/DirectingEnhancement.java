@@ -90,7 +90,7 @@ public class DirectingEnhancement implements Enhancement, Listener {
 
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
-            if (helmet == null || !forge.create(helmet).hasEnhancement(this))
+            if (helmet == null || !forge.create(helmet).has(this))
                 return;
 
             context.setCancelled(true);

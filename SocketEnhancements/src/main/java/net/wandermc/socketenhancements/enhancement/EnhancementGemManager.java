@@ -41,10 +41,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
-import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.events.BlockableAction;
 import net.wandermc.socketenhancements.events.ItemEventBlocker;
+import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
 
 /**
  * A class for managing the creation and use of Enhancement Gems.
@@ -201,14 +201,15 @@ public class EnhancementGemManager implements Listener {
             return;
 
         EnhancedItem enhancedItem = forge.create(item);
-        Enhancement enhancement = enhancedItem.pop();
-        if (enhancement instanceof EmptySocket)
+        Enhancement enhancement = last(forge.create(item));
+        if (enhancement == null)
             return;
 
         ItemStack gem = createGemOfType(enhancement);
         if (gem.isEmpty())
             return;
 
+        enhancedItem.remove(enhancement);
         enhancedItem.update();
 
         event.getPlayer().getWorld().dropItemNaturally(
@@ -231,8 +232,9 @@ public class EnhancementGemManager implements Listener {
                 continue;
 
             if (isEnhancementGem(item)) {
-                Enhancement enhancement = forge.create(item).pop();
-                enhancements.add(enhancement);
+                Enhancement enhancement = last(forge.create(item));
+                if (enhancement != null)
+                    enhancements.add(enhancement);
             } else
                 itemToEnhance = forge.create(item.clone());
         }
@@ -249,5 +251,21 @@ public class EnhancementGemManager implements Listener {
         }
 
         event.getInventory().setResult(itemToEnhance.update());
+    }
+
+    /**
+     * The last (most recently bound) Enhancement on `item`.
+     *
+     * @return The last Enhancement, or null if none are bound.
+     */
+    private Enhancement last(EnhancedItem item) {
+        Enhancement enhancement = null;
+        for (int i = 0; i < item.sockets(); i++) {
+            if (item.get(i) instanceof EmptySocket)
+                break;
+
+            enhancement = item.get(i);
+        }
+        return enhancement;
     }
 }

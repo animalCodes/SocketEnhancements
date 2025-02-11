@@ -59,10 +59,10 @@ public class ProtectedEnhancement implements Enhancement, Listener {
     public void run(PlayerItemBreakEvent context) {
         EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
 
-        if (!enhancedItem.hasEnhancement(this))
+        if (!enhancedItem.has(this))
             return;
 
-        enhancedItem.removeEnhancement(this);
+        enhancedItem.remove(this);
 
         ItemStack itemStack = enhancedItem.update();
 

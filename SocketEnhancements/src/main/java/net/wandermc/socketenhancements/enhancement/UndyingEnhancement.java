@@ -100,11 +100,11 @@ public class UndyingEnhancement implements Enhancement, Listener {
             // May be in offhand or mainhand
             ItemStack shield = entity.getEquipment().getItemInOffHand();
             if (shield.isEmpty() ||
-                    !forge.create(shield).hasEnhancement(this)) {
+                    !forge.create(shield).has(this)) {
                 shield = entity.getEquipment().getItemInMainHand();
 
                 if (shield.isEmpty() ||
-                        !forge.create(shield).hasEnhancement(this))
+                        !forge.create(shield).has(this))
                     return;
             }
 
@@ -120,7 +120,7 @@ public class UndyingEnhancement implements Enhancement, Listener {
 
             EnhancedItem enhancedShield = forge.create(shield);
 
-            enhancedShield.removeEnhancement(this);
+            enhancedShield.remove(this);
             enhancedShield.update();
         }
     }

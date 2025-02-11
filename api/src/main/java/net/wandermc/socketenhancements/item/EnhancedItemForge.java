@@ -31,7 +31,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.Component;
 
-import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 
@@ -66,21 +65,6 @@ public class EnhancedItemForge {
     }
 
     /**
-     * Create an EnhancedItemForge for `plugin`.
-     *
-     * @param plugin The plugin this 'Forge is working for.
-     * @param manager `plugin`'s EnhancementManager.
-     * @param socketLimits Limits for how many sockets can be applied to certain
-     *                     items, with the default socket limit stored under
-     *                     Material.AIR.
-     */
-    public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
-        EnumMap<Material, Integer> socketLimits) {
-        this(plugin, manager, socketLimits, socketLimits.getOrDefault(
-            Material.AIR, 0));
-    }
-
-    /**
      * Create an EnhancedItem around `item`.
      *
      * Note that `.update()` will need to be called for any subsequent changes
@@ -104,6 +88,15 @@ public class EnhancedItemForge {
      */
     public Set<Material> enhanceableMaterials() {
         return socketLimits.keySet();
+    }
+
+    /**
+     * Socket limit set for `mat`, or -1 if not defined.
+     *
+     * @return Socket limit for `mat`.
+     */
+    public int socketLimit(Material mat) {
+        return socketLimits.get(mat);
     }
 
     /**
@@ -177,7 +170,7 @@ public class EnhancedItemForge {
          * @return Whether there is an empty socket.
          */
         public boolean hasEmptySocket() {
-            return hasEnhancement(manager.empty());
+            return has(manager.empty());
         }
 
         /**
@@ -212,8 +205,8 @@ public class EnhancedItemForge {
          * @param enhancement The Enhancement to look for.
          * @return Whether it's bound.
          */
-        public boolean hasEnhancement(Enhancement enhancement) {
-            return hasEnhancement(enhancement.name());
+        public boolean has(Enhancement enhancement) {
+            return has(enhancement.name());
         }
 
         /**
@@ -222,7 +215,7 @@ public class EnhancedItemForge {
          * @param enhancement The name of the Enhancement to look for.
          * @return Whether it's bound.
          */
-        public boolean hasEnhancement(String enhancementName) {
+        public boolean has(String enhancementName) {
             return socketList.contains(enhancementName);
         }
 
@@ -232,8 +225,8 @@ public class EnhancedItemForge {
          * @param enhancement The enhancement to remove.
          * @return Whether the enhancement was present.
          */
-        public boolean removeEnhancement(Enhancement enhancement) {
-            return removeEnhancement(enhancement.name());
+        public boolean remove(Enhancement enhancement) {
+            return remove(enhancement.name());
         }
 
         /**
@@ -242,7 +235,7 @@ public class EnhancedItemForge {
          * @param enhancement The name of the enhancement to remove.
          * @return Whether the enhancement was present.
          */
-        public boolean removeEnhancement(String enhancementName) {
+        public boolean remove(String enhancementName) {
             int index = socketList.indexOf(enhancementName);
             if (index < 0)
                 return false;
@@ -252,24 +245,13 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Remove the last Enhancement from the item.
+         * Get the Enhancement at index `i`.
          *
-         * @return The last Enhancement, or an EmptySocket if none are bound.
+         * @return The Enhancement.
+         * @throws IndexOutOfBoundsException if `i < 0 || i > sockets()`.
          */
-        public Enhancement pop() {
-            Enhancement enhancement = null;
-            for (int i = 0; i < socketList.size(); i++) {
-                if (manager.get(socketList.get(i)) instanceof EmptySocket)
-                    break;
-
-                enhancement = manager.get(socketList.get(i));
-            }
-
-            if (enhancement != null) {
-                removeEnhancement(enhancement);
-                return enhancement;
-            } else 
-                return manager.empty();
+        public Enhancement get(int i) {
+            return manager.get(socketList.get(i));
         }
 
         /**
@@ -303,7 +285,7 @@ public class EnhancedItemForge {
                 return false;
 
             // Can't bind an enhancement more than once.
-            if (hasEnhancement(enhancement))
+            if (has(enhancement))
                 return false;
 
             return checklessBind(enhancement);

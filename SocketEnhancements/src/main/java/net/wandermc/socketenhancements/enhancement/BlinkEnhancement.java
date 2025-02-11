@@ -121,7 +121,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
             return false;
 
         if (!(context.hasItem() &&
-            forge.create(context.getItem()).hasEnhancement(this)))
+            forge.create(context.getItem()).has(this)))
             return false;
 
         if (player.calculateTotalExperiencePoints() < COST &&
@@ -224,6 +224,6 @@ public class BlinkEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return !item.hasEnhancement("boost");
+        return !item.has("boost");
     }
 }

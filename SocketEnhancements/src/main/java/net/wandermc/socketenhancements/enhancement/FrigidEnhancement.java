@@ -78,7 +78,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
                         armourPiece.isEmpty())
                         continue;
 
-                    if (forge.create(armourPiece).hasEnhancement(this))
+                    if (forge.create(armourPiece).has(this))
                         chance += CHANCE_PER;
                 }
 
@@ -103,7 +103,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        if (item.hasEnhancement("scorching"))
+        if (item.has("scorching"))
             return false;
         return ARMOR.isTagged(item.itemStack().getType());
     }

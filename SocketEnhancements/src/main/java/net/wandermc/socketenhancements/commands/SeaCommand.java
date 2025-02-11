@@ -213,7 +213,7 @@ public class SeaCommand implements CommandExecutor {
             return false;
         }
 
-        if (!item.removeEnhancement(args[1])) {
+        if (!item.remove(args[1])) {
             sender.sendMessage(Component.text("Item doesn't have \"" +
                 args[1] + "\" bound to it."));
             return false;
@@ -260,7 +260,7 @@ public class SeaCommand implements CommandExecutor {
             return false;
         }
 
-        if (item.hasEnhancement(enhancement)) {
+        if (item.has(enhancement)) {
             sender.sendMessage(Component.text("This item already has \"" +
                     enhancement.name() + "\"."));
             return false;

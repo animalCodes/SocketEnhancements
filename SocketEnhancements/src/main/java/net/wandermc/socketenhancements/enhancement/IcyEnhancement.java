@@ -69,7 +69,7 @@ public class IcyEnhancement implements Enhancement, Listener {
                 ItemStack weapon = attacker.getEquipment().getItemInMainHand();
 
                 if (weapon.isEmpty() ||
-                        !forge.create(weapon).hasEnhancement(this))
+                        !forge.create(weapon).has(this))
                     return;
 
                 if (!roll(CHANCE))

@@ -91,7 +91,7 @@ public class BoostEnhancement implements Enhancement, Listener {
             return false;
 
         if (!(context.hasItem() &&
-            forge.create(context.getItem()).hasEnhancement(this)))
+            forge.create(context.getItem()).has(this)))
             return false;
 
         if (context.getItem().getItemMeta() instanceof Damageable damageable) {
@@ -133,7 +133,7 @@ public class BoostEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        if (item.hasEnhancement("blink"))
+        if (item.has("blink"))
             return false;
         return item.itemStack().getItemMeta() instanceof Damageable
             && item.itemStack().getType() != Material.ELYTRA;
