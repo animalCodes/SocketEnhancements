@@ -78,7 +78,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
                         armourPiece.isEmpty())
                         continue;
 
-                    if (forge.create(armourPiece).has(this))
+                    if (forge.has(armourPiece, this))
                         chance += CHANCE_PER;
                 }
 

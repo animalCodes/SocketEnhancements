@@ -100,6 +100,41 @@ public class EnhancedItemForge {
     }
 
     /**
+     * How many sockets are currently on `item`.
+     *
+     * Shortcut for create(item).sockets();
+     *
+     * @return The number of sockets.
+     */
+    public int sockets(ItemStack item) {
+        return create(item).sockets();
+    }
+
+    /**
+     * Whether `item` has `enhancement` currently bound to it.
+     *
+     * Shortcut for create(item).has(enhancement)
+     *
+     * @param enhancement The Enhancement to look for.
+     * @return Whether it's bound.
+     */
+    public boolean has(ItemStack item, Enhancement enhancement) {
+        return create(item).has(enhancement.name());
+    }
+
+    /**
+     * Whether `item` has `enhancementName` currently bound to it.
+     *
+     * Shortcut for create(item).has(enhancementName)
+     *
+     * @param enhancement The name of the Enhancement to look for.
+     * @return Whether it's bound.
+     */
+    public boolean has(ItemStack item, String enhancementName) {
+        return create(item).has(enhancementName);
+    }
+
+    /**
      * A wrapper class for reading, updating and removing sockets and
      * enhancements from ItemStacks.
      */

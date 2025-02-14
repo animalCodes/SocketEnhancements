@@ -66,8 +66,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (context.getEntity() instanceof LivingEntity defender) {
                 ItemStack weapon = attacker.getEquipment().getItemInMainHand();
-                if (weapon.isEmpty() ||
-                    !forge.create(weapon).has(this))
+                if (weapon.isEmpty() || !forge.has(weapon, this))
                     return;
 
                 if (!roll(CHANCE))

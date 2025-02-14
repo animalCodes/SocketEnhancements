@@ -90,8 +90,7 @@ public class BoostEnhancement implements Enhancement, Listener {
             context.getAction() == Action.RIGHT_CLICK_AIR))
             return false;
 
-        if (!(context.hasItem() &&
-            forge.create(context.getItem()).has(this)))
+        if (!(context.hasItem() && forge.has(context.getItem(), this)))
             return false;
 
         if (context.getItem().getItemMeta() instanceof Damageable damageable) {

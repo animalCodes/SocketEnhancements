@@ -88,7 +88,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         ItemStack pickaxe = context.getPlayer().getInventory()
             .getItemInMainHand();
 
-        if (pickaxe.isEmpty() || !forge.create(pickaxe).has(this))
+        if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
             return;
 
         context.getPlayer().spawnParticle(
