@@ -20,7 +20,6 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * could lead to enhancements being registered multiple times.
  */
 public class EnhancementManager {
+    private final PluginManager pluginManager;
     private final JavaPlugin plugin;
 
     private final HashMap<String, Enhancement> enhancementStore =
@@ -46,45 +46,47 @@ public class EnhancementManager {
      * @param emptySocket EmptySocket instance to use.
      */
     public EnhancementManager(JavaPlugin plugin, EmptySocket emptySocket) {
+        this.pluginManager = plugin.getServer().getPluginManager();
         this.plugin = plugin;
         this.emptySocket = emptySocket;
     }
 
     /**
-     * Normalise `name`.
+     * Normalise Enhancement name `name`.
      *
      * @param name Name of Enhancement.
      * @return Normalised version of `name`
      */
-    private String normaliseName(String name) {
+    private String normalise(String name) {
         // TODO expand this
         return name.toLowerCase();
     }
 
     /**
-     * Activate every currently-stored Enhancement.
-     */
-    public void activateEnhancements() {
-        PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        for (Enhancement e : enhancementStore.values()) {
-            if (e instanceof Listener listener)
-                pluginManager.registerEvents(listener, plugin);
-            else
-                plugin.getLogger().warning("Couldn't activate enhancement " + e
-                    + ". Because it is not an instance of Listener.");
-        }
-    }
-
-    /**
-     * Register `enhancement`.
+     * Store and activate `enhancement`.
      *
-     * Note that the Enhancement will only become active after calling
-     * `activateEnhancements()`
-     * 
+     * If the enhancement is already registered, false will be returned and no
+     * further action will be taken.
+     *
      * @param enhancement The Enhancement to store.
+     * @return Whether the enhancement was registered.
+     * @throws IllegalArgumentException If `enhancement` does not implement
+     *         `org.bukkit.event.Listener.
      */
-    public void store(Enhancement enhancement) {
-        enhancementStore.put(normaliseName(enhancement.name()), enhancement);
+    public boolean register(Enhancement enhancement) {
+        if (enhancementStore.containsKey(normalise(enhancement.name())))
+            return false;
+
+        if (enhancement instanceof Listener listener) {
+            pluginManager.registerEvents(listener, plugin);
+        } else {
+            throw new IllegalArgumentException("enhancement \"" +
+                enhancement.name() +
+                "\" does not implement org.bukkit.event.Listener.");
+        }
+
+        enhancementStore.put(normalise(enhancement.name()), enhancement);
+        return true;
     }
 
     /**
@@ -97,7 +99,7 @@ public class EnhancementManager {
      * @return The Enhancement.
      */
     public Enhancement get(String name) {
-        return enhancementStore.getOrDefault(normaliseName(name), emptySocket);
+        return enhancementStore.getOrDefault(normalise(name), emptySocket);
     }
 
     /**

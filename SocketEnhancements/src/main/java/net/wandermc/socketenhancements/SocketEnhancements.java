@@ -56,7 +56,6 @@ public class SocketEnhancements extends JavaPlugin {
             socketsConfig.SOCKET_LIMITS, socketsConfig.DEFAULT_SOCKET_LIMIT);
 
         registerEnhancements();
-        enhancementManager.activateEnhancements();
 
         getCommand("sea").setExecutor(
             new SeaCommand(enhancementManager, enhancedItemForge));
@@ -82,17 +81,29 @@ public class SocketEnhancements extends JavaPlugin {
      * Register all SocketEnhancements core enhancements.
      */
     private void registerEnhancements() {
-        enhancementManager.store(new ProtectedEnhancement(enhancedItemForge));
-        enhancementManager.store(new BlinkEnhancement(enhancedItemForge));
-        enhancementManager.store(new BoostEnhancement(enhancedItemForge));
-        enhancementManager.store(new CushioningEnhancement(enhancedItemForge));
-        enhancementManager.store(new DirectingEnhancement(enhancedItemForge));
-        enhancementManager.store(new ExplosiveEnhancement(enhancedItemForge));
-        enhancementManager.store(new ScorchingEnhancement(enhancedItemForge));
-        enhancementManager.store(new LifestealEnhancement(enhancedItemForge));
-        enhancementManager.store(new FrigidEnhancement(enhancedItemForge));
-        enhancementManager.store(new IcyEnhancement(enhancedItemForge));
-        enhancementManager.store(new WitheringEnhancement(enhancedItemForge));
-        enhancementManager.store(new UndyingEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new ProtectedEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new BlinkEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new BoostEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new CushioningEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new DirectingEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new ExplosiveEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new ScorchingEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new LifestealEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new FrigidEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new IcyEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new WitheringEnhancement(enhancedItemForge));
+        enhancementManager.register(
+            new UndyingEnhancement(enhancedItemForge));
     }
 }
