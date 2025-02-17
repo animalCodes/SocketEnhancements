@@ -100,8 +100,6 @@ public class SocketEnhancements extends JavaPlugin {
         enhancementManager.register(
             new FrigidEnhancement(enhancedItemForge));
         enhancementManager.register(
-            new IcyEnhancement(enhancedItemForge));
-        enhancementManager.register(
             new WitheringEnhancement(enhancedItemForge));
         enhancementManager.register(
             new UndyingEnhancement(enhancedItemForge));
