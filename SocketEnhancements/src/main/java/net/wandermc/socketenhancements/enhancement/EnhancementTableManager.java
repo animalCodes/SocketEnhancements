@@ -20,7 +20,6 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -110,7 +109,7 @@ public class EnhancementTableManager implements Listener {
         enhancementPoolII.trimToSize();
         enhancementPoolIII.trimToSize();
 
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**

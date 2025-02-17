@@ -17,7 +17,6 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

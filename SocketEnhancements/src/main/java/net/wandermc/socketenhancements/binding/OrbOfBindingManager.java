@@ -20,7 +20,6 @@ package net.wandermc.socketenhancements.binding;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -82,13 +81,12 @@ public class OrbOfBindingManager implements Listener {
 
         BlockableAction[] a = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
-            item -> {
-                return item.isSimilar(this.orbOfBinding);},
+            item -> item.isSimilar(this.orbOfBinding),
             BlockableAction.getValidActions(orbOfBindingType).toArray(a));
 
         registerRecipes();
 
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**
@@ -116,12 +114,11 @@ public class OrbOfBindingManager implements Listener {
         for (Material ingredient : ingredients)
             orbOfBindingRecipe.addIngredient(ingredient);
 
-        Bukkit.addRecipe(orbOfBindingRecipe);
-
+        plugin.getServer().addRecipe(orbOfBindingRecipe, true);
 
         // Recipe for adding an orb of binding to an item.
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
-                new NamespacedKey(plugin, "orb_of_binding_upgrade"), 
+                new NamespacedKey(plugin, "orb_of_binding_upgrade"),
                 new ItemStack(Material.STONE, 1));
 
         // Any item with a socket limit
@@ -130,7 +127,7 @@ public class OrbOfBindingManager implements Listener {
                 Collectors.toList())));
         upgradeRecipe.addIngredient(orbOfBinding);
 
-        Bukkit.addRecipe(upgradeRecipe);
+        plugin.getServer().addRecipe(upgradeRecipe);
     }
 
     /**

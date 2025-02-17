@@ -20,7 +20,6 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -94,7 +93,7 @@ public class EnhancementGemManager implements Listener {
 
         registerRecipe();
 
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**
@@ -171,7 +170,7 @@ public class EnhancementGemManager implements Listener {
                     toList())));
         recipe.addIngredient(dummyGem.getType());
 
-        Bukkit.addRecipe(recipe);
+        plugin.getServer().addRecipe(recipe);
     }
 
     /**
