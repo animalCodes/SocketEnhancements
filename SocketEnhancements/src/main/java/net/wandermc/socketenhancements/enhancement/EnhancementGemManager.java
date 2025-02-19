@@ -40,10 +40,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import net.wandermc.socketenhancements.events.BlockableAction;
-import net.wandermc.socketenhancements.events.ItemEventBlocker;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.util.event.BlockableAction;
+import net.wandermc.socketenhancements.util.event.ItemEventBlocker;
 
 /**
  * A class for managing the creation and use of Enhancement Gems.

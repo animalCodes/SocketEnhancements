@@ -19,6 +19,9 @@ package net.wandermc.socketenhancements.util;
 
 import java.util.List;
 
+/**
+ * A collection of methods for doing things randomly.
+ */
 public class Dice {
     /**
      * Pick a random item from none-empty `list`.

@@ -15,7 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package net.wandermc.socketenhancements.events;
+package net.wandermc.socketenhancements.util.event;
 
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
