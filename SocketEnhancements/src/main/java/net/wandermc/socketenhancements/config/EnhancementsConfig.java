@@ -44,19 +44,14 @@ public class EnhancementsConfig {
     public final int ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY;
 
     /**
-     * Whether enhancement gems can be obtained and used by players.
+     * Configuration section for enhancementGems.
+     *
+     * Should contain the following fields:
+     * - "enabled" (boolean)
+     * - "block": (string)
+     * - "material": (string)
      */
-    public final boolean ENHANCEMENT_GEMS_ENABLED;
-
-    /**
-     * The Material type of the block used to create enhancement gems.
-     */
-    public final Material ENHANCEMENT_GEMS_BLOCK_TYPE;
-
-    /**
-     * The Material type of enhancement gems.
-     */
-    public final Material ENHANCEMENT_GEMS_TYPE;
+    public final ConfigurationSection enhancementGemsSection;
 
     /**
      * Create a SocketsConfig with values read from `file`.
@@ -79,24 +74,8 @@ public class EnhancementsConfig {
         this.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY =
             enhancementTablesSection.getInt("randomisation_frequency", 5);
 
-        ConfigurationSection enhancementGemsSection = yamlConfig
+        this.enhancementGemsSection = yamlConfig
             .getConfigurationSection("enhancement_gems");
 
-        this.ENHANCEMENT_GEMS_ENABLED =  enhancementGemsSection
-            .getBoolean("enabled", true);
-
-        Material blockMaterial = Material.getMaterial(enhancementGemsSection
-            .getString("block", "GRINDSTONE"));
-        if (blockMaterial != null && blockMaterial != Material.AIR)
-            this.ENHANCEMENT_GEMS_BLOCK_TYPE = blockMaterial;
-        else
-            this.ENHANCEMENT_GEMS_BLOCK_TYPE = Material.GRINDSTONE;
-
-        Material gemMaterial = Material.getMaterial(enhancementGemsSection
-        .getString("material", "END_CRYSTAL"));
-        if (gemMaterial != null && gemMaterial != Material.AIR)
-            this.ENHANCEMENT_GEMS_TYPE = gemMaterial;
-        else
-            this.ENHANCEMENT_GEMS_TYPE = Material.END_CRYSTAL;
     }
 }

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -58,38 +59,60 @@ public class EnhancementGemManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancedItemForge forge;
     private final NamespacedKey gemKey;
-    private final ItemEventBlocker eventBlocker;
+
+    private final ItemStack dummyGem;
 
     private final Material blockType;
-    private final Material enhancementGemType;
-    private final ItemStack dummyGem;
+    private final Material gemType;
+
+    private final ItemEventBlocker eventBlocker;
 
     /**
      * Create an EnhancementGemManager for `plugin`.
      *
+     * The fields to be read from `config` and their default values are
+     * as follows:
+     * - "block": "GRINDSTONE"
+     * - "material": "END_CRYSTAL"
+     *
+     * If either field is unspecified, "AIR", or cannot be converted into a
+     * Material, the default will be used.
+     *
      * @param plugin The plugin this manager is working for.
      * @param forge The current EnhancedItemForge.
-     * @param blockType The Material of the block used to extract Enhancement
-     *                  Gems.
-     * @param enhancementGemType The Material of Enhancement Gems.
+     * @param config Configuration options for enhancement gems. See
+     *                      above.
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge,
-        Material blockType, Material enhancementGemType) {
+        ConfigurationSection config) {
         this.plugin = plugin;
         this.forge = forge;
-
         this.gemKey = new NamespacedKey(plugin, "is_gem");
 
-        this.blockType = blockType;
-        this.enhancementGemType = enhancementGemType;
+        // blockType
+        Material bt = Material.getMaterial(config.getString("block",
+            "GRINDSTONE"));
+        if (bt == null || bt == Material.AIR)
+            this.blockType = Material.GRINDSTONE;
+        else
+            this.blockType = bt;
 
+        // gemType
+        Material gt = Material.getMaterial(config.getString(
+            "material", "END_CRYSTAL"));
+        if (gt == null || gt == Material.AIR)
+            this.gemType = Material.END_CRYSTAL;
+        else
+            this.gemType = gt;
+
+        this.dummyGem = createGem().itemStack();
+
+        // eventBlocker
         BlockableAction[] javaIsDumb = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> isEnhancementGem(item),
             BlockableAction.getValidActions
-            (enhancementGemType).toArray(javaIsDumb));
-
-        this.dummyGem = createGem();
+            (gemType).toArray(javaIsDumb));
 
         registerRecipe();
 
@@ -106,6 +129,8 @@ public class EnhancementGemManager implements Listener {
      * @return Whether `item` is an Enhancement Gem.
      */
     public boolean isEnhancementGem(ItemStack item) {
+        if (!item.hasItemMeta())
+            return false;
         PersistentDataContainer dataContainer = item.getItemMeta()
         .getPersistentDataContainer();
         if (dataContainer.has(gemKey))
@@ -117,7 +142,7 @@ public class EnhancementGemManager implements Listener {
     /**
      * Create an enhancement gem of type `enhancement`.
      *
-     * An "Enhancement Gem" is an item of type `this.enhancementGemType` with
+     * An "Enhancement Gem" is an item of type `this.gemType` with
      * a single socket. The enhancement in that socket is the "type" of the
      * Enhancement Gem.
      *
@@ -128,7 +153,7 @@ public class EnhancementGemManager implements Listener {
      * @return An Enhancement Gem OR an empty ItemStack.
      */
     public ItemStack createGemOfType(Enhancement enhancement) {
-        EnhancedItem enhancedItem = forge.create(createGem());
+        EnhancedItem enhancedItem = createGem();
         if (enhancedItem.checklessBind(enhancement))
             return enhancedItem.update();
         else
@@ -140,8 +165,8 @@ public class EnhancementGemManager implements Listener {
      *
      * @return An Enhancement Gem.
      */
-    private ItemStack createGem() {
-        ItemStack item = new ItemStack(enhancementGemType);
+    private EnhancedItem createGem() {
+        ItemStack item = new ItemStack(gemType);
 
         ItemMeta meta = item.getItemMeta();
         meta.displayName(ENHANCEMENT_GEM_NAME);
@@ -151,8 +176,9 @@ public class EnhancementGemManager implements Listener {
 
         EnhancedItem enhancedItem = forge.create(item);
         enhancedItem.addSockets(1);
+        enhancedItem.update();
 
-        return enhancedItem.update();
+        return enhancedItem;
     }
 
     /**

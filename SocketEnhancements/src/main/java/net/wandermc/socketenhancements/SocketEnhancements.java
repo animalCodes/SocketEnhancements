@@ -19,6 +19,7 @@ package net.wandermc.socketenhancements;
 
 import java.io.File;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.socketenhancements.config.SocketsConfig;
@@ -71,10 +72,10 @@ public class SocketEnhancements extends JavaPlugin {
                 eConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS,
                 eConfig.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY);
 
-        if (eConfig.ENHANCEMENT_GEMS_ENABLED)
+        ConfigurationSection gemConfig = eConfig.enhancementGemsSection;
+        if (gemConfig.getBoolean("enabled", true))
             this.enhancementGemManager = new EnhancementGemManager(this,
-                enhancedItemForge, eConfig.ENHANCEMENT_GEMS_BLOCK_TYPE,
-                eConfig.ENHANCEMENT_GEMS_TYPE);
+                enhancedItemForge, gemConfig);
     }
 
     /**
