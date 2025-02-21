@@ -20,10 +20,10 @@ package net.wandermc.socketenhancements;
 import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.wandermc.socketenhancements.config.SocketsConfig;
-import net.wandermc.socketenhancements.config.EnhancementsConfig;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.*;
@@ -47,8 +47,8 @@ public class SocketEnhancements extends JavaPlugin {
             new File(getDataFolder(), "sockets.yml"));
 
         saveResource("enhancements.yml", false);
-        EnhancementsConfig eConfig = new EnhancementsConfig(
-            new File(getDataFolder(), "enhancements.yml"));
+        YamlConfiguration enhancementsConfig = YamlConfiguration
+            .loadConfiguration(new File(getDataFolder(), "enhancements.yml"));
 
         this.enhancementManager = new EnhancementManager(this,
             new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
@@ -66,13 +66,14 @@ public class SocketEnhancements extends JavaPlugin {
                 enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS,
                 socketsConfig.ORB_OF_BINDING_TYPE);
 
-        if (eConfig.ENHANCEMENT_TABLES_ENABLED)
+        ConfigurationSection tablesConfig = enhancementsConfig
+            .getConfigurationSection("enhancement_tables");
+        if (tablesConfig.getBoolean("enabled", true))
             this.enhancementTableManager = new EnhancementTableManager(this,
-                enhancementManager, enhancedItemForge,
-                eConfig.ENHANCEMENT_TABLES_ADDITIVE_POOLS,
-                eConfig.ENHANCEMENT_TABLES_RANDOMISATION_FREQUENCY);
+                enhancementManager, enhancedItemForge, tablesConfig);
 
-        ConfigurationSection gemConfig = eConfig.enhancementGemsSection;
+        ConfigurationSection gemConfig = enhancementsConfig
+            .getConfigurationSection("enhancement_gems");
         if (gemConfig.getBoolean("enabled", true))
             this.enhancementGemManager = new EnhancementGemManager(this,
                 enhancedItemForge, gemConfig);

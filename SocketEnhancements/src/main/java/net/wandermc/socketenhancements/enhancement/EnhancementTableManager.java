@@ -20,6 +20,7 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -69,20 +70,25 @@ public class EnhancementTableManager implements Listener {
     /**
      * Create an EnhancementTableManager for `plugin`.
      *
+     * The fields to be read from `config` and their defaults are:
+     * - "additive_pools": true
+     * - "randomisation_frequency": 5
+     *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
      * @param forge The current EnhancedItemForge.
-     * @param additivePools Whether enhancement pools are additive or unique.
-     *        (see class Javadoc)
+     * @param config Configuration options for Enhancement Tables.
      */
     public EnhancementTableManager(JavaPlugin plugin,EnhancementManager manager,
-        EnhancedItemForge forge, boolean additivePools,
-        int randomisationFrequency) {
+        EnhancedItemForge forge, ConfigurationSection config) {
         this.plugin = plugin;
         this.manager = manager;
         this.forge = forge;
 
-        this.randomisationFrequency = randomisationFrequency;
+        this.randomisationFrequency = config.getInt("randomisation_frequency",
+            5);
+
+        boolean additivePools = config.getBoolean("additive_pools", true);
 
         enhancementPoolI = new ArrayList();
         enhancementPoolII = new ArrayList();
@@ -110,20 +116,6 @@ public class EnhancementTableManager implements Listener {
         enhancementPoolIII.trimToSize();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    /**
-     * Create an EnhancementTableManager for `plugin`.
-     *
-     * Enhancement pools will be "additive", randomisation frequency will be 5.
-     *
-     * @param plugin The plugin this manager is working for.
-     * @param manager The current EnhancementManager.
-     * @param forge The current EnhancedItemForge.
-     */
-    public EnhancementTableManager(JavaPlugin plugin,
-        EnhancementManager manager, EnhancedItemForge forge) {
-        this(plugin, manager, forge, true, 5);
     }
 
     /**
