@@ -61,10 +61,10 @@ public class SocketEnhancements extends JavaPlugin {
         getCommand("sea").setExecutor(
             new SeaCommand(enhancementManager, enhancedItemForge));
 
-        if (socketsConfig.ORBS_OF_BINDING_ENABLED)
+        ConfigurationSection orbsConfig = socketsConfig.ORBS_OF_BINDING_CONFIG;
+        if (orbsConfig.getBoolean("enabled", true))
             this.orbOfBindingManager = new OrbOfBindingManager(this,
-                enhancedItemForge, socketsConfig.ORB_OF_BINDING_INGREDIENTS,
-                socketsConfig.ORB_OF_BINDING_TYPE);
+                enhancedItemForge, orbsConfig);
 
         ConfigurationSection tablesConfig = enhancementsConfig
             .getConfigurationSection("enhancement_tables");

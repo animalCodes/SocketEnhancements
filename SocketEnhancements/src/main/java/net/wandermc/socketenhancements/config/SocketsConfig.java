@@ -48,20 +48,9 @@ public class SocketsConfig {
     public final EnumMap<Material, Integer> SOCKET_LIMITS;
 
     /**
-     * Whether Orbs of Binding can be crafted and applied to items.
+     * Configuration options for Orbs of Binding.
      */
-    public final boolean ORBS_OF_BINDING_ENABLED;
-
-    /**
-     * Ingredients used to craft an orb of binding.
-     * Length must be between 1 and 9 inclusive.
-     */
-    public final ArrayList<Material> ORB_OF_BINDING_INGREDIENTS;
-
-    /**
-     * Material type of orbs of binding.
-     */
-    public final Material ORB_OF_BINDING_TYPE;
+    public final ConfigurationSection ORBS_OF_BINDING_CONFIG;
 
     /**
      * Create a SocketsConfig with values read from `file`.
@@ -93,39 +82,7 @@ public class SocketsConfig {
             }
         }
 
-        this.ORB_OF_BINDING_INGREDIENTS = new ArrayList<Material>();
-
-        ConfigurationSection orbsOfBindingSection = yamlConfig
+        this.ORBS_OF_BINDING_CONFIG = yamlConfig
             .getConfigurationSection("orbs_of_binding");
-
-        this.ORBS_OF_BINDING_ENABLED = orbsOfBindingSection
-            .getBoolean("enabled", true);
-
-        Material orbType = Material.getMaterial(orbsOfBindingSection
-            .getString("material", "CONDUIT"));
-        if (orbType == null || orbType == Material.AIR)
-            this.ORB_OF_BINDING_TYPE = Material.CONDUIT;
-        else
-            this.ORB_OF_BINDING_TYPE = orbType;
-
-        if (orbsOfBindingSection != null) {
-            for (String ingredient :
-                    orbsOfBindingSection.getStringList("ingredients")) {
-                Material material = Material.getMaterial(ingredient);
-                if (material != null && material != Material.AIR)
-                    ORB_OF_BINDING_INGREDIENTS.add(material);
-
-                if (ORB_OF_BINDING_INGREDIENTS.size() >= 9)
-                    break;
-            }
-        }
-
-        if (ORB_OF_BINDING_INGREDIENTS.size() == 0) {
-            ORB_OF_BINDING_INGREDIENTS.add(Material.END_CRYSTAL);
-            ORB_OF_BINDING_INGREDIENTS.add(Material.PRISMARINE_SHARD);
-            ORB_OF_BINDING_INGREDIENTS.add(Material.CHORUS_FRUIT);
-        }
-
-        ORB_OF_BINDING_INGREDIENTS.trimToSize();
     }
 }

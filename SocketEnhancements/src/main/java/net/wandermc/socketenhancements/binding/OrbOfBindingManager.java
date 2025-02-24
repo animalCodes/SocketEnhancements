@@ -17,11 +17,13 @@
  */
 package net.wandermc.socketenhancements.binding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -60,22 +62,32 @@ public class OrbOfBindingManager implements Listener {
     /**
      * Create an OrbOfBindingManager for `plugin`.
      *
+     * `config` is expected to have the following fields. If they are
+     * unspecified or invalid, the default values will be used.
+     *
+     * - "material": "CONDUIT"
+     * - "ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+     *
+     * All strings must be valid Materials but not AIR.
+     * "ingredients" must have at least one material. Only the first 9 will
+     * be used.
+     *
      * @param plugin The plugin this manager is working for.
-     * @param manager The current EnhancementManager.
-     * @param ingredients The items used to craft an orb of binding, count must
-     *                    be > 0 and < 10.
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options for orbs of binding.
      */
     public OrbOfBindingManager(JavaPlugin plugin, EnhancedItemForge forge,
-        List<Material> ingredients, Material orbOfBindingType) {
+        ConfigurationSection config) {
         this.plugin = plugin;
         this.forge = forge;
-        this.ingredients = ingredients;
-        this.orbOfBindingType = orbOfBindingType;
 
-        if (ingredients.size() < 1 || ingredients.size() > 9) {
-            throw new IllegalArgumentException("Invalid ingredient list size: "
-                + ingredients.size() + ". Must be between 1 and 9 inclusive.");
-        }
+        this.ingredients = retrieveIngredients(config);
+
+        Material orbType = Material.getMaterial(config.getString("material",
+            "AIR"));
+        if (orbType == null || orbType == Material.AIR)
+            orbType = Material.CONDUIT;
+        this.orbOfBindingType = orbType;
 
         this.orbOfBinding = createOrbOfBinding();
 
@@ -87,6 +99,34 @@ public class OrbOfBindingManager implements Listener {
         registerRecipes();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    /**
+     * Retrieve the list of ingredients to craft an orb of binding.
+     *
+     * @param config The orbs of binding configuration.
+     * @return Orb ingredients.
+     */
+    private List<Material> retrieveIngredients(ConfigurationSection config) {
+        ArrayList<Material> ingredients = new ArrayList<Material>();
+
+        for (String ingredient : config.getStringList("ingredients")) {
+            Material material = Material.getMaterial(ingredient);
+            if (material != null && material != Material.AIR)
+                ingredients.add(material);
+
+            if (ingredients.size() >= 9)
+                break;
+        }
+
+        if (ingredients.size() == 0) {
+            ingredients.add(Material.GHAST_TEAR);
+            ingredients.add(Material.PRISMARINE_SHARD);
+            ingredients.add(Material.CHORUS_FRUIT);
+        }
+
+        ingredients.trimToSize();
+        return ingredients;
     }
 
     /**
