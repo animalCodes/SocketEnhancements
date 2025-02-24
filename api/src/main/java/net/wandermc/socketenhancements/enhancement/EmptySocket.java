@@ -17,7 +17,10 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -35,10 +38,15 @@ public class EmptySocket implements Enhancement {
     /**
      * Create an EmptySocket.
      *
-     * @param socketMessage The socketMessage to use.
+     * `config` should have an "empty_socket_message" Rich Message (String)
+     * field.
+     *
+     * @param config Configuration options for EmptySocket.
      */
-    public EmptySocket(TextComponent socketMessage) {
-        this.socketMessage = socketMessage;
+    public EmptySocket(ConfigurationSection config) {
+        this.socketMessage = (TextComponent) config.getRichMessage(
+            "empty_socket_message", MiniMessage.miniMessage().deserialize(
+            "<!italic><white><Empty Socket>"));
     }
 
     public String name() {

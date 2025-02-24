@@ -23,6 +23,7 @@ import java.util.EnumMap;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -49,19 +50,48 @@ public class EnhancedItemForge {
     /**
      * Create an EnhancedItemForge for `plugin`.
      *
+     * `config` is expected to have an integer field "default" and a
+     * sub-configuration section "limits", With set limits for specific
+     * Materials.
+     *
+     * If "default" is unset or < 0, it will be set to 0.
+     *
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.
-     * @param socketLimits Limits for how many sockets can be applied to certain
-     *                     items.
-     * @param defaultSocketLimit Socket limit for any other item.
+     * @param config Configuration options.
      */
     public EnhancedItemForge(JavaPlugin plugin, EnhancementManager manager,
-        EnumMap<Material, Integer> socketLimits, int defaultSocketLimit) {
+        ConfigurationSection config) {
         this.manager = manager;
         this.socketsKey = new NamespacedKey(plugin, "sockets");
 
-        this.socketLimits = socketLimits;
-        this.defaultSocketLimit = defaultSocketLimit;
+        this.socketLimits = parseLimits(config);
+
+        int dsl = config.getInt("default", 0);
+        if (dsl < 0)
+            dsl = 0;
+        this.defaultSocketLimit = dsl;
+    }
+
+    /**
+     * Parse socket limits.
+     *
+     * @param c EnhancedItemForge Configuration section.
+     * @return Socket limits.
+     */
+    private EnumMap<Material, Integer> parseLimits(ConfigurationSection c) {
+        EnumMap<Material, Integer> socketLimits = new EnumMap<>(Material.class);
+        ConfigurationSection limits = c.getConfigurationSection("limits");
+
+        if (limits != null) {
+            for (String key : limits.getKeys(false)) {
+                Material material = Material.getMaterial(key);
+                if (material != null && material != Material.AIR)
+                    socketLimits.put(material, limits.getInt(key));
+            }
+        }
+
+        return socketLimits;
     }
 
     /**

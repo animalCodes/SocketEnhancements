@@ -23,7 +23,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.wandermc.socketenhancements.config.SocketsConfig;
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
 import net.wandermc.socketenhancements.enhancement.*;
@@ -43,25 +42,25 @@ public class SocketEnhancements extends JavaPlugin {
     public void onEnable() {
         // TODO stop this from logging a warning if the file already exists
         saveResource("sockets.yml", false);
-        SocketsConfig socketsConfig = new SocketsConfig(
-            new File(getDataFolder(), "sockets.yml"));
+        YamlConfiguration socketsConfig = YamlConfiguration
+            .loadConfiguration(new File(getDataFolder(), "sockets.yml"));
 
         saveResource("enhancements.yml", false);
         YamlConfiguration enhancementsConfig = YamlConfiguration
             .loadConfiguration(new File(getDataFolder(), "enhancements.yml"));
 
         this.enhancementManager = new EnhancementManager(this,
-            new EmptySocket(socketsConfig.EMPTY_SOCKET_MESSAGE));
+            new EmptySocket(socketsConfig));
         this.enhancedItemForge = new EnhancedItemForge(this,
-            enhancementManager,
-            socketsConfig.SOCKET_LIMITS, socketsConfig.DEFAULT_SOCKET_LIMIT);
+            enhancementManager, socketsConfig);
 
         registerEnhancements();
 
         getCommand("sea").setExecutor(
             new SeaCommand(enhancementManager, enhancedItemForge));
 
-        ConfigurationSection orbsConfig = socketsConfig.ORBS_OF_BINDING_CONFIG;
+        ConfigurationSection orbsConfig = socketsConfig
+            .getConfigurationSection("orbs_of_binding");
         if (orbsConfig.getBoolean("enabled", true))
             this.orbOfBindingManager = new OrbOfBindingManager(this,
                 enhancedItemForge, orbsConfig);
