@@ -53,7 +53,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
-        .deserialize("<!italic><white><<black>Withering<white>>");
+        .deserialize("<!italic><white><<dark_gray>Withering<white>>");
 
     private final EnhancedItemForge forge;
 
