@@ -59,20 +59,20 @@ public class SocketEnhancements extends JavaPlugin {
         getCommand("sea").setExecutor(
             new SeaCommand(enhancementManager, enhancedItemForge));
 
-        ConfigurationSection orbsConfig = socketsConfig
-            .getConfigurationSection("orbs_of_binding");
+        ConfigurationSection orbsConfig = nsConfig(socketsConfig
+            .getConfigurationSection("orbs_of_binding"));
         if (orbsConfig.getBoolean("enabled", true))
             this.orbOfBindingManager = new OrbOfBindingManager(this,
                 enhancedItemForge, orbsConfig);
 
-        ConfigurationSection tablesConfig = enhancementsConfig
-            .getConfigurationSection("enhancement_tables");
+        ConfigurationSection tablesConfig = nsConfig(enhancementsConfig
+            .getConfigurationSection("enhancement_tables"));
         if (tablesConfig.getBoolean("enabled", true))
             this.enhancementTableManager = new EnhancementTableManager(this,
                 enhancementManager, enhancedItemForge, tablesConfig);
 
-        ConfigurationSection gemConfig = enhancementsConfig
-            .getConfigurationSection("enhancement_gems");
+        ConfigurationSection gemConfig = nsConfig(enhancementsConfig
+            .getConfigurationSection("enhancement_gems"));
         if (gemConfig.getBoolean("enabled", true))
             this.enhancementGemManager = new EnhancementGemManager(this,
                 enhancedItemForge, gemConfig);
@@ -104,5 +104,19 @@ public class SocketEnhancements extends JavaPlugin {
             new WitheringEnhancement(enhancedItemForge));
         enhancementManager.register(
             new UndyingEnhancement(enhancedItemForge));
+    }
+
+    /**
+     * Replace `config` with an empty section if null.
+     *
+     * @param config Configuration section to check.
+     * @return Null-safe config.
+     */
+    private ConfigurationSection nsConfig(ConfigurationSection config) {
+        if (config == null)
+            // YamlConfiguration appears to be the only extension of
+            // ConfigurationSection with an accessible blank constructor.
+            return new YamlConfiguration();
+        return config;
     }
 }
