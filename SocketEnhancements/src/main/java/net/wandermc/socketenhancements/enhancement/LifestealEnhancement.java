@@ -19,6 +19,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,11 +42,12 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 /**
  * Lifesteal enhancement.
  *
- * On attacking another entity, have a CHANCE chance to gain a quarter of the
+ * On attacking another entity, have a CHANCE chance to gain GAIN% of the
  * dealt damage as health.
  */
 public class LifestealEnhancement implements Enhancement, Listener {
-    private static final double CHANCE = 0.5;
+    private final double CHANCE;
+    private final double GAIN;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -53,8 +55,21 @@ public class LifestealEnhancement implements Enhancement, Listener {
 
     private final EnhancedItemForge forge;
 
-    public LifestealEnhancement(EnhancedItemForge forge) {
+    /**
+     * Create a LifestealEnhancement.
+     *
+     * `config` defaults:
+     * - "chance": 0.5
+     * - "gain": 0.25
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
+     */
+    public LifestealEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.CHANCE = config.getDouble("chance", 0.5);
+        this.GAIN = config.getDouble("gain", 0.25);
     }
 
     @EventHandler
@@ -76,7 +91,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
                 return;
 
             double newHealth = attacker.getHealth() +
-                (context.getFinalDamage() / 4);
+                (context.getFinalDamage() * GAIN);
             if (newHealth > maxHealth)
                 newHealth = maxHealth;
 

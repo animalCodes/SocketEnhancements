@@ -131,7 +131,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("lifesteal"));
         if (lifestealConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new LifestealEnhancement(enhancedItemForge));
+                new LifestealEnhancement(enhancedItemForge, lifestealConfig));
 
         ConfigurationSection frigidConfig = nsConfig(config
             .getConfigurationSection("frigid"));
