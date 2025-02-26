@@ -125,7 +125,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("scorching"));
         if (scorchingConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new ScorchingEnhancement(enhancedItemForge));
+                new ScorchingEnhancement(enhancedItemForge, scorchingConfig));
 
         ConfigurationSection lifestealConfig = nsConfig(config
             .getConfigurationSection("lifesteal"));

@@ -18,6 +18,7 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,11 +47,11 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  */
 public class ScorchingEnhancement implements Enhancement, Listener {
     // Chance for effect to be applied per armour piece.
-    private static final double CHANCE_PER = 0.2;
+    private final double CHANCE_PER;
     // How many fire ticks to apply to the attacker on activation.
-    private static final int FIRE_TICKS = 40;
+    private final int FIRE_TICKS;
     // Knockback strength applied to attacker on activation.
-    private static final double KNOCKBACK = 0.5;
+    private final double KNOCKBACK;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -60,11 +61,27 @@ public class ScorchingEnhancement implements Enhancement, Listener {
 
     /**
      * Create a Scorching enhancement.
-     * 
+     *
+     * `config` defaults:
+     * - "chance_per": 0.2
+     * - "fire_ticks": 40
+     * - "knockback": 0.5
+     *
+     * "knockback" must be > 0.
+     *
      * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
      */
-    public ScorchingEnhancement(EnhancedItemForge forge) {
+    public ScorchingEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+
+        this.CHANCE_PER = config.getDouble("chance_per", 0.2);
+        this.FIRE_TICKS = config.getInt("fire_ticks", 40);
+        double knockback = config.getDouble("knockback", 0.5);
+        if (knockback <= 0)
+            knockback = 0.5;
+        this.KNOCKBACK = knockback;
     }
 
     @EventHandler

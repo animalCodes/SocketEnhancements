@@ -78,6 +78,13 @@ enhancements:
   # Chance increases with each enhanced armour piece.
   scorching:
     enabled: true
+    # Chance increase per enhanced armour piece.
+    # Percentage as a decimal, so 0 = 0%, 0.2 = 20%, etc.
+    chance_per: 0.2
+    # How long to set attacker on fire for, in ticks. (20 ticks = 1 second)
+    fire_ticks: 40
+    # Knockback strength. Must be greater than 0.
+    knockback: 0.5
 
   # Has a chance to gain a quarter of damage dealt as health.
   lifesteal:
