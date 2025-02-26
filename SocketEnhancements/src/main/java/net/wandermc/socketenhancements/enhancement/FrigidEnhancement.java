@@ -18,6 +18,7 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,10 +48,9 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  */
 public class FrigidEnhancement implements Enhancement, Listener {
     // Chance for effect to be applied per armour piece.
-    private static final double CHANCE_PER = 0.15;
-
-    private static final PotionEffect MINING_FATIGUE_EFFECT =
-        new PotionEffect(PotionEffectType.MINING_FATIGUE, 70, 2);
+    private final double CHANCE_PER;
+    // Mining fatigue potion effect to apply.
+    private final PotionEffect MINING_FATIGUE_EFFECT;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -61,10 +61,20 @@ public class FrigidEnhancement implements Enhancement, Listener {
     /**
      * Create a Frigid enhancement.
      *
+     * `config` defaults:
+     * - chance_per: 0.15
+     * - duration: 70
+     * - amplifier: 2
+     *
      * @param forge The current EnhancedItemForge.
      */
-    public FrigidEnhancement(EnhancedItemForge forge) {
+    public FrigidEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.CHANCE_PER = config.getDouble("chance_per", 0.15);
+        this.MINING_FATIGUE_EFFECT = new PotionEffect(
+            PotionEffectType.MINING_FATIGUE, config.getInt("duration", 70),
+            config.getInt("amplifier", 2));
     }
 
     @EventHandler

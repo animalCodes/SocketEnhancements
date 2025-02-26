@@ -137,7 +137,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("frigid"));
         if (frigidConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new FrigidEnhancement(enhancedItemForge));
+                new FrigidEnhancement(enhancedItemForge, frigidConfig));
 
         ConfigurationSection witheringConfig = nsConfig(config
             .getConfigurationSection("withering"));

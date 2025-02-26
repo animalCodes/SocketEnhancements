@@ -105,7 +105,6 @@ enhancements:
 
   # Has a chance to knock back attackers and set them on fire for a brief
   # period.
-  # Chance increases with each enhanced armour piece.
   scorching:
     enabled: true
     # Chance increase per enhanced armour piece.
@@ -126,9 +125,14 @@ enhancements:
     gain: 0.25
 
   # Has a chance to freeze and apply mining fatigue to attackers.
-  # Chance increases per enhanced armour piece.
   frigid:
     enabled: true
+    # Chance increase per armour piece.
+    chance_per: 0.15
+    # Duration of mining fatigue effect. (In ticks)
+    duration: 70
+    # Strength of mining fatigue effect.
+    amplifier: 2
 
   # Has a chance to apply "wither" to attacked entities.
   withering:
