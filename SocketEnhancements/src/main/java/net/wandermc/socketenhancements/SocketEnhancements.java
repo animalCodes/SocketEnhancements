@@ -95,7 +95,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("blink"));
         if (blinkConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new BlinkEnhancement(enhancedItemForge));
+                new BlinkEnhancement(enhancedItemForge, blinkConfig));
 
         ConfigurationSection boostConfig = nsConfig(config
             .getConfigurationSection("boost"));

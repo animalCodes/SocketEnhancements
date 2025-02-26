@@ -51,6 +51,10 @@ enhancements:
   # Costs experience points and temporarily blinds the player.
   blink:
     enabled: true
+    # Amount of experience *points* (not levels) deducted per use.
+    cost: 16
+    # Maximum distance players can teleport.
+    max_distance: 64
 
   # Boosts gliding players as if they had used a firework.
   # Damages item on use and the firework may hurt the player.

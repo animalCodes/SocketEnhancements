@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,9 +53,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  */
 public class BlinkEnhancement implements Enhancement, Listener {
     // How many experience points this costs per use.
-    private static final int COST = 16;
+    private final int COST;
     // The maximum distance a player can teleport while using this.
-    private static final int MAX_DISTANCE = 64;
+    private final int MAX_DISTANCE;
     // All blocks that can be teleported through.
     private static final EnumSet<Material> BLINK_THROUGH_BLOCKS;
 
@@ -73,8 +74,21 @@ public class BlinkEnhancement implements Enhancement, Listener {
 
     private final EnhancedItemForge forge;
 
-    public BlinkEnhancement(EnhancedItemForge forge) {
+    /**
+     * Create a BlinkEnhancement.
+     *
+     * `config` defaults:
+     * - "cost": 16
+     * - "max_distance": 64
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
+     */
+    public BlinkEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.COST = config.getInt("cost", 16);
+        this.MAX_DISTANCE = config.getInt("max_distance", 64);
     }
 
     /**
