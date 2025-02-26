@@ -71,11 +71,31 @@ enhancements:
   cushioning:
     enabled: true
 
-  # When a player is struck with lightning, simulates the effect of them eating
-  # a golden apple.
-  # Also applies fire resistance.
+  # When a player is struck with lightning, Apply various buffs.
   directing:
     enabled: true
+    # Amount to increase food level by.
+    food_gain: 4
+    # Amount to increase saturation by.
+    saturation_gain: 9.6
+    # List of potion effects to apply.
+    # Each entry may have the following fields:
+    # effect (Namespaced key of effect)
+    # duration (Duration of effect in ticks)
+    # amplifier (Potion strength)
+    # ambient (Whether the effect is 'ambient')
+    # has-particles (Whether the effect has particles)
+    # has-icon (Whether the effect has an icon)
+    effects:
+      - effect: minecraft:absorption
+        duration: 2400
+        amplifier: 1
+      - effect: minecraft:regeneration
+        duration: 100
+        amplifier: 2
+      - effect: minecraft:fire_resistance
+        duration: 200
+        amplifier: 1
 
   # When a block is broken, also destroys all blocks within a 1-block radius.
   # (3*3 cube centered on mined block)

@@ -113,7 +113,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("directing"));
         if (directingConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new DirectingEnhancement(enhancedItemForge));
+                new DirectingEnhancement(enhancedItemForge, directingConfig));
 
         ConfigurationSection explosiveConfig = nsConfig(config
             .getConfigurationSection("explosive"));

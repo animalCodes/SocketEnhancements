@@ -17,7 +17,11 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,16 +45,13 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 /**
  * Directing enhancement.
  *
- * When a player is struck with lightning, simulate the effect of them eating a
- * (normal) golden apple.
+ * When a player is struck with lightning, apply various buffs.
+ * Default buffs aim to simulate the effect of eating a golden apple.
  */
 public class DirectingEnhancement implements Enhancement, Listener {
-    private static final PotionEffect ABSORPTION_EFFECT =
-        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 60 * 2, 1);
-    private static final PotionEffect REGENERATION_EFFECT =
-        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2);
-    private static final PotionEffect FIRE_RESISTANCE_EFFECT =
-        new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1);
+    private final int FOOD_GAIN;
+    private final float SATURATION_GAIN;
+    private final ArrayList<PotionEffect> POTION_EFFECTS;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -61,26 +62,48 @@ public class DirectingEnhancement implements Enhancement, Listener {
     /**
      * Create a Directing enhancement.
      *
-     * @param forge The current EnhancedItemForge.
-     */
-    public DirectingEnhancement(EnhancedItemForge forge) {
-        this.forge = forge;
-    }
-
-    /**
-     * Simulate the effects of `player` eating a golden apple.
+     * `config` defaults:
+     * food_gain: 4
+     * saturation_gain: 9.6
+     * effects:
+     *   - effect: minecraft:absorption
+     *     duration: 2400
+     *     amplifier: 1
+     *   - effect: minecraft:regeneration
+     *     duration: 100
+     *     amplifier: 2
+     *   - effect: minecraft:fire_resistance
+     *     duration: 200
+     *     amplifier: 1
      *
-     * @param player the player to feed.
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
      */
-    private void eatGoldenApple(Player player) {
-        player.setFoodLevel(player.getFoodLevel() + 4);
-        player.setSaturation(player.getSaturation() + 9.6f);
-        player.addPotionEffect(ABSORPTION_EFFECT);
-        player.addPotionEffect(REGENERATION_EFFECT);
-        // Getting struck by lightning sets the player on fire, which will
-        // nullify the benefits of "eating a golden apple". So give them fire
-        // resistance as well so this enhancement isn't entirely pointless.
-        player.addPotionEffect(FIRE_RESISTANCE_EFFECT);
+    public DirectingEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
+        this.forge = forge;
+        this.FOOD_GAIN = config.getInt("food_gain", 4);
+        this.SATURATION_GAIN = (float)config.getDouble("saturation_gain", 9.6);
+
+        this.POTION_EFFECTS = new ArrayList();
+
+        // "If it works it ain't stupid"
+        config.getMapList("effects").forEach(rawMap -> {
+            HashMap convMap = new HashMap();
+            rawMap.forEach((k, v) -> convMap.put(k.toString(), v));
+            try {
+                this.POTION_EFFECTS.add(new PotionEffect(convMap));
+            } catch (Exception e) {}
+        });
+
+        if (this.POTION_EFFECTS.size() == 0) {
+            this.POTION_EFFECTS.add(new PotionEffect(
+                PotionEffectType.ABSORPTION, 20 * 60 * 2, 1));
+            this.POTION_EFFECTS.add(new PotionEffect(
+                PotionEffectType.REGENERATION, 20 * 5, 2));
+            this.POTION_EFFECTS.add(new PotionEffect(
+                PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1));
+        }
     }
 
     @EventHandler
@@ -94,7 +117,9 @@ public class DirectingEnhancement implements Enhancement, Listener {
                 return;
 
             context.setCancelled(true);
-            eatGoldenApple(player);
+            player.setFoodLevel(player.getFoodLevel() + FOOD_GAIN);
+            player.setSaturation(player.getSaturation() + SATURATION_GAIN);
+            POTION_EFFECTS.forEach(effect -> player.addPotionEffect(effect));
         }
     }
 
