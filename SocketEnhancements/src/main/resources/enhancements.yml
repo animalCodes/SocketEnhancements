@@ -39,3 +39,60 @@ enhancement_gems:
   # Changing this value will break any previously obtained enhancement gems.
   # Cannot be AIR
   material: "END_CRYSTAL"
+
+# Per-enhancement configuration options.
+enhancements:
+  # Stops enhanced items from breaking.
+  # Will be consumed in the process.
+  protected:
+    enabled: true
+
+  # Allows players to teleport to the block they are looking at.
+  # Costs experience points and temporarily blinds the player.
+  blink:
+    enabled: true
+
+  # Boosts gliding players as if they had used a firework.
+  # Damages item on use and the firework may hurt the player.
+  boost:
+    enabled: true
+
+  # Halves damage from flying into walls.
+  cushioning:
+    enabled: true
+
+  # When a player is struck with lightning, simulates the effect of them eating
+  # a golden apple.
+  # Also applies fire resistance.
+  directing:
+    enabled: true
+
+  # When a block is broken, also destroys all blocks within a 1-block radius.
+  # (3*3 cube centered on mined block)
+  # Blocks are broken as if mined with enhanced pickaxe.
+  explosive:
+    enabled: true
+
+  # Has a chance to knock back attackers and set them on fire for a brief
+  # period.
+  # Chance increases with each enhanced armour piece.
+  scorching:
+    enabled: true
+
+  # Has a chance to gain a quarter of damage dealt as health.
+  lifesteal:
+    enabled: true
+
+  # Has a chance to freeze and apply mining fatigue to attackers.
+  # Chance increases per enhanced armour piece.
+  frigid:
+    enabled: true
+
+  # Has a chance to apply "wither" to attacked entities.
+  withering:
+    enabled: true
+
+  # Prevents player death and applies buffs if held on taking fatal damage.
+  # Will be consumed in the process.
+  undying:
+    enabled: true

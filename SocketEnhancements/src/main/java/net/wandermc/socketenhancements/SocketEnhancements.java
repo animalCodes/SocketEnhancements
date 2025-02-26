@@ -54,7 +54,8 @@ public class SocketEnhancements extends JavaPlugin {
         this.enhancedItemForge = new EnhancedItemForge(this,
             enhancementManager, socketsConfig);
 
-        registerEnhancements();
+        registerEnhancements(nsConfig(enhancementsConfig
+            .getConfigurationSection("enhancements")));
 
         getCommand("sea").setExecutor(
             new SeaCommand(enhancementManager, enhancedItemForge));
@@ -80,30 +81,75 @@ public class SocketEnhancements extends JavaPlugin {
 
     /**
      * Register all SocketEnhancements core enhancements.
+     *
+     * @param config enhancements configuration section.
      */
-    private void registerEnhancements() {
-        enhancementManager.register(
-            new ProtectedEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new BlinkEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new BoostEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new CushioningEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new DirectingEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new ExplosiveEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new ScorchingEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new LifestealEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new FrigidEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new WitheringEnhancement(enhancedItemForge));
-        enhancementManager.register(
-            new UndyingEnhancement(enhancedItemForge));
+    private void registerEnhancements(ConfigurationSection config) {
+        ConfigurationSection protectedConfig = nsConfig(config
+            .getConfigurationSection("protected"));
+        if (protectedConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new ProtectedEnhancement(enhancedItemForge));
+
+        ConfigurationSection blinkConfig = nsConfig(config
+            .getConfigurationSection("blink"));
+        if (blinkConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new BlinkEnhancement(enhancedItemForge));
+
+        ConfigurationSection boostConfig = nsConfig(config
+            .getConfigurationSection("boost"));
+        if (boostConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new BoostEnhancement(enhancedItemForge));
+
+        ConfigurationSection cushioningConfig = nsConfig(config
+            .getConfigurationSection("cushioning"));
+        if (cushioningConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new CushioningEnhancement(enhancedItemForge));
+
+        ConfigurationSection directingConfig = nsConfig(config
+            .getConfigurationSection("directing"));
+        if (directingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new DirectingEnhancement(enhancedItemForge));
+
+        ConfigurationSection explosiveConfig = nsConfig(config
+            .getConfigurationSection("explosive"));
+        if (explosiveConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new ExplosiveEnhancement(enhancedItemForge));
+
+        ConfigurationSection scorchingConfig = nsConfig(config
+            .getConfigurationSection("scorching"));
+        if (scorchingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new ScorchingEnhancement(enhancedItemForge));
+
+        ConfigurationSection lifestealConfig = nsConfig(config
+            .getConfigurationSection("lifesteal"));
+        if (lifestealConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new LifestealEnhancement(enhancedItemForge));
+
+        ConfigurationSection frigidConfig = nsConfig(config
+            .getConfigurationSection("frigid"));
+        if (frigidConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new FrigidEnhancement(enhancedItemForge));
+
+        ConfigurationSection witheringConfig = nsConfig(config
+            .getConfigurationSection("withering"));
+        if (witheringConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new WitheringEnhancement(enhancedItemForge));
+
+        ConfigurationSection undyingConfig = nsConfig(config
+            .getConfigurationSection("undying"));
+        if (undyingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new UndyingEnhancement(enhancedItemForge));
     }
 
     /**
