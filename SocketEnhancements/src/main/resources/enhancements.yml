@@ -113,6 +113,12 @@ enhancements:
   # Has a chance to apply "wither" to attacked entities.
   withering:
     enabled: true
+    # Chance to apply wither.
+    chance: 0.3
+    # Duration of potion effect, in ticks.
+    duration: 160
+    # Strength of potion effect.
+    amplifier: 1
 
   # Prevents player death and applies buffs if held on taking fatal damage.
   # Will be consumed in the process.

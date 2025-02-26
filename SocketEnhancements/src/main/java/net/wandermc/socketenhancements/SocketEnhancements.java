@@ -143,7 +143,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("withering"));
         if (witheringConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new WitheringEnhancement(enhancedItemForge));
+                new WitheringEnhancement(enhancedItemForge, witheringConfig));
 
         ConfigurationSection undyingConfig = nsConfig(config
             .getConfigurationSection("undying"));

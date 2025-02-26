@@ -18,6 +18,7 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,10 +47,9 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  */
 public class WitheringEnhancement implements Enhancement, Listener {
     // Chance for enhancement to activated.
-    private static final double CHANCE = 0.3;
-
-    private static final PotionEffect WITHER_EFFECT =
-        new PotionEffect(PotionEffectType.WITHER, 160, 1);
+    private final double CHANCE;
+    // Potion effect to apply to victims.
+    private final PotionEffect WITHER_EFFECT;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -57,8 +57,32 @@ public class WitheringEnhancement implements Enhancement, Listener {
 
     private final EnhancedItemForge forge;
 
-    public WitheringEnhancement(EnhancedItemForge forge) {
+    /**
+     * Create a WitheringEnhancement.
+     *
+     * `config` defaults:
+     * "chance": 0.3
+     * "duration": 160
+     * "amplifier": 1
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config ConfigurationOptions.
+     */
+    public WitheringEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.CHANCE = config.getDouble("chance", 0.3);
+
+        int duration = config.getInt("duration", 160);
+        if (duration <= 0)
+            duration = 160;
+
+        int amplifier = config.getInt("amplifier", 1);
+        if (amplifier <= 0)
+            amplifier = 1;
+
+        this.WITHER_EFFECT = new PotionEffect(PotionEffectType.WITHER, duration,
+            amplifier);
     }
 
     @EventHandler
