@@ -20,6 +20,7 @@ package net.wandermc.socketenhancements.enhancement;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,30 +48,49 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  */
 public class BoostEnhancement implements Enhancement, Listener {
     // How much damage will be applied to the item on use.
-    private static final int COST = 8;
+    private final int COST;
     // The flight duration the player will be boosted with.
-    private static final int DURATION = 2;
+    private final int DURATION;
     // Chance for boost to damage player.
-    private static final double CHANCE = 0.15;
+    private final double DAMAGE_CHANCE;
+    // The virtual firework rocket used to boost the player.
+    private final ItemStack ROCKET;
+    // Alternative rocket, damages player when used.
+    private final ItemStack DAMAGE_ROCKET;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Boost<white>>");
 
-    // The virtual firework rocket used to boost the player.
-    private static final ItemStack rocket =
-        Bukkit.getServer().getItemFactory().createItemStack(
-            "minecraft:firework_rocket{Fireworks:{Flight:"+DURATION+"}}");
-    // Alternative rocket, damages player when used.
-    private static final ItemStack damageRocket =
-        Bukkit.getServer().getItemFactory().createItemStack(
-            "minecraft:firework_rocket{Fireworks:{Explosions:[{Colors:" +
-            "[11743532],Type:4}],Flight:"+DURATION+"}}");
-
     private final EnhancedItemForge forge;
 
-    public BoostEnhancement(EnhancedItemForge forge) {
+    /**
+     * Create a BoostEnhancement.
+     *
+     * `config` defaults:
+     * - "cost": 8
+     * - "duration": 2
+     * - "damage_chance": 0.15
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
+     */
+    public BoostEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.COST = config.getInt("cost", 8);
+        this.DURATION = config.getInt("duration", 2);
+        this.DAMAGE_CHANCE = config.getDouble("damage_chance", 0.15);
+
+        this.ROCKET = Bukkit.getServer().getItemFactory().createItemStack(
+            "minecraft:firework_rocket[fireworks={flight_duration:"+DURATION
+            +"}]");
+
+        this.DAMAGE_ROCKET = Bukkit.getServer().getItemFactory()
+            .createItemStack("minecraft:firework_rocket[fireworks={" +
+                "explosions:[{shape:star,colors:[11743532]}],flight_duration:"
+                +DURATION+"}]");
+
     }
 
     /**
@@ -110,10 +130,11 @@ public class BoostEnhancement implements Enhancement, Listener {
         if (!contextMatches(context))
             return;
 
-        if (roll(CHANCE))
-            player.fireworkBoost(damageRocket);
-        else
-            player.fireworkBoost(rocket);
+        if (roll(DAMAGE_CHANCE)) {
+            player.fireworkBoost(DAMAGE_ROCKET);
+        } else {
+            player.fireworkBoost(ROCKET);
+        }
 
         if (player.getGameMode() != GameMode.CREATIVE)
             context.getItem().damage(COST, player);

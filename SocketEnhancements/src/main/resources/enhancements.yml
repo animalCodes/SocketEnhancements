@@ -60,6 +60,12 @@ enhancements:
   # Damages item on use and the firework may hurt the player.
   boost:
     enabled: true
+    # How much damage the item will take when used.
+    cost: 8
+    # Flight duration of simulated rocket.
+    duration: 2
+    # Chance for firework to damage player.
+    damage_chance: 0.15
 
   # Halves damage from flying into walls.
   cushioning:

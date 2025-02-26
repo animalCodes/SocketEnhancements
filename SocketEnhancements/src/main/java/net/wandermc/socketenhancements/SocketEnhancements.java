@@ -101,7 +101,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("boost"));
         if (boostConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new BoostEnhancement(enhancedItemForge));
+                new BoostEnhancement(enhancedItemForge, boostConfig));
 
         ConfigurationSection cushioningConfig = nsConfig(config
             .getConfigurationSection("cushioning"));
