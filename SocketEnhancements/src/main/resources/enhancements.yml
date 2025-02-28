@@ -39,6 +39,8 @@ enhancement_gems:
   # Changing this value will break any previously obtained enhancement gems.
   # Cannot be AIR
   material: "END_CRYSTAL"
+  # Whether dropped enhancement gems can be destroyed in fire/lava.
+  flammable: false
 
 # Per-enhancement configuration options.
 enhancements:

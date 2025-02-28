@@ -36,6 +36,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.tag.DamageTypeTags;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -64,19 +65,17 @@ public class EnhancementGemManager implements Listener {
 
     private final Material blockType;
     private final Material gemType;
+    private final boolean flammable;
 
     private final ItemEventBlocker eventBlocker;
 
     /**
      * Create an EnhancementGemManager for `plugin`.
      *
-     * The fields to be read from `config` and their default values are
-     * as follows:
-     * - "block": "GRINDSTONE"
-     * - "material": "END_CRYSTAL"
-     *
-     * If either field is unspecified, "AIR", or cannot be converted into a
-     * Material, the default will be used.
+     * `config` defaults:
+     * - block: GRINDSTONE
+     * - material: END_CRYSTAL
+     * - flammable: false
      *
      * @param plugin The plugin this manager is working for.
      * @param forge The current EnhancedItemForge.
@@ -93,17 +92,17 @@ public class EnhancementGemManager implements Listener {
         Material bt = Material.getMaterial(config.getString("block",
             "GRINDSTONE"));
         if (bt == null || bt == Material.AIR)
-            this.blockType = Material.GRINDSTONE;
-        else
-            this.blockType = bt;
+            bt = Material.GRINDSTONE;
+        this.blockType = bt;
 
         // gemType
         Material gt = Material.getMaterial(config.getString(
             "material", "END_CRYSTAL"));
         if (gt == null || gt == Material.AIR)
-            this.gemType = Material.END_CRYSTAL;
-        else
-            this.gemType = gt;
+            gt = Material.END_CRYSTAL;
+        this.gemType = gt;
+
+        this.flammable = config.getBoolean("flammable", false);
 
         this.dummyGem = createGem().itemStack();
 
@@ -169,6 +168,8 @@ public class EnhancementGemManager implements Listener {
         ItemStack item = new ItemStack(gemType);
 
         ItemMeta meta = item.getItemMeta();
+        if (!flammable)
+            meta.setDamageResistant(DamageTypeTags.IS_FIRE);
         meta.displayName(ENHANCEMENT_GEM_NAME);
         meta.getPersistentDataContainer()
             .set(gemKey, PersistentDataType.BOOLEAN, true);
