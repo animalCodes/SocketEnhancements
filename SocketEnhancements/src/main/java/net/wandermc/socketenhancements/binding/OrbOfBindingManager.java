@@ -32,6 +32,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.tag.DamageTypeTags;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -56,17 +57,18 @@ public class OrbOfBindingManager implements Listener {
     private final ItemEventBlocker eventBlocker;
 
     private final ItemStack orbOfBinding;
+
     private final Material orbOfBindingType;
     private final List<Material> ingredients;
+    private final boolean flammable;
 
     /**
      * Create an OrbOfBindingManager for `plugin`.
      *
-     * `config` is expected to have the following fields. If they are
-     * unspecified or invalid, the default values will be used.
-     *
-     * - "material": "CONDUIT"
-     * - "ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+     * `config` defaults:
+     * - material: CONDUIT
+     * - ingredients: [GHAST_TEAR, PRISMARINE_SHARD, CHORUS_FRUIT]
+     * - flammable: false
      *
      * All strings must be valid Materials but not AIR.
      * "ingredients" must have at least one material. Only the first 9 will
@@ -81,13 +83,15 @@ public class OrbOfBindingManager implements Listener {
         this.plugin = plugin;
         this.forge = forge;
 
-        this.ingredients = retrieveIngredients(config);
-
         Material orbType = Material.getMaterial(config.getString("material",
             "AIR"));
         if (orbType == null || orbType == Material.AIR)
             orbType = Material.CONDUIT;
         this.orbOfBindingType = orbType;
+
+        this.ingredients = retrieveIngredients(config);
+
+        this.flammable = config.getBoolean("flammable", false);
 
         this.orbOfBinding = createOrbOfBinding();
 
@@ -138,6 +142,8 @@ public class OrbOfBindingManager implements Listener {
         ItemStack orb = new ItemStack(orbOfBindingType);
         ItemMeta meta = orb.getItemMeta();
         meta.displayName(ORB_OF_BINDING_NAME);
+        if (!flammable)
+            meta.setDamageResistant(DamageTypeTags.IS_FIRE);
         orb.setItemMeta(meta);
         return orb;
     }

@@ -72,3 +72,5 @@ orbs_of_binding:
   # Materials used to craft an orb of binding.
   # If there are more than nine items in the list, only the first nine (valid) items will be used.
   ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+  # Whether dropped orbs will be destroyed by fire/lava
+  flammable: false
