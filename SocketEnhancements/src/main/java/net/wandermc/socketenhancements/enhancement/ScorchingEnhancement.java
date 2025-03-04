@@ -78,6 +78,7 @@ public class ScorchingEnhancement implements Enhancement, Listener {
 
         this.CHANCE_PER = config.getDouble("chance_per", 0.2);
         this.FIRE_TICKS = config.getInt("fire_ticks", 40);
+
         double knockback = config.getDouble("knockback", 0.5);
         if (knockback <= 0)
             knockback = 0.5;
@@ -101,12 +102,8 @@ public class ScorchingEnhancement implements Enhancement, Listener {
                 if (roll(chance)) {
                     attacker.setFireTicks(attacker.getFireTicks()+FIRE_TICKS);
                     attacker.knockback(KNOCKBACK,
-                        // Find RELATIVE positon, so if defender is at x=70
-                        // and attacker is at x=71, we want -1.
-                        (defender.getX() == attacker.getX() ? 0 :
-                        defender.getX() - attacker.getX()),
-                        (defender.getZ() == attacker.getZ() ? 0 :
-                        defender.getZ() - attacker.getZ()));
+                        defender.getX() - attacker.getX(),
+                        defender.getZ() - attacker.getZ());
                 }
             }
         }
