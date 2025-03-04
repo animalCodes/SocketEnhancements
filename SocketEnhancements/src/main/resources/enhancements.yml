@@ -77,6 +77,8 @@ enhancements:
   # Halves damage from flying into walls.
   cushioning:
     enabled: true
+    # Percentage of damage taken when equipped.
+    damage_taken: 0.5
 
   # When a player is struck with lightning, Apply various buffs.
   directing:

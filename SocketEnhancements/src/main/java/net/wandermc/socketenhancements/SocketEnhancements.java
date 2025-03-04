@@ -107,7 +107,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("cushioning"));
         if (cushioningConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new CushioningEnhancement(enhancedItemForge));
+                new CushioningEnhancement(enhancedItemForge, cushioningConfig));
 
         ConfigurationSection directingConfig = nsConfig(config
             .getConfigurationSection("directing"));

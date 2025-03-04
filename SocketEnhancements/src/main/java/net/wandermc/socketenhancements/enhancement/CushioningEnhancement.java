@@ -19,6 +19,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,15 +48,23 @@ public class CushioningEnhancement implements Enhancement, Listener {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<gray>Cushioning<white>>");
 
-    private EnhancedItemForge forge;
+    private final EnhancedItemForge forge;
+
+    private final double damageTaken;
 
     /**
      * Create a Cushioning enhancement.
-     * 
+     *
+     * `config` defaults:
+     * - damage_taken: 0.5
+     *
      * @param forge The current EnhancedItemForge.
+     * @param config Configuration Options.
      */
-    public CushioningEnhancement(EnhancedItemForge forge) {
+    public CushioningEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+        this.damageTaken = config.getDouble("damage_taken", 0.5);
     }
 
     @EventHandler
@@ -67,7 +76,7 @@ public class CushioningEnhancement implements Enhancement, Listener {
             ItemStack helmet = player.getInventory().getHelmet();
 
             if (helmet != null && forge.has(helmet, this)) {
-                context.setDamage(context.getDamage() / 2);
+                context.setDamage(context.getDamage() * damageTaken);
                 player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
             }
         }
