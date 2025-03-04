@@ -119,7 +119,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("explosive"));
         if (explosiveConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new ExplosiveEnhancement(enhancedItemForge));
+                new ExplosiveEnhancement(enhancedItemForge, explosiveConfig));
 
         ConfigurationSection scorchingConfig = nsConfig(config
             .getConfigurationSection("scorching"));

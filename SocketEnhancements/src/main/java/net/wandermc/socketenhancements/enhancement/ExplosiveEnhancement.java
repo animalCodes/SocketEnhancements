@@ -19,9 +19,11 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -50,10 +52,32 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_red>Explosive<white>>");
 
+    private final Material costType;
+    private final int costAmount;
+
     private final EnhancedItemForge forge;
 
-    public ExplosiveEnhancement(EnhancedItemForge forge) {
+    /**
+     * Create an ExplosiveEnhancement.
+     *
+     * `config` defaults:
+     * - cost_type: "GUNPOWDER"
+     * - cost_amount: 2
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
+     */
+    public ExplosiveEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+
+        Material costType = Material.getMaterial(config.getString("cost_type",
+            "GUNPOWDER"));
+        if (costType == Material.AIR || costType == null)
+            costType = Material.GUNPOWDER;
+        this.costType = costType;
+
+        this.costAmount = config.getInt("cost_amount", 2);
     }
 
     /**
@@ -74,7 +98,6 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         for (int x = -1; x <= 1; x++)
             for (int z = -1; z <= 1; z++) {
                 blocks[i++] = origin.getRelative(x, -1, z);
-                // Avoid 0, 0, 0.
                 if (!(x == 0 && z == 0))
                     blocks[i++] = origin.getRelative(x, 0, z);
                 blocks[i++] = origin.getRelative(x, 1, z);
@@ -84,33 +107,35 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
 
     @EventHandler
     public void run(BlockBreakEvent context) {
-        ItemStack pickaxe = context.getPlayer().getInventory()
-            .getItemInMainHand();
+        Player player = context.getPlayer();
+        ItemStack pickaxe = player.getInventory().getItemInMainHand();
 
         if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
             return;
 
-        context.getPlayer().spawnParticle(
-            Particle.EXPLOSION, context.getBlock().getLocation(), 10);
-        context.getPlayer().playSound(context.getBlock().getLocation(),
+        ItemStack offhand = player.getInventory().getItemInOffHand();
+        if (costAmount > 0 &&
+            offhand.getType() != costType || offhand.getAmount() < costAmount)
+            return;
+
+        player.spawnParticle( Particle.EXPLOSION, context.getBlock()
+            .getLocation(), 10);
+        player.playSound(context.getBlock().getLocation(),
             Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
 
         int damage = 0;
         for (Block relative : getRelatives(context.getBlock())) {
-            // Only mining blocks with a maximum blast resistance of 10 will
-            // let us mine up to endstone but no further, hopefully that's a
-            // good balance.
             if (relative.getType().getBlastResistance() <= 10) {
-                // Normally, blocks with a hardness of 0 will be mined instantly
-                // regardless of the tool used and won't deduct durability from
-                // the item. Consistency is nice, so let's copy that behaviour.
                 if (relative.getType().getHardness() > 0)
                     damage++;
                 relative.breakNaturally(pickaxe);
             }
         }
 
-        pickaxe.damage(damage, context.getPlayer());
+        pickaxe.damage(damage, player);
+
+        if (costAmount > 0)
+            offhand.setAmount(offhand.getAmount() - costAmount);
     }
 
     public String name() {

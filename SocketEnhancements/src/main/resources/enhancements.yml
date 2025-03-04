@@ -101,9 +101,15 @@ enhancements:
 
   # When a block is broken, also destroys all blocks within a 1-block radius.
   # (3*3 cube centered on mined block)
-  # Blocks are broken as if mined with enhanced pickaxe.
+  # Requires player to be holding at least cost_amount items of type cost_type
+  # in their offhand.
+  # Blocks are broken as if mined with same pickaxe.
   explosive:
     enabled: true
+    # Material to be taken from player's offhand on use.
+    cost_type: GUNPOWDER
+    # Amount of above material to take. May be 0.
+    cost_amount: 2
 
   # Has a chance to knock back attackers and set them on fire for a brief
   # period.
