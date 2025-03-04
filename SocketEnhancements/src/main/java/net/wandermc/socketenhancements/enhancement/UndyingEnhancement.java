@@ -17,9 +17,13 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,22 +46,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Undying enhancement.
  *
  * If an entity takes fatal damage from any source other than the void or /kill
- * while holding enhanced item, imitate a weakened totem of undying by:
- * - Removing any active potion effects.
- * - Giving them Regeneration II for 20 seconds,
- * - Fire resistance for 20 seconds and
- * - Absorption I for 5 seconds.
- * - Cancelling the damage event.
- *
- * And remove the enhancement.
+ * while holding enhanced item, prevent death, apply configurable buffs and
+ * remove the enhancement.
  */
 public class UndyingEnhancement implements Enhancement, Listener {
-    private static final PotionEffect REGENERATION_EFFECT =
-        new PotionEffect(PotionEffectType.REGENERATION, 400, 2);
-    private static final PotionEffect FIRE_RESISTANCE_EFFECT =
-        new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 400, 1);
-    private static final PotionEffect ABSORPTION_EFFECT =
-        new PotionEffect(PotionEffectType.ABSORPTION, 100, 1);
+    private final ArrayList<PotionEffect> potionEffects;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -66,12 +59,44 @@ public class UndyingEnhancement implements Enhancement, Listener {
     private EnhancedItemForge forge;
 
     /**
-     * Create a Undying enhancement.
-     * 
+     * Create an Undying enhancement.
+     *
+     * `config` defaults:
+     * effects:
+     *   - effect: minecraft:regeneration
+     *     duration: 400
+     *     amplifier: 2
+     *   - effect: minecraft:fire_resistance
+     *     duration: 400
+     *     amplifier: 1
+     *   - effect: minecraft:absorption
+     *     duration: 100
+     *     amplifier: 1
+     *
      * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
      */
-    public UndyingEnhancement(EnhancedItemForge forge) {
+    public UndyingEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
         this.forge = forge;
+
+        this.potionEffects = new ArrayList();
+        config.getMapList("effects").forEach(rawMap -> {
+            HashMap convMap = new HashMap();
+            rawMap.forEach((k, v) -> convMap.put(k.toString(), v));
+            try {
+                this.potionEffects.add(new PotionEffect(convMap));
+            } catch (Exception e) {}
+        });
+
+        if (this.potionEffects.size() == 0) {
+            this.potionEffects.add(new PotionEffect(
+                PotionEffectType.REGENERATION, 400, 2));
+            this.potionEffects.add(new PotionEffect(
+                PotionEffectType.FIRE_RESISTANCE, 400, 1));
+            this.potionEffects.add(new PotionEffect(
+                PotionEffectType.ABSORPTION, 100, 1));
+        }
     }
 
     /**
@@ -107,9 +132,7 @@ public class UndyingEnhancement implements Enhancement, Listener {
             }
 
             entity.clearActivePotionEffects();
-            entity.addPotionEffect(REGENERATION_EFFECT);
-            entity.addPotionEffect(FIRE_RESISTANCE_EFFECT);
-            entity.addPotionEffect(ABSORPTION_EFFECT);
+            potionEffects.forEach(effect -> entity.addPotionEffect(effect));
 
             if (entity instanceof Player player)
                 applyCosmetics(player);

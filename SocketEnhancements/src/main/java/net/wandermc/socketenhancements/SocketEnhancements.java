@@ -149,7 +149,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("undying"));
         if (undyingConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new UndyingEnhancement(enhancedItemForge));
+                new UndyingEnhancement(enhancedItemForge, undyingConfig));
     }
 
     /**

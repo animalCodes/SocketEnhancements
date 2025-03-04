@@ -163,3 +163,14 @@ enhancements:
   # Will be consumed in the process.
   undying:
     enabled: true
+    # List of potion effects to apply. Uses same format as Directing.
+    effects:
+      - effect: minecraft:regeneration
+        duration: 400
+        amplifier: 2
+      - effect: minecraft:fire_resistance
+        duration: 400
+        amplifier: 1
+      - effect: minecraft:absorption
+        duration: 100
+        amplifier: 1
