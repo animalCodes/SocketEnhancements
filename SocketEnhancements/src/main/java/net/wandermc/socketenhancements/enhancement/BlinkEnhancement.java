@@ -52,10 +52,6 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * blindness.
  */
 public class BlinkEnhancement implements Enhancement, Listener {
-    // How many experience points this costs per use.
-    private final int COST;
-    // The maximum distance a player can teleport while using this.
-    private final int MAX_DISTANCE;
     // All blocks that can be teleported through.
     private static final EnumSet<Material> BLINK_THROUGH_BLOCKS;
 
@@ -72,14 +68,22 @@ public class BlinkEnhancement implements Enhancement, Listener {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_purple>Blink<white>>");
 
+    // Type of cost to deduct, AIR indicates experience points.
+    private final Material costType;
+    // How many experience points / items this costs per use.
+    private final int costAmount;
+    // The maximum distance a player can teleport while using this.
+    private final int maxDistance;
+
     private final EnhancedItemForge forge;
 
     /**
      * Create a BlinkEnhancement.
      *
      * `config` defaults:
-     * - "cost": 16
-     * - "max_distance": 64
+     * - cost_type: "AIR"
+     * - cost_amount: 16
+     * - max_distance: 64
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.
@@ -87,8 +91,15 @@ public class BlinkEnhancement implements Enhancement, Listener {
     public BlinkEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.COST = config.getInt("cost", 16);
-        this.MAX_DISTANCE = config.getInt("max_distance", 64);
+
+        Material mat = Material.getMaterial(config.getString("cost_type",
+            "AIR"));
+        if (mat == null)
+            mat = Material.AIR;
+        this.costType = mat;
+
+        this.costAmount = config.getInt("cost_amount", 16);
+        this.maxDistance = config.getInt("max_distance", 64);
     }
 
     /**
@@ -137,14 +148,19 @@ public class BlinkEnhancement implements Enhancement, Listener {
         if (!(context.hasItem() && forge.has(context.getItem(), this)))
             return false;
 
-        if (player.calculateTotalExperiencePoints() < COST &&
-            player.getGameMode() != GameMode.CREATIVE)
-            return false;
-
         if (player.getPotionEffect(PotionEffectType.BLINDNESS) != null)
             return false;
 
-        return true;
+        if (costAmount <= 0)
+            return true;
+
+        if (costType == Material.AIR) {
+            return player.calculateTotalExperiencePoints() >= costAmount;
+        } else {
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            return offhand.getType() == costType
+                && offhand.getAmount() >= costAmount;
+        }
     }
 
     /**
@@ -156,7 +172,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
     private Location findSafeLocation(Location start) {
         Location safe = start.clone();
 
-        for (double modY = 1; modY <= MAX_DISTANCE/2; modY++) {
+        for (double modY = 1; modY <= maxDistance/2; modY++) {
             safe.setY(start.getY()+modY);
             if (isSafe(safe))
                 return safe;
@@ -191,14 +207,10 @@ public class BlinkEnhancement implements Enhancement, Listener {
 
         Player player = context.getPlayer();
 
-        Location tpLocation =
-            // Block player is looking at
-            player.getTargetBlock(BLINK_THROUGH_BLOCKS, MAX_DISTANCE)
-            // Neighbouring block nearest to player (may be air)
-            .getRelative(player.getFacing().getOppositeFace())
-                .getLocation().toCenterLocation();
+        Location tpLocation = player.getTargetBlock(BLINK_THROUGH_BLOCKS,
+            maxDistance).getRelative(player.getFacing().getOppositeFace())
+            .getLocation().toCenterLocation();
 
-        // Let's at least *try* not to murder the player.
         if (!isSafe(tpLocation)) {
             Location newLocation = findSafeLocation(tpLocation);
             if (tpLocation.equals(newLocation)) {
@@ -208,19 +220,18 @@ public class BlinkEnhancement implements Enhancement, Listener {
                 tpLocation = newLocation;
         }
 
-        // Teleporting a player resets their yaw and pitch, so let's save them
-        // first.
-        float yaw = player.getLocation().getYaw();
-        float pitch = player.getLocation().getPitch();
+        tpLocation.setYaw(player.getLocation().getYaw());
+        tpLocation.setPitch(player.getLocation().getPitch());
 
         player.teleport(tpLocation);
         applyCosmetics(player, true);
 
-        player.setRotation(yaw, pitch);
-
-        if (player.getGameMode() != GameMode.CREATIVE) {
+        if (costType == Material.AIR) {
             player.setExperienceLevelAndProgress(
-                player.calculateTotalExperiencePoints()-COST);
+                player.calculateTotalExperiencePoints()-costAmount);
+        } else {
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            offhand.setAmount(offhand.getAmount()-costAmount);
         }
     }
 

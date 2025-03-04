@@ -53,8 +53,13 @@ enhancements:
   # Costs experience points and temporarily blinds the player.
   blink:
     enabled: true
-    # Amount of experience *points* (not levels) deducted per use.
-    cost: 16
+    # Type of cost, may be a Material or any other string, in which case
+    # experience points will be used. If a material, the item must be held in
+    # the player's offhand.
+    cost_type: EXP
+    # Number of items to take or experience points to deduct on use.
+    # May be 0.
+    cost_amount: 16
     # Maximum distance players can teleport.
     max_distance: 64
 
