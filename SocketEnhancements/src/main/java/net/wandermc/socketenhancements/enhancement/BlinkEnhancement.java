@@ -20,7 +20,6 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;

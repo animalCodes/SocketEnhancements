@@ -18,7 +18,6 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -98,7 +97,7 @@ public class BoostEnhancement implements Enhancement, Listener {
      *
      * The player must have interacted with the air while gliding and holding an
      * item with this bound to it, additionally, the item must have more than
-     * COST*2 durability OR the player must be in creative mode.
+     * COST*2 durability.
      *
      * @param context The context to check.
      * @return Whether this enhancement's effect should be run.
@@ -115,8 +114,7 @@ public class BoostEnhancement implements Enhancement, Listener {
 
         if (context.getItem().getItemMeta() instanceof Damageable damageable) {
             if ((context.getItem().getType().getMaxDurability() -
-                damageable.getDamage() <= (COST * 2))
-                && (player.getGameMode() != GameMode.CREATIVE))
+                damageable.getDamage() <= (COST * 2)))
                 return false;
         } else
             return false;
@@ -136,8 +134,7 @@ public class BoostEnhancement implements Enhancement, Listener {
             player.fireworkBoost(ROCKET);
         }
 
-        if (player.getGameMode() != GameMode.CREATIVE)
-            context.getItem().damage(COST, player);
+        context.getItem().damage(COST, player);
     }
 
     public String name() {
