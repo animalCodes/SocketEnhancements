@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -101,38 +102,51 @@ public class BlinkEnhancement implements Enhancement, Listener {
         this.maxDistance = config.getInt("max_distance", 64);
     }
 
-    /**
-     * Apply the "cosmetic" effects of a blink succeeding or failing.
-     *
-     * The success effects are: Blind the player for 3 seconds, spawn "warped
-     * spore" particles at their location and play the sound of a chorus fruit
-     * teleport.
-     * The failure effect is: Play the sound of a shulker being hurt. (with
-     * shell closed)
-     *
-     * @param player the Player to apply the effects to.
-     * @param success Whether the blink succeeded or not.
-     */
-    private static void applyCosmetics(Player player, boolean success) {
-        if (success) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
-                60, 1, false, false));
-            player.spawnParticle(Particle.WARPED_SPORE, player.getLocation(),
-                10);
-            player.playSound(player.getLocation(),
-                Sound.ITEM_CHORUS_FRUIT_TELEPORT, 3, 10);
-        } else
-            player.playSound(player.getLocation(),
-                Sound.ENTITY_SHULKER_HURT_CLOSED, 2, 10);
+    @EventHandler
+    public void run(PlayerInteractEvent context) {
+        if (!contextMatches(context))
+            return;
+
+        Player player = context.getPlayer();
+
+        Location tpLocation = player.getTargetBlock(BLINK_THROUGH_BLOCKS,
+            maxDistance).getRelative(player.getFacing().getOppositeFace())
+            .getLocation().toCenterLocation();
+
+        if (!isSafe(tpLocation)) {
+            Location newLocation = findSafeLocation(tpLocation);
+            if (tpLocation.equals(newLocation)) {
+                applyFailureCosmetics(player);
+                return;
+            } else
+                tpLocation = newLocation;
+        }
+
+        tpLocation.setYaw(player.getLocation().getYaw());
+        tpLocation.setPitch(player.getLocation().getPitch());
+
+        player.teleport(tpLocation, TeleportCause.PLUGIN);
+        applySuccessCosmetics(player);
+
+        if (costType == Material.AIR) {
+            player.setExperienceLevelAndProgress(
+                player.calculateTotalExperiencePoints()-costAmount);
+        } else {
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            offhand.setAmount(offhand.getAmount()-costAmount);
+        }
     }
 
     /**
      * Determine whether `context` matches the conditions for a blink.
      *
-     * The conditions are as follows: Player must have interacted with the air
-     * while sneaking and holding an item with this enhancement, the player
-     * must not have blindness and have at least COST experience points OR be
-     * in creative.
+     * The conditions are as follows:
+     * - Player must have interacted with the air while sneaking and holding an
+     *   item with this enhancement.
+     * - Player must not have blindness.
+     * - If costAmount > 0. Player must be holding at least `costAmount` items
+     *   of type `costType` in their offhand. OR, if costType is EXP. They must
+     *   have at least `costAmount` experience points.
      *
      * @param context The context to check.
      * @return Whether this enhancement's effect should be run.
@@ -147,19 +161,60 @@ public class BlinkEnhancement implements Enhancement, Listener {
         if (!(context.hasItem() && forge.has(context.getItem(), this)))
             return false;
 
-        if (player.getPotionEffect(PotionEffectType.BLINDNESS) != null)
+        if (player.getPotionEffect(PotionEffectType.BLINDNESS) != null) {
+            applyFailureCosmetics(player);
             return false;
+        }
 
         if (costAmount <= 0)
             return true;
 
         if (costType == Material.AIR) {
-            return player.calculateTotalExperiencePoints() >= costAmount;
+            if (player.calculateTotalExperiencePoints() < costAmount) {
+                applyFailureCosmetics(player);
+                return false;
+            }
+            return true;
         } else {
             ItemStack offhand = player.getInventory().getItemInOffHand();
-            return offhand.getType() == costType
-                && offhand.getAmount() >= costAmount;
+            if (offhand.getType() != costType || offhand.getAmount() <
+                costAmount) {
+                applyFailureCosmetics(player);
+                return false;
+            }
+            return true;
         }
+    }
+
+    /**
+     * Apply the cosmetic effects of a blink succeeding.
+     *
+     * The effects are: Blind the player for 3 seconds, spawn "warped spore"
+     * particles at their location and play the sound of a chorus fruit
+     * teleport.
+     *
+     * @param player the Player to apply the effects to.
+     */
+    private static void applySuccessCosmetics(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
+            60, 1, false, false));
+        player.spawnParticle(Particle.WARPED_SPORE, player.getLocation(),
+            10);
+        player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,
+            3, 10);
+    }
+
+    /**
+     * Apply the cosmetic effect of a blink failing.
+     *
+     * The effect is: Play the sound of a shulker being hurt. (with shell
+     * closed)
+     *
+     * @param player the Player to apply the effects to.
+     */
+    private static void applyFailureCosmetics(Player player) {
+        player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED,
+            2, 10);
     }
 
     /**
@@ -197,41 +252,6 @@ public class BlinkEnhancement implements Enhancement, Listener {
         return !loc.getBlock().getType().isSolid() &&
                 !loc.getBlock().getRelative(0, 1, 0).getType().isSolid() &&
                 loc.getBlock().getRelative(0, -1, 0).isSolid();
-    }
-
-    @EventHandler
-    public void run(PlayerInteractEvent context) {
-        if (!contextMatches(context))
-            return;
-
-        Player player = context.getPlayer();
-
-        Location tpLocation = player.getTargetBlock(BLINK_THROUGH_BLOCKS,
-            maxDistance).getRelative(player.getFacing().getOppositeFace())
-            .getLocation().toCenterLocation();
-
-        if (!isSafe(tpLocation)) {
-            Location newLocation = findSafeLocation(tpLocation);
-            if (tpLocation.equals(newLocation)) {
-                applyCosmetics(player, false);
-                return;
-            } else
-                tpLocation = newLocation;
-        }
-
-        tpLocation.setYaw(player.getLocation().getYaw());
-        tpLocation.setPitch(player.getLocation().getPitch());
-
-        player.teleport(tpLocation);
-        applyCosmetics(player, true);
-
-        if (costType == Material.AIR) {
-            player.setExperienceLevelAndProgress(
-                player.calculateTotalExperiencePoints()-costAmount);
-        } else {
-            ItemStack offhand = player.getInventory().getItemInOffHand();
-            offhand.setAmount(offhand.getAmount()-costAmount);
-        }
     }
 
     public String name() {
