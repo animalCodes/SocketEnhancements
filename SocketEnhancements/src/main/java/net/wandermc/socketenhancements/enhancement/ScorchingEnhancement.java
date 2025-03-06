@@ -24,6 +24,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -41,17 +43,19 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 /**
  * Scorching enhancement.
  *
- * When wearer is attacked, has a chance to knock back attackers and set them on
- * fire for a brief period, chance increases with each enhanced armour piece.
- * Think thorns + fire aspect.
+ * When wearer is attacked, has a chance to give defender fire resistance, knock
+ * back attacker and set them on fire for a brief period, chance increases with
+ * each enhanced armour piece.
  */
 public class ScorchingEnhancement implements Enhancement, Listener {
     // Chance for effect to be applied per armour piece.
     private final double CHANCE_PER;
-    // How many fire ticks to apply to the attacker on activation.
+    // How many fire ticks to apply to the attacker.
     private final int FIRE_TICKS;
-    // Knockback strength applied to attacker on activation.
+    // Knockback strength applied to attacker.
     private final double KNOCKBACK;
+    // Fire resistance effect given to defender.
+    private final PotionEffect EFFECT;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -83,6 +87,9 @@ public class ScorchingEnhancement implements Enhancement, Listener {
         if (knockback <= 0)
             knockback = 0.5;
         this.KNOCKBACK = knockback;
+
+        this.EFFECT = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
+            this.FIRE_TICKS * 1.5, 1);
     }
 
     @EventHandler
@@ -100,6 +107,7 @@ public class ScorchingEnhancement implements Enhancement, Listener {
                 }
 
                 if (roll(chance)) {
+                    defender.addPotionEffect(EFFECT);
                     attacker.setFireTicks(attacker.getFireTicks()+FIRE_TICKS);
                     attacker.knockback(KNOCKBACK,
                         defender.getX() - attacker.getX(),
