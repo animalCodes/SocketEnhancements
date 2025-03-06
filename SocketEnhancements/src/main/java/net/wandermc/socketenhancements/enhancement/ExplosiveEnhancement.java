@@ -87,22 +87,34 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
      * @return All blocks within 1 block of origin.
      */
     private Block[] getRelatives(Block origin) {
-        // The below algorithm should result in exactly 26 blocks. If it finds
-        // too many we'll get an ArrayIndexOutOfBoundsException, if too little
-        // we'll get an NPE later on. Either way it'll "fail loudly", which IMO
-        // is always better than failing "quietly".
-        Block[] blocks = new Block[26];
-        int i = 0;
-        // Generate every possible combination of x, y and z where each can be
-        // -1, 0 or 1. EXCEPT for 0, 0, 0.
-        for (int x = -1; x <= 1; x++)
-            for (int z = -1; z <= 1; z++) {
-                blocks[i++] = origin.getRelative(x, -1, z);
-                if (!(x == 0 && z == 0))
-                    blocks[i++] = origin.getRelative(x, 0, z);
-                blocks[i++] = origin.getRelative(x, 1, z);
-            }
-        return blocks;
+        return new Block[] {
+            origin.getRelative(-1, -1, -1),
+            origin.getRelative(-1, -1, 0),
+            origin.getRelative(-1, -1, 1),
+            origin.getRelative(-1, 0, -1),
+            origin.getRelative(-1, 0, 0),
+            origin.getRelative(-1, 0, 1),
+            origin.getRelative(-1, 1, -1),
+            origin.getRelative(-1, 1, 0),
+            origin.getRelative(-1, 1, 1),
+            origin.getRelative(0, -1, -1),
+            origin.getRelative(0, -1, 0),
+            origin.getRelative(0, -1, 1),
+            origin.getRelative(0, 0, -1),
+            origin.getRelative(0, 0, 1),
+            origin.getRelative(0, 1, -1),
+            origin.getRelative(0, 1, 0),
+            origin.getRelative(0, 1, 1),
+            origin.getRelative(1, -1, -1),
+            origin.getRelative(1, -1, 0),
+            origin.getRelative(1, -1, 1),
+            origin.getRelative(1, 0, -1),
+            origin.getRelative(1, 0, 0),
+            origin.getRelative(1, 0, 1),
+            origin.getRelative(1, 1, -1),
+            origin.getRelative(1, 1, 0),
+            origin.getRelative(1, 1, 1)
+        };
     }
 
     @EventHandler
