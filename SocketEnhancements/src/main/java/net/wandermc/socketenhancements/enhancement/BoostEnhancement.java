@@ -41,25 +41,21 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 /**
  * Boost enhancement.
  *
- * On use, boosts gliding players as if they had used a firework of duration
- * DURATION, at the cost of applying COST damage to the item. There is a CHANCE
- * chance that the rocket will damage the player.
+ * On use, boosts gliding players as if they had used a firework, at the cost of
+ * applying damage to the item. There is a chance that the rocket will damage
+ * the player.
  */
 public class BoostEnhancement implements Enhancement, Listener {
-    // How much damage will be applied to the item on use.
-    private final int COST;
-    // The flight duration the player will be boosted with.
-    private final int DURATION;
-    // Chance for boost to damage player.
-    private final double DAMAGE_CHANCE;
-    // The virtual firework rocket used to boost the player.
-    private final ItemStack ROCKET;
-    // Alternative rocket, damages player when used.
-    private final ItemStack DAMAGE_ROCKET;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Boost<white>>");
+
+    private final int damage;
+    private final int flightDuration;
+    private final double damageChance;
+
+    private final ItemStack rocket;
+    private final ItemStack damageRocket;
 
     private final EnhancedItemForge forge;
 
@@ -77,18 +73,18 @@ public class BoostEnhancement implements Enhancement, Listener {
     public BoostEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.COST = config.getInt("cost", 8);
-        this.DURATION = config.getInt("duration", 2);
-        this.DAMAGE_CHANCE = config.getDouble("damage_chance", 0.15);
+        this.damage = config.getInt("cost", 8);
+        this.flightDuration = config.getInt("duration", 2);
+        this.damageChance = config.getDouble("damage_chance", 0.15);
 
-        this.ROCKET = Bukkit.getServer().getItemFactory().createItemStack(
-            "minecraft:firework_rocket[fireworks={flight_duration:"+DURATION
-            +"}]");
+        this.rocket = Bukkit.getServer().getItemFactory().createItemStack(
+            "minecraft:firework_rocket[fireworks={flight_duration:"+
+            flightDuration+"}]");
 
-        this.DAMAGE_ROCKET = Bukkit.getServer().getItemFactory()
+        this.damageRocket = Bukkit.getServer().getItemFactory()
             .createItemStack("minecraft:firework_rocket[fireworks={" +
                 "explosions:[{shape:star,colors:[11743532]}],flight_duration:"
-                +DURATION+"}]");
+                +flightDuration+"}]");
 
     }
 
@@ -97,7 +93,7 @@ public class BoostEnhancement implements Enhancement, Listener {
      *
      * The player must have interacted with the air while gliding and holding an
      * item with this bound to it, additionally, the item must have more than
-     * COST*2 durability.
+     * cost*2 durability.
      *
      * @param context The context to check.
      * @return Whether this enhancement's effect should be run.
@@ -114,7 +110,7 @@ public class BoostEnhancement implements Enhancement, Listener {
 
         if (context.getItem().getItemMeta() instanceof Damageable damageable) {
             if ((context.getItem().getType().getMaxDurability() -
-                damageable.getDamage() <= (COST * 2)))
+                damageable.getDamage() <= (damage * 2)))
                 return false;
         } else
             return false;
@@ -128,13 +124,13 @@ public class BoostEnhancement implements Enhancement, Listener {
         if (!contextMatches(context))
             return;
 
-        if (roll(DAMAGE_CHANCE)) {
-            player.fireworkBoost(DAMAGE_ROCKET);
+        if (roll(damageChance)) {
+            player.fireworkBoost(damageRocket);
         } else {
-            player.fireworkBoost(ROCKET);
+            player.fireworkBoost(rocket);
         }
 
-        context.getItem().damage(COST, player);
+        context.getItem().damage(damage, player);
     }
 
     public String name() {

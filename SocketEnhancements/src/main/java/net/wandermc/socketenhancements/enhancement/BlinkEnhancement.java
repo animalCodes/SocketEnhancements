@@ -68,11 +68,8 @@ public class BlinkEnhancement implements Enhancement, Listener {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_purple>Blink<white>>");
 
-    // Type of cost to deduct, AIR indicates experience points.
     private final Material costType;
-    // How many experience points / items this costs per use.
     private final int costAmount;
-    // The maximum distance a player can teleport while using this.
     private final int maxDistance;
 
     private final EnhancedItemForge forge;
@@ -92,6 +89,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
         config) {
         this.forge = forge;
 
+        // AIR indicates experience points.
         Material mat = Material.getMaterial(config.getString("cost_type",
             "AIR"));
         if (mat == null)

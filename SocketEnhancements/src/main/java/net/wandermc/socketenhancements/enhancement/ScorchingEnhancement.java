@@ -48,18 +48,14 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * each enhanced armour piece.
  */
 public class ScorchingEnhancement implements Enhancement, Listener {
-    // Chance for effect to be applied per armour piece.
-    private final double CHANCE_PER;
-    // How many fire ticks to apply to the attacker.
-    private final int FIRE_TICKS;
-    // Knockback strength applied to attacker.
-    private final double KNOCKBACK;
-    // Fire resistance effect given to defender.
-    private final PotionEffect EFFECT;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<yellow>Scorching<white>>");
+
+    private final double chancePerItem;
+    private final int fireTicks;
+    private final double knockbackStrength;
+    private final PotionEffect effect;
 
     private EnhancedItemForge forge;
 
@@ -80,16 +76,16 @@ public class ScorchingEnhancement implements Enhancement, Listener {
         config) {
         this.forge = forge;
 
-        this.CHANCE_PER = config.getDouble("chance_per", 0.2);
-        this.FIRE_TICKS = config.getInt("fire_ticks", 40);
+        this.chancePerItem = config.getDouble("chance_per", 0.2);
+        this.fireTicks = config.getInt("fire_ticks", 40);
 
         double knockback = config.getDouble("knockback", 0.5);
         if (knockback <= 0)
             knockback = 0.5;
-        this.KNOCKBACK = knockback;
+        this.knockbackStrength = knockback;
 
-        this.EFFECT = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
-            this.FIRE_TICKS * 1.5, 1);
+        this.effect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
+            (int)(this.fireTicks * 1.5), 1);
     }
 
     @EventHandler
@@ -103,13 +99,13 @@ public class ScorchingEnhancement implements Enhancement, Listener {
                         continue;
 
                     if (forge.has(armourPiece, this))
-                        chance += CHANCE_PER;
+                        chance += chancePerItem;
                 }
 
                 if (roll(chance)) {
-                    defender.addPotionEffect(EFFECT);
-                    attacker.setFireTicks(attacker.getFireTicks()+FIRE_TICKS);
-                    attacker.knockback(KNOCKBACK,
+                    defender.addPotionEffect(effect);
+                    attacker.setFireTicks(attacker.getFireTicks()+fireTicks);
+                    attacker.knockback(knockbackStrength,
                         defender.getX() - attacker.getX(),
                         defender.getZ() - attacker.getZ());
                 }

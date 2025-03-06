@@ -50,11 +50,11 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * remove the enhancement.
  */
 public class UndyingEnhancement implements Enhancement, Listener {
-    private final ArrayList<PotionEffect> potionEffects;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<yellow>Undying<white>>");
+
+    private final ArrayList<PotionEffect> potionEffects;
 
     private EnhancedItemForge forge;
 

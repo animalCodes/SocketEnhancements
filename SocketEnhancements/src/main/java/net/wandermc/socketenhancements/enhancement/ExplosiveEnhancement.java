@@ -46,6 +46,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  *
  * On mining a block also destroy all neighbouring blocks within a 1-block
  * radius. (3*3 cube centered on mined block)
+ * May cost set amount of items which must be held in offhand.
  */
 public class ExplosiveEnhancement implements Enhancement, Listener {
     private static final TextComponent socketMessage = (TextComponent)

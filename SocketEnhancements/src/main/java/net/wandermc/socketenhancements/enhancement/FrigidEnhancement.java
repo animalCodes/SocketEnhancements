@@ -47,14 +47,12 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * Chance increases per enhanced armour piece.
  */
 public class FrigidEnhancement implements Enhancement, Listener {
-    // Chance for effect to be applied per armour piece.
-    private final double CHANCE_PER;
-    // Mining fatigue potion effect to apply.
-    private final PotionEffect MINING_FATIGUE_EFFECT;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<aqua>Frigid<white>>");
+
+    private final double chancePerItem;
+    private final PotionEffect effect;
 
     private EnhancedItemForge forge;
 
@@ -71,10 +69,18 @@ public class FrigidEnhancement implements Enhancement, Listener {
     public FrigidEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.CHANCE_PER = config.getDouble("chance_per", 0.15);
-        this.MINING_FATIGUE_EFFECT = new PotionEffect(
-            PotionEffectType.MINING_FATIGUE, config.getInt("duration", 70),
-            config.getInt("amplifier", 2));
+        this.chancePerItem = config.getDouble("chance_per", 0.15);
+
+        int duration = config.getInt("duration", 70);
+        if (duration <= 0)
+            duration = 70;
+
+        int amplifier = config.getInt("amplifier", 2);
+        if (amplifier <= 0)
+            amplifier = 2;
+
+        this.effect = new PotionEffect( PotionEffectType.MINING_FATIGUE,
+            duration, amplifier);
     }
 
     @EventHandler
@@ -89,12 +95,12 @@ public class FrigidEnhancement implements Enhancement, Listener {
                         continue;
 
                     if (forge.has(armourPiece, this))
-                        chance += CHANCE_PER;
+                        chance += chancePerItem;
                 }
 
                 if (roll(chance)) {
                     attacker.setFreezeTicks(attacker.getMaxFreezeTicks());
-                    attacker.addPotionEffect(MINING_FATIGUE_EFFECT);
+                    attacker.addPotionEffect(effect);
                 }
             }
         }

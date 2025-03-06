@@ -42,16 +42,16 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
 /**
  * Lifesteal enhancement.
  *
- * On attacking another entity, have a CHANCE chance to gain GAIN% of the
+ * On attacking another entity, have a chance to gain some of the
  * dealt damage as health.
  */
 public class LifestealEnhancement implements Enhancement, Listener {
-    private final double CHANCE;
-    private final double GAIN;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Lifesteal<white>>");
+
+    private final double chance;
+    private final double gain;
 
     private final EnhancedItemForge forge;
 
@@ -68,8 +68,8 @@ public class LifestealEnhancement implements Enhancement, Listener {
     public LifestealEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.CHANCE = config.getDouble("chance", 0.5);
-        this.GAIN = config.getDouble("gain", 0.25);
+        this.chance = config.getDouble("chance", 0.5);
+        this.gain = config.getDouble("gain", 0.25);
     }
 
     @EventHandler
@@ -82,7 +82,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
             if (weapon.isEmpty() || !forge.has(weapon, this))
                 return;
 
-            if (!roll(CHANCE))
+            if (!roll(chance))
                 return;
 
             double maxHealth = attacker.getAttribute(
@@ -91,7 +91,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
                 return;
 
             double newHealth = attacker.getHealth() +
-                (context.getFinalDamage() * GAIN);
+                (context.getFinalDamage() * gain);
             if (newHealth > maxHealth)
                 newHealth = maxHealth;
 

@@ -46,14 +46,12 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * On attacking another entity, have a chance to apply wither to them.
  */
 public class WitheringEnhancement implements Enhancement, Listener {
-    // Chance for enhancement to activated.
-    private final double CHANCE;
-    // Potion effect to apply to victims.
-    private final PotionEffect WITHER_EFFECT;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_gray>Withering<white>>");
+
+    private final double chance;
+    private final PotionEffect effect;
 
     private final EnhancedItemForge forge;
 
@@ -71,7 +69,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
     public WitheringEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.CHANCE = config.getDouble("chance", 0.3);
+        this.chance = config.getDouble("chance", 0.3);
 
         int duration = config.getInt("duration", 160);
         if (duration <= 0)
@@ -81,7 +79,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
         if (amplifier <= 0)
             amplifier = 1;
 
-        this.WITHER_EFFECT = new PotionEffect(PotionEffectType.WITHER, duration,
+        this.effect = new PotionEffect(PotionEffectType.WITHER, duration,
             amplifier);
     }
 
@@ -93,10 +91,10 @@ public class WitheringEnhancement implements Enhancement, Listener {
                 if (weapon.isEmpty() || !forge.has(weapon, this))
                     return;
 
-                if (!roll(CHANCE))
+                if (!roll(chance))
                     return;
 
-                defender.addPotionEffect(WITHER_EFFECT);
+                defender.addPotionEffect(effect);
             }
         }
     }

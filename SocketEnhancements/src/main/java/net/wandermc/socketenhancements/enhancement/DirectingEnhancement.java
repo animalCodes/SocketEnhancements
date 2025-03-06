@@ -49,9 +49,9 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Default buffs aim to simulate the effect of eating a golden apple.
  */
 public class DirectingEnhancement implements Enhancement, Listener {
-    private final int FOOD_GAIN;
-    private final float SATURATION_GAIN;
-    private final ArrayList<PotionEffect> POTION_EFFECTS;
+    private final int foodGain;
+    private final float saturationGain;
+    private final ArrayList<PotionEffect> potionEffects;
 
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
@@ -82,26 +82,26 @@ public class DirectingEnhancement implements Enhancement, Listener {
     public DirectingEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.FOOD_GAIN = config.getInt("food_gain", 4);
-        this.SATURATION_GAIN = (float)config.getDouble("saturation_gain", 9.6);
+        this.foodGain = config.getInt("food_gain", 4);
+        this.saturationGain = (float)config.getDouble("saturation_gain", 9.6);
 
-        this.POTION_EFFECTS = new ArrayList();
+        this.potionEffects = new ArrayList();
 
         // "If it works it ain't stupid"
         config.getMapList("effects").forEach(rawMap -> {
             HashMap convMap = new HashMap();
             rawMap.forEach((k, v) -> convMap.put(k.toString(), v));
             try {
-                this.POTION_EFFECTS.add(new PotionEffect(convMap));
+                this.potionEffects.add(new PotionEffect(convMap));
             } catch (Exception e) {}
         });
 
-        if (this.POTION_EFFECTS.size() == 0) {
-            this.POTION_EFFECTS.add(new PotionEffect(
+        if (this.potionEffects.size() == 0) {
+            this.potionEffects.add(new PotionEffect(
                 PotionEffectType.ABSORPTION, 20 * 60 * 2, 1));
-            this.POTION_EFFECTS.add(new PotionEffect(
+            this.potionEffects.add(new PotionEffect(
                 PotionEffectType.REGENERATION, 20 * 5, 2));
-            this.POTION_EFFECTS.add(new PotionEffect(
+            this.potionEffects.add(new PotionEffect(
                 PotionEffectType.FIRE_RESISTANCE, 20 * 10, 1));
         }
     }
@@ -117,9 +117,9 @@ public class DirectingEnhancement implements Enhancement, Listener {
                 return;
 
             context.setCancelled(true);
-            player.setFoodLevel(player.getFoodLevel() + FOOD_GAIN);
-            player.setSaturation(player.getSaturation() + SATURATION_GAIN);
-            POTION_EFFECTS.forEach(effect -> player.addPotionEffect(effect));
+            player.setFoodLevel(player.getFoodLevel() + foodGain);
+            player.setSaturation(player.getSaturation() + saturationGain);
+            potionEffects.forEach(effect -> player.addPotionEffect(effect));
         }
     }
 
