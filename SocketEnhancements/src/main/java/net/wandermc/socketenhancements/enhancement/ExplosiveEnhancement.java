@@ -17,19 +17,21 @@
  */
 package net.wandermc.socketenhancements.enhancement;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.entity.Player;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.plugin.PluginManager;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -56,6 +58,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
     private final Material costType;
     private final int costAmount;
 
+    private final PluginManager pluginManager = Bukkit.getPluginManager();
     private final EnhancedItemForge forge;
 
     /**
@@ -136,14 +139,28 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         player.playSound(context.getBlock().getLocation(),
             Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
 
+        EnhancedItem enhancedPickaxe = forge.create(pickaxe);
+        // Temporarily remove pickaxe to avoid 'cascade' where potentially
+        // infinite blocks are broken
+        enhancedPickaxe.remove(this);
+        enhancedPickaxe.update();
+
         int damage = 0;
         for (Block relative : getRelatives(context.getBlock())) {
             if (relative.getType().getBlastResistance() <= 10) {
-                if (relative.getType().getHardness() > 0)
-                    damage++;
-                relative.breakNaturally(pickaxe);
+                BlockBreakEvent event = new BlockBreakEvent(relative, player);
+                pluginManager.callEvent(event);
+
+                if (!event.isCancelled()) {
+                    relative.breakNaturally(pickaxe);
+                    if (relative.getType().getHardness() > 0)
+                        damage++;
+                }
             }
         }
+
+        enhancedPickaxe.bind(this);
+        enhancedPickaxe.update();
 
         pickaxe.damage(damage, player);
 
