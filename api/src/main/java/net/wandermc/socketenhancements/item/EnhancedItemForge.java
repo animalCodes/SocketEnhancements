@@ -173,6 +173,9 @@ public class EnhancedItemForge {
         private ItemMeta itemMeta;
         private ArrayList<String> socketList;
 
+        // Whether item has non-SE lore.
+        private boolean hasExtraLore;
+
         /**
          * Create an EnhancedItem around `item`.
          * 
@@ -182,33 +185,39 @@ public class EnhancedItemForge {
             this.item = item;
             this.itemMeta = item.getItemMeta();
 
-            // Ensure the item has a socket list before doing anything with it
             PersistentDataContainer dataContainer = itemMeta
                 .getPersistentDataContainer();
             if (!dataContainer.has(socketsKey))
                 dataContainer.set(socketsKey, PersistentDataType.LIST.strings(),
                      new ArrayList<String>());
 
-            // A PersistentDataType.LIST is immutable, but we need to modify it.
-            // So create a new ArrayList based on the ArrayList we might have
-            // literally just stored on the item.
             this.socketList = new ArrayList<String>(dataContainer
                 .get(socketsKey, PersistentDataType.LIST.strings()));
+
+            this.hasExtraLore = socketList.size() == 0 && itemMeta.hasLore();
         }
 
         /**
          * Update the item's lore to match socketList.
          */
         private void updateLore() {
-            ArrayList<Component> lore = new ArrayList<Component>(
-                socketList.size());
+            ArrayList<Component> newLore = new ArrayList<Component>(
+                socketList.size() + 1);
 
-            socketList.forEach(socketId -> lore.add(manager.get(socketId)
+            socketList.forEach(socketId -> newLore.add(manager.get(socketId)
                 .socketMessage()));
+            newLore.add(Component.empty());
 
-            // Currently, SocketEnhancements greedily resets the entire lore
-            // field, meaning any none-SE lore will be deleted. Ah well.
-            itemMeta.lore(lore);
+            int emptyIndex = -1;
+            if (itemMeta.hasLore())
+                emptyIndex = itemMeta.lore().indexOf(Component.empty());
+
+            if (hasExtraLore || emptyIndex != -1) {
+                for (int i = emptyIndex+1; i < itemMeta.lore().size(); i++)
+                    newLore.add(itemMeta.lore().get(i));
+            }
+
+            itemMeta.lore(newLore);
         }
 
         /**
