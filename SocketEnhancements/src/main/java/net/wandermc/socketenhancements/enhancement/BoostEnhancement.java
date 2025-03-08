@@ -118,7 +118,7 @@ public class BoostEnhancement implements Enhancement, Listener {
         return true;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(PlayerInteractEvent context) {
         Player player = context.getPlayer();
         if (!contextMatches(context))

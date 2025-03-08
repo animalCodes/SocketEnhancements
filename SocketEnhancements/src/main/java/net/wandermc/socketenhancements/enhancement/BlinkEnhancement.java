@@ -100,7 +100,7 @@ public class BlinkEnhancement implements Enhancement, Listener {
         this.maxDistance = config.getInt("max_distance", 64);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(PlayerInteractEvent context) {
         if (!contextMatches(context))
             return;

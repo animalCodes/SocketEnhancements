@@ -88,14 +88,12 @@ public class EnhancementGemManager implements Listener {
         this.forge = forge;
         this.gemKey = new NamespacedKey(plugin, "is_gem");
 
-        // blockType
         Material bt = Material.getMaterial(config.getString("block",
             "GRINDSTONE"));
         if (bt == null || bt == Material.AIR)
             bt = Material.GRINDSTONE;
         this.blockType = bt;
 
-        // gemType
         Material gt = Material.getMaterial(config.getString(
             "material", "END_CRYSTAL"));
         if (gt == null || gt == Material.AIR)
@@ -106,7 +104,6 @@ public class EnhancementGemManager implements Listener {
 
         this.dummyGem = createGem().itemStack();
 
-        // eventBlocker
         BlockableAction[] javaIsDumb = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> isEnhancementGem(item),
@@ -188,10 +185,8 @@ public class EnhancementGemManager implements Listener {
     private void registerRecipe() {
         ShapelessRecipe recipe = new ShapelessRecipe(
                 new NamespacedKey(plugin, "enhancement_gem_addition"),
-                // Result is irrelevant as it will be overridden.
                 new ItemStack(Material.STONE, 1));
 
-        // If an item has a socket limit, it can be enhanced
         recipe.addIngredient(new RecipeChoice.MaterialChoice(
                 forge.enhanceableMaterials().stream().collect(Collectors.
                     toList())));
@@ -210,7 +205,6 @@ public class EnhancementGemManager implements Listener {
      */
     @EventHandler(ignoreCancelled=true)
     public void handleInteract(PlayerInteractEvent event) {
-        // TODO make interaction configurable
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
         if (event.getClickedBlock().getType() != blockType)

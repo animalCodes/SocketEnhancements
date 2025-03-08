@@ -53,10 +53,6 @@ public class EnhancementTableManager implements Listener {
     private final EnhancementManager manager;
     private final EnhancedItemForge forge;
 
-    // Enhancements that can be picked based on which option was selected in the
-    // enchanting table.
-    // Counters track how many times a pool has been chosen (and presumably
-    // accessed) to avoid randomising them unnecessarily.
     private final ArrayList<Enhancement> enhancementPoolI;
     private int iCounter = 0;
     private final ArrayList<Enhancement> enhancementPoolII;
@@ -64,7 +60,6 @@ public class EnhancementTableManager implements Listener {
     private final ArrayList<Enhancement> enhancementPoolIII;
     private int iiiCounter = 0;
 
-    // How frequently enhancement pools are randomised.
     private int randomisationFrequency;
 
     /**
@@ -187,9 +182,7 @@ public class EnhancementTableManager implements Listener {
         }
 
         if (i >= pool.size()) {
-            // No valid enhancements found.
             if (!event.getItem().getEnchantments().isEmpty()) {
-                // Item is already enchanted, let's not add any more..
                 event.setCancelled(true);
             }
             return;
@@ -197,14 +190,8 @@ public class EnhancementTableManager implements Listener {
 
         item.update();
 
-        // Stop enchantments from being added (Also stops lapis and experience
-        // from being taken)
         event.setCancelled(true);
 
-        // It is possible to have 0 levels but still use an enchanting table
-        // if you are in creative, but if a player's level drops below 0
-        // an IllegalArgumentException will be thrown... So let's just not
-        // decrement levels if doing so would make them negative.
         if (!(event.getEnchanter().getLevel() < 1))
             event.getEnchanter().setLevel(event.getEnchanter().getLevel() - 1);
     }

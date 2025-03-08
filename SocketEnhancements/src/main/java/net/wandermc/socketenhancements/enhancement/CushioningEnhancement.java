@@ -67,7 +67,7 @@ public class CushioningEnhancement implements Enhancement, Listener {
         this.damageTaken = config.getDouble("damage_taken", 0.5);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageEvent context) {
         if (context.getCause() != DamageCause.FLY_INTO_WALL)
             return;

@@ -72,7 +72,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
         this.gain = config.getDouble("gain", 0.25);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (!(context.getEntity() instanceof LivingEntity))

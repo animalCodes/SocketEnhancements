@@ -110,10 +110,8 @@ public class UndyingEnhancement implements Enhancement, Listener {
         player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageEvent context) {
-        // Totems can't save you if the damage was caused by /kill or the void,
-        // so neither can this.
         if (context.getCause() == EntityDamageEvent.DamageCause.KILL ||
             context.getCause() == EntityDamageEvent.DamageCause.VOID)
             return;
@@ -122,7 +120,6 @@ public class UndyingEnhancement implements Enhancement, Listener {
             if (entity.getHealth() - context.getFinalDamage() > 0)
                 return;
 
-            // May be in offhand or mainhand
             ItemStack shield = entity.getEquipment().getItemInOffHand();
             if (shield.isEmpty() || !forge.has(shield, this)) {
                 shield = entity.getEquipment().getItemInMainHand();

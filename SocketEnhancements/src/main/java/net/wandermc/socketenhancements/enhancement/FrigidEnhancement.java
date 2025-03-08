@@ -83,7 +83,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
             duration, amplifier);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageByEntityEvent context) {
         if (context.getEntity() instanceof LivingEntity defender) {
             if (context.getDamager() instanceof LivingEntity attacker) {

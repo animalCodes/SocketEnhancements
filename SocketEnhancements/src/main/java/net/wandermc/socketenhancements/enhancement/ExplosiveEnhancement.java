@@ -118,7 +118,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
         };
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(BlockBreakEvent context) {
         Player player = context.getPlayer();
         ItemStack pickaxe = player.getInventory().getItemInMainHand();

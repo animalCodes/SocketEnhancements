@@ -88,7 +88,7 @@ public class ScorchingEnhancement implements Enhancement, Listener {
             (int)(this.fireTicks * 1.5), 1);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageByEntityEvent context) {
         if (context.getEntity() instanceof LivingEntity defender) {
             if (context.getDamager() instanceof LivingEntity attacker) {

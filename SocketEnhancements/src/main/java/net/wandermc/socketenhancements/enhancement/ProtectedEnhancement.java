@@ -55,7 +55,7 @@ public class ProtectedEnhancement implements Enhancement, Listener {
         this.forge = forge;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(PlayerItemBreakEvent context) {
         EnhancedItem enhancedItem = forge.create(context.getBrokenItem());
 
@@ -68,8 +68,7 @@ public class ProtectedEnhancement implements Enhancement, Listener {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!(itemMeta instanceof Damageable))
-            return; // Technically this should never happen, as
-                    // undamageable items cannot have this enhancement.
+            return;
 
         ((Damageable) itemMeta).setDamage(0);
         itemStack.setItemMeta(itemMeta);
@@ -90,8 +89,6 @@ public class ProtectedEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        // If an item can take damage, it can break.
-        // Unless it's an elytra..
         return item.itemStack().getItemMeta() instanceof Damageable
             && item.itemStack().getType() != Material.ELYTRA;
     }

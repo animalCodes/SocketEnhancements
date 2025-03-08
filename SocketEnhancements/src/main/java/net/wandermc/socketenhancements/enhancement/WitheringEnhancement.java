@@ -83,7 +83,7 @@ public class WitheringEnhancement implements Enhancement, Listener {
             amplifier);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageByEntityEvent context) {
         if (context.getDamager() instanceof LivingEntity attacker) {
             if (context.getEntity() instanceof LivingEntity defender) {

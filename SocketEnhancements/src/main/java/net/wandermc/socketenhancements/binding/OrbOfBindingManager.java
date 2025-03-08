@@ -162,12 +162,10 @@ public class OrbOfBindingManager implements Listener {
 
         plugin.getServer().addRecipe(orbOfBindingRecipe, true);
 
-        // Recipe for adding an orb of binding to an item.
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
                 new NamespacedKey(plugin, "orb_of_binding_upgrade"),
                 new ItemStack(Material.STONE, 1));
 
-        // Any item with a socket limit
         upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
             forge.enhanceableMaterials().stream().collect(
                 Collectors.toList())));
@@ -184,11 +182,10 @@ public class OrbOfBindingManager implements Listener {
      */
     @EventHandler(ignoreCancelled=true)
     public void handleCraft(PrepareItemCraftEvent event) {
-        // Try to find orbs of binding and item being bound in crafting table
         int orbs = 0;
         EnhancedItem itemToUpgrade = null;
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (item == null) // Empty slots are represented by null
+            if (item == null)
                 continue;
 
             if (item.isSimilar(orbOfBinding))
@@ -197,18 +194,14 @@ public class OrbOfBindingManager implements Listener {
                 itemToUpgrade = forge.create(item.clone());
         }
 
-        // We only care about the event if the crafting matrix contains at least
-        // one orb of binding and another item.
         if (orbs < 1 || itemToUpgrade == null)
             return;
 
         if (itemToUpgrade.socketLimit() >=
             itemToUpgrade.sockets() + orbs) {
-            // Item exists and can have `orbs` sockets added, do so.
             itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.update());
         } else {
-            // In case item can't have the orbs added, hide dummy result item.
             event.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }

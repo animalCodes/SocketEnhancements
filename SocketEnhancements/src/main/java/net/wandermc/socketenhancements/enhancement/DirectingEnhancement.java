@@ -106,7 +106,7 @@ public class DirectingEnhancement implements Enhancement, Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void run(EntityDamageByEntityEvent context) {
         if (!(context.getDamager() instanceof LightningStrike))
             return;
