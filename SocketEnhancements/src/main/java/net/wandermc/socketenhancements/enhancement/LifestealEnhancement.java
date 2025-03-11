@@ -59,8 +59,8 @@ public class LifestealEnhancement implements Enhancement, Listener {
      * Create a LifestealEnhancement.
      *
      * `config` defaults:
-     * - "chance": 0.5
-     * - "gain": 0.25
+     * chance: 0.5
+     * gain: 0.25
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.

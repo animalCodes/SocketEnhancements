@@ -65,9 +65,9 @@ public class EnhancementTableManager implements Listener {
     /**
      * Create an EnhancementTableManager for `plugin`.
      *
-     * The fields to be read from `config` and their defaults are:
-     * - "additive_pools": true
-     * - "randomisation_frequency": 5
+     * `config` defaults:
+     * additive_pools: true
+     * randomisation_frequency: 5
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.

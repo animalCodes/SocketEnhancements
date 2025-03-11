@@ -59,9 +59,9 @@ public class WitheringEnhancement implements Enhancement, Listener {
      * Create a WitheringEnhancement.
      *
      * `config` defaults:
-     * "chance": 0.3
-     * "duration": 160
-     * "amplifier": 1
+     * chance: 0.3
+     * duration: 160
+     * amplifier: 1
      *
      * @param forge The current EnhancedItemForge.
      * @param config ConfigurationOptions.

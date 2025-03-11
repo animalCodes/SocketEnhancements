@@ -56,7 +56,7 @@ public class CushioningEnhancement implements Enhancement, Listener {
      * Create a Cushioning enhancement.
      *
      * `config` defaults:
-     * - damage_taken: 0.5
+     * damage_taken: 0.5
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration Options.

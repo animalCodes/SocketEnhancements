@@ -66,13 +66,9 @@ public class OrbOfBindingManager implements Listener {
      * Create an OrbOfBindingManager for `plugin`.
      *
      * `config` defaults:
-     * - material: CONDUIT
-     * - ingredients: [GHAST_TEAR, PRISMARINE_SHARD, CHORUS_FRUIT]
-     * - flammable: false
-     *
-     * All strings must be valid Materials but not AIR.
-     * "ingredients" must have at least one material. Only the first 9 will
-     * be used.
+     * material: "CONDUIT"
+     * ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+     * flammable: false
      *
      * @param plugin The plugin this manager is working for.
      * @param forge The current EnhancedItemForge.

@@ -50,11 +50,11 @@ public class EnhancedItemForge {
     /**
      * Create an EnhancedItemForge for `plugin`.
      *
-     * `config` is expected to have an integer field "default" and a
-     * sub-configuration section "limits", With set limits for specific
-     * Materials.
+     * `config` defaults:
+     * default: 0
      *
-     * If "default" is unset or < 0, it will be set to 0.
+     * `config` is expected to have a sub-configuration section "limits", With
+     * set limits for specific Materials.
      *
      * @param plugin The plugin this 'Forge is working for.
      * @param manager `plugin`'s EnhancementManager.

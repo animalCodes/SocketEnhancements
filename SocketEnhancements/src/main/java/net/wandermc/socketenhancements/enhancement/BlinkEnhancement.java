@@ -80,9 +80,9 @@ public class BlinkEnhancement implements Enhancement, Listener {
      * Create a BlinkEnhancement.
      *
      * `config` defaults:
-     * - cost_type: "AIR"
-     * - cost_amount: 16
-     * - max_distance: 64
+     * cost_type: "AIR"
+     * cost_amount: 16
+     * max_distance: 64
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.

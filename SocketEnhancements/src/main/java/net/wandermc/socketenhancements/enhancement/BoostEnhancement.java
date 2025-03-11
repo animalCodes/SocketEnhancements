@@ -65,9 +65,9 @@ public class BoostEnhancement implements Enhancement, Listener {
      * Create a BoostEnhancement.
      *
      * `config` defaults:
-     * - "cost": 8
-     * - "duration": 2
-     * - "damage_chance": 0.15
+     * cost: 8
+     * duration: 2
+     * damage_chance: 0.15
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.

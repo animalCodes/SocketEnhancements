@@ -65,8 +65,8 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
      * Create an ExplosiveEnhancement.
      *
      * `config` defaults:
-     * - cost_type: "GUNPOWDER"
-     * - cost_amount: 2
+     * cost_type: "GUNPOWDER"
+     * cost_amount: 2
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.

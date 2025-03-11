@@ -73,14 +73,13 @@ public class EnhancementGemManager implements Listener {
      * Create an EnhancementGemManager for `plugin`.
      *
      * `config` defaults:
-     * - block: GRINDSTONE
-     * - material: END_CRYSTAL
-     * - flammable: false
+     * block: "GRINDSTONE"
+     * material: "END_CRYSTAL"
+     * flammable: false
      *
      * @param plugin The plugin this manager is working for.
      * @param forge The current EnhancedItemForge.
-     * @param config Configuration options for enhancement gems. See
-     *                      above.
+     * @param config Configuration options for enhancement gems.
      */
     public EnhancementGemManager(JavaPlugin plugin, EnhancedItemForge forge,
         ConfigurationSection config) {

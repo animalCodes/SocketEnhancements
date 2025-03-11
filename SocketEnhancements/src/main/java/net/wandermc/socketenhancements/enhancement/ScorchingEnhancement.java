@@ -63,9 +63,9 @@ public class ScorchingEnhancement implements Enhancement, Listener {
      * Create a Scorching enhancement.
      *
      * `config` defaults:
-     * - "chance_per": 0.2
-     * - "fire_ticks": 40
-     * - "knockback": 0.5
+     * "chance_per": 0.2
+     * "fire_ticks": 40
+     * "knockback": 0.5
      *
      * "knockback" must be > 0.
      *

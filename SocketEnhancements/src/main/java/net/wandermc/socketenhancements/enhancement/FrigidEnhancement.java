@@ -60,9 +60,9 @@ public class FrigidEnhancement implements Enhancement, Listener {
      * Create a Frigid enhancement.
      *
      * `config` defaults:
-     * - chance_per: 0.15
-     * - duration: 70
-     * - amplifier: 2
+     * chance_per: 0.15
+     * duration: 70
+     * amplifier: 2
      *
      * @param forge The current EnhancedItemForge.
      */
