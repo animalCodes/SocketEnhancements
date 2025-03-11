@@ -32,6 +32,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import static com.destroystokyo.paper.MaterialTags.ARMOR;
+
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -149,6 +151,7 @@ public class BoostEnhancement implements Enhancement, Listener {
         if (item.has("blink"))
             return false;
         return item.itemStack().getItemMeta() instanceof Damageable
+            && !ARMOR.isTagged(item.itemStack().getType())
             && item.itemStack().getType() != Material.ELYTRA;
     }
 }
