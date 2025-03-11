@@ -37,6 +37,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import static com.destroystokyo.paper.MaterialTags.SWORDS;
+import static com.destroystokyo.paper.MaterialTags.AXES;
+
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
@@ -156,6 +159,8 @@ public class UndyingEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.itemStack().getType() == Material.SHIELD;
+        return item.itemStack().getType() == Material.SHIELD
+            || SWORDS.isTagged(item.itemStack().getType())
+            || AXES.isTagged(item.itemStack().getType());
     }
 }
