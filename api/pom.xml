@@ -8,7 +8,7 @@
     <parent>
         <groupId>net.wandermc</groupId>
         <artifactId>SocketEnhancements-parent</artifactId>
-        <version>${version}</version>
+        <version>0.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 </project>

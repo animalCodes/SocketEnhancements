@@ -4,13 +4,12 @@
 
     <groupId>net.wandermc</groupId>
     <artifactId>SocketEnhancements-parent</artifactId>
-    <version>${version}</version>
+    <version>0.6.0</version>
     <name>SocketEnhancements parent</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <version>0.6.0</version>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>

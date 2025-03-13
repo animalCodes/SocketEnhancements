@@ -22,6 +22,8 @@ import java.io.File;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.ServicePriority;
 
 import net.wandermc.socketenhancements.binding.OrbOfBindingManager;
 import net.wandermc.socketenhancements.commands.*;
@@ -53,6 +55,12 @@ public class SocketEnhancements extends JavaPlugin {
             new EmptySocket(socketsConfig));
         this.enhancedItemForge = new EnhancedItemForge(this,
             enhancementManager, socketsConfig);
+
+        ServicesManager servicesManager = getServer().getServicesManager();
+        servicesManager.register(EnhancementManager.class, enhancementManager,
+            this, ServicePriority.Highest);
+        servicesManager.register(EnhancedItemForge.class, enhancedItemForge,
+            this, ServicePriority.Highest);
 
         registerEnhancements(nsConfig(enhancementsConfig
             .getConfigurationSection("enhancements")));
