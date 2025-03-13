@@ -99,8 +99,12 @@ public class FrigidEnhancement implements Enhancement, Listener {
                 }
 
                 if (roll(chance)) {
-                    attacker.setFreezeTicks(attacker.getMaxFreezeTicks());
-                    attacker.addPotionEffect(effect);
+                    if (attacker.getFireTicks() > 0) {
+                        attacker.setFireTicks(0);
+                    } else {
+                        attacker.setFreezeTicks(attacker.getMaxFreezeTicks());
+                        attacker.addPotionEffect(effect);
+                    }
                 }
             }
         }
