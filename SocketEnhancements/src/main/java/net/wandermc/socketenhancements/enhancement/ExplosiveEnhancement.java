@@ -28,12 +28,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.plugin.PluginManager;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -140,7 +137,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
             Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
 
         EnhancedItem enhancedPickaxe = forge.create(pickaxe);
-        // Temporarily remove pickaxe to avoid 'cascade' where potentially
+        // Temporarily remove enhancement to avoid 'cascade' where potentially
         // infinite blocks are broken
         enhancedPickaxe.remove(this);
         enhancedPickaxe.update();
@@ -152,9 +149,9 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
                 pluginManager.callEvent(event);
 
                 if (!event.isCancelled()) {
-                    relative.breakNaturally(pickaxe);
                     if (relative.getType().getHardness() > 0)
                         damage++;
+                    relative.breakNaturally(pickaxe);
                 }
             }
         }
