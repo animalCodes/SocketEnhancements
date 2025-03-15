@@ -118,6 +118,12 @@ enhancements:
     # Amount of above material to take. May be 0.
     cost_amount: 2
 
+  # Allows mined spawners to be picked up.
+  capturing:
+    enabled: true
+    # Whether the enhancement should be removed after breaking a spawner.
+    single_use: false
+
   # Has a chance to knock back attackers and set them on fire for a brief
   # period.
   scorching:

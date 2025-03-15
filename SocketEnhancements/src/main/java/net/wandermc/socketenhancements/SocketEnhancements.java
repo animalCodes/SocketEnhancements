@@ -129,6 +129,12 @@ public class SocketEnhancements extends JavaPlugin {
             enhancementManager.register(
                 new ExplosiveEnhancement(enhancedItemForge, explosiveConfig));
 
+        ConfigurationSection capturingConfig = nsConfig(config
+            .getConfigurationSection("capturing"));
+        if (capturingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new CapturingEnhancement(enhancedItemForge, capturingConfig));
+
         ConfigurationSection scorchingConfig = nsConfig(config
             .getConfigurationSection("scorching"));
         if (scorchingConfig.getBoolean("enabled", true))

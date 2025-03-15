@@ -178,6 +178,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return PICKAXES.isTagged(item.itemStack().getType());
+        return !item.has("capturing") && PICKAXES.isTagged(item.itemStack()
+            .getType());
     }
 }
