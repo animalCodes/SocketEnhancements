@@ -26,7 +26,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 

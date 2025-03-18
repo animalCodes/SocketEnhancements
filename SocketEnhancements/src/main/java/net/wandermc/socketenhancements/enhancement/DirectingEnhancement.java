@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -87,7 +86,6 @@ public class DirectingEnhancement implements Enhancement, Listener {
 
         this.potionEffects = new ArrayList();
 
-        // "If it works it ain't stupid"
         config.getMapList("effects").forEach(rawMap -> {
             HashMap convMap = new HashMap();
             rawMap.forEach((k, v) -> convMap.put(k.toString(), v));

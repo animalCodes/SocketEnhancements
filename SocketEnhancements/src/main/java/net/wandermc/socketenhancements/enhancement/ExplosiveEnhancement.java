@@ -131,7 +131,7 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
             offhand.getType() != costType || offhand.getAmount() < costAmount)
             return;
 
-        player.spawnParticle( Particle.EXPLOSION, context.getBlock()
+        player.spawnParticle(Particle.EXPLOSION, context.getBlock()
             .getLocation(), 10);
         player.playSound(context.getBlock().getLocation(),
             Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
@@ -147,12 +147,12 @@ public class ExplosiveEnhancement implements Enhancement, Listener {
             if (relative.getType().getBlastResistance() <= 10) {
                 BlockBreakEvent event = new BlockBreakEvent(relative, player);
                 pluginManager.callEvent(event);
+                if (event.isCancelled())
+                    continue;
 
-                if (!event.isCancelled()) {
-                    if (relative.getType().getHardness() > 0)
-                        damage++;
-                    relative.breakNaturally(pickaxe);
-                }
+                if (relative.getType().getHardness() > 0)
+                    damage++;
+                relative.breakNaturally(pickaxe);
             }
         }
 

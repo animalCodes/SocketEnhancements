@@ -77,7 +77,7 @@ public class CapturingEnhancement implements Enhancement, Listener {
         ItemStack pickaxe = context.getPlayer().getInventory()
             .getItemInMainHand();
 
-        if (pickaxe == null || !forge.has(pickaxe, this))
+        if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
             return;
 
         if (context.getBlock().getType() != Material.SPAWNER)

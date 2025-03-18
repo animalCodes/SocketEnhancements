@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -79,7 +78,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
         if (amplifier <= 0)
             amplifier = 2;
 
-        this.effect = new PotionEffect( PotionEffectType.MINING_FATIGUE,
+        this.effect = new PotionEffect(PotionEffectType.MINING_FATIGUE,
             duration, amplifier);
     }
 
@@ -90,8 +89,7 @@ public class FrigidEnhancement implements Enhancement, Listener {
                 double chance = 0;
                 for (ItemStack armourPiece : defender.getEquipment()
                     .getArmorContents()) {
-                    if (armourPiece == null ||
-                        armourPiece.isEmpty())
+                    if (armourPiece == null || armourPiece.isEmpty())
                         continue;
 
                     if (forge.has(armourPiece, this))

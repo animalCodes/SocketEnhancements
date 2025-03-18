@@ -27,7 +27,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -41,7 +40,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 /**
  * Cushioning enhancement.
  *
- * Halves damage taken from flying into walls.
+ * Reduces damage taken from flying into walls.
  */
 public class CushioningEnhancement implements Enhancement, Listener {
     private static final TextComponent socketMessage = (TextComponent)
