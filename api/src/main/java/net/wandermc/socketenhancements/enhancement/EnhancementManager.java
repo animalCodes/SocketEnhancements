@@ -19,6 +19,7 @@ package net.wandermc.socketenhancements.enhancement;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -109,6 +110,15 @@ public class EnhancementManager {
      */
     public Enhancement empty() {
         return emptySocket;
+    }
+
+    /**
+     * The names of all currently stored enhancements.
+     *
+     * @return A list of all known enhancement names.
+     */
+    public Set<String> getAllNames() {
+        return enhancementStore.keySet();
     }
 
     /**

@@ -17,9 +17,12 @@
  */
 package net.wandermc.socketenhancements.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -41,7 +44,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
  *   `enhancement2` on held item.
  * - help - Print help.
  */
-public class SeaCommand implements CommandExecutor {
+public class SeaCommand implements TabExecutor {
     private EnhancementManager enhancementManager;
     private EnhancedItemForge forge;
 
@@ -96,6 +99,34 @@ public class SeaCommand implements CommandExecutor {
                 Component.text("Only players can use this command."));
             return true;
         }
+    }
+
+    public List<String> onTabComplete(CommandSender sender, Command command,
+        String label, String[] args) {
+        ArrayList<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            suggestions.add("bind");
+            suggestions.add("addsocket");
+            suggestions.add("replace");
+            suggestions.add("help");
+            return suggestions;
+        }
+
+        switch (args[0].toLowerCase()) {
+            case "bind": {
+                suggestions.addAll(enhancementManager.getAllNames());
+                break;
+            } case "addsocket": {
+                suggestions.add("1");
+                break;
+            } case "replace": {
+                suggestions.addAll(enhancementManager.getAllNames());
+                break;
+            }
+        }
+
+        return suggestions;
     }
 
     private boolean bindCommand(Player sender, String[] args) {
