@@ -120,24 +120,29 @@ public class SeaCommand implements TabExecutor {
         if (sender instanceof Player player) {
             if (args.length < 1) {
                 sender.sendMessage(noSubCommandMsg);
-                return helpCommand(sender);
+                helpCommand(sender);
+                return true;
             }
 
             switch (args[0].toLowerCase()) {
                 case "bind":
-                    return bindCommand(player, args);
+                    bindCommand(player, args);
+                    break;
                 case "addsocket":
-                    return addSocketCommand(player, args);
+                    addSocketCommand(player, args);
+                    break;
                 case "replace":
-                    return replaceCommand(player, args);
+                    replaceCommand(player, args);
+                    break;
                 case "help":
                 default:
-                    return helpCommand(sender);
+                    helpCommand(sender);
             }
         } else {
             sender.sendMessage(onlyPlayersMsg);
-            return true;
         }
+
+        return true;
     }
 
     public List<String> onTabComplete(CommandSender sender, Command command,
@@ -168,10 +173,10 @@ public class SeaCommand implements TabExecutor {
         return suggestions;
     }
 
-    private boolean bindCommand(Player sender, String[] args) {
+    private void bindCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
             sender.sendMessage(noItemMsg);
-            return true;
+            return;
         }
 
         EnhancedItem item = forge.create(sender.getInventory()
@@ -179,7 +184,7 @@ public class SeaCommand implements TabExecutor {
 
         if (args.length < 2) {
             sender.sendMessage(noEnhancementMsg);
-            return true;
+            return;
         }
 
         for (int i = 1; i < args.length; i++) {
@@ -187,21 +192,19 @@ public class SeaCommand implements TabExecutor {
             if (enhancement instanceof EmptySocket) {
                 sender.sendMessage(unknownEnhancementMsgStart.append(
                     Component.text('"'+args[i]+'"')));
-                return false;
+                return;
             }
 
             bind(sender, item, enhancement);
         }
 
         item.update();
-
-        return true;
     }
 
-    private boolean addSocketCommand(Player sender, String[] args) {
+    private void addSocketCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
             sender.sendMessage(noItemMsg);
-            return true;
+            return;
         }
 
         EnhancedItem item = forge.create(sender.getInventory()
@@ -214,32 +217,30 @@ public class SeaCommand implements TabExecutor {
             } catch (NumberFormatException e) {
                 sender.sendMessage(Component.text('"'+args[1]+'"')
                     .color(NamedTextColor.RED).append(badNumberMsgEnd));
-                return false;
+                return;
             }
         }
 
         if (item.sockets() >= item.socketLimit()) {
             sender.sendMessage(maxSocketsMsgStart.append(
                 Component.text("("+item.socketLimit()+")")));
-            return true;
+            return;
         }
 
         if (item.sockets() + numSockets > item.socketLimit()) {
             sender.sendMessage(tooManySocketsMsgStart.append(
                 Component.text("("+item.socketLimit()+")")));
-            return true;
+            return;
         }
 
         item.addSockets(numSockets);
         item.update();
-
-        return true;
     }
 
-    private boolean replaceCommand(Player sender, String[] args) {
+    private void replaceCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
             sender.sendMessage(noItemMsg);
-            return true;
+            return;
         }
 
         EnhancedItem item = forge.create(sender.getInventory()
@@ -250,39 +251,36 @@ public class SeaCommand implements TabExecutor {
                 sender.sendMessage(noBaseOrReplacementMsg);
             else
                 sender.sendMessage(noReplacementMsg);
-            return false;
+            return;
         }
 
         Enhancement enhancement2 = enhancementManager.get(args[2]);
         if (enhancement2 instanceof EmptySocket) {
             sender.sendMessage(unknownEnhancementMsgStart.append(
                 Component.text('"'+args[2]+'"')));
-            return false;
+            return;
         }
 
         if (!item.remove(args[1])) {
             sender.sendMessage(notBoundMsgStart.append(
                 Component.text('"'+args[1]+'"')).append(notBoundMsgEnd));
-            return false;
+            return;
         }
 
         if (!item.bind(enhancement2)) {
             sender.sendMessage(Component.text('"'+args[2]+'"')
                 .color(NamedTextColor.RED).append(cannotBindMsgEnd));
-            return false;
+            return;
         }
 
         item.update();
-
-        return true;
     }
 
-    private boolean helpCommand(CommandSender sender) {
+    private void helpCommand(CommandSender sender) {
         sender.sendMessage(bindHelpMsg);
         sender.sendMessage(addsocketHelpMsg);
         sender.sendMessage(replaceHelpMsg);
         sender.sendMessage(helpHelpMsg);
-        return true;
     }
 
     /**
