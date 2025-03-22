@@ -26,7 +26,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import net.wandermc.socketenhancements.enhancement.EmptySocket;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
@@ -45,22 +45,69 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
  * - help - Print help.
  */
 public class SeaCommand implements TabExecutor {
+    // 'Informational' text is coloured YELLOW. Errors are coloured RED.
+    private static final Component noSubCommandMsg = Component.text(
+        "No subcommand specified.").color(NamedTextColor.RED).appendNewline()
+        .append(Component.text("Valid subcommands:")
+            .color(NamedTextColor.YELLOW));
+    private static final Component onlyPlayersMsg = Component.text(
+        "Only players can use this command.").color(NamedTextColor.RED);
+    private static final Component bindHelpMsg = Component.text(
+        "bind {enhancements} - Bind given list of enhancements to item held " +
+        "in main hand. If no enhancements are given SocketEnhancements will " +
+        "bind the first valid enhancement it finds.")
+        .color(NamedTextColor.YELLOW);
+    private static final Component addsocketHelpMsg = Component.text(
+        "addsocket {n} - Add n socket(s) to item held in main hand. If n " +
+        "isn't specified, 1 socket is added.").color(NamedTextColor.YELLOW);
+    private static final Component replaceHelpMsg = Component.text(
+        "replace {enhancement1} {enhancement2} - Replace enhancement1 with " +
+        "enhancement2 on item held in main hand. enhancement1 may be an " +
+        "unregistered enhancement, in which case this can be used to update " +
+        "items after an enhancement's name has been changed.")
+        .color(NamedTextColor.YELLOW);
+    private static final Component helpHelpMsg = Component.text(
+        "help - Print this help.").color(NamedTextColor.YELLOW);
+
+    private static final Component noItemMsg = Component.text(
+        "No item in main hand.").color(NamedTextColor.RED);
+    private static final Component cannotBindMsgEnd = Component.text(
+        " cannot be bound to this item.").color(NamedTextColor.RED);
+    private static final Component unknownEnhancementMsgStart = Component.text(
+        "Unknown enhancement ").color(NamedTextColor.RED);
+
+    private static final Component noEnhancementMsg = Component.text(
+        "No enhancement given.").color(NamedTextColor.RED).appendNewline()
+        .append(Component.text("Trying all registered enhancements...")
+            .color(NamedTextColor.YELLOW));
+    private static final Component noValidEnhancementMsg = Component.text(
+        "Couldn't find a valid enhancement.").color(NamedTextColor.RED);
+    private static final Component noEmptySocketsMsg = Component.text(
+        "No empty sockets available.").color(NamedTextColor.RED);
+    private static final Component alreadyBoundMsgStart = Component.text(
+        "This item already has ").color(NamedTextColor.RED);
+
+    private static final Component maxSocketsMsgStart = Component.text(
+        "This item already has the maximum number of sockets. ")
+        .color(NamedTextColor.RED);
+    private static final Component badNumberMsgEnd = Component.text(
+        " Is not a valid number.").color(NamedTextColor.RED);
+    private static final Component tooManySocketsMsgStart = Component.text(
+        "Adding that many sockets would put this item over its socket limit. ")
+        .color(NamedTextColor.RED);
+
+    private static final Component noBaseOrReplacementMsg = Component.text(
+        "No base or replacement enhancement given.").color(NamedTextColor.RED);
+    private static final Component noReplacementMsg = Component.text(
+        "No replacement enhancement given.").color(NamedTextColor.RED);
+    private static final Component notBoundMsgStart = Component.text(
+        "Item doesn't have ").color(NamedTextColor.RED);
+    private static final Component notBoundMsgEnd = Component.text(
+        " bound to it.").color(NamedTextColor.RED);
+
+
     private EnhancementManager enhancementManager;
     private EnhancedItemForge forge;
-
-    private static TextComponent[] subCommands = {
-        Component.text("bind {enhancements} - Bind given list of enhancements" +
-        " to item held in main hand. If no enhancements are given" +
-        " SocketEnhancements will bind the first valid enhancement it finds."),
-        Component.text("addsocket {n} - Add n socket(s) to item held in main" +
-        " hand. If n isn't specified, 1 socket is added."),
-        Component.text("replace {enhancement1} {enhancement2} - Replace" +
-        " enhancement1 with enhancement2 on item held in main hand." +
-        " enhancement1 may be an unregistered enhancement, in which case" +
-        " this can be used to update items after an enhancement's name has" +
-        " been changed."),
-        Component.text("help - Print this help.")
-    };
 
     /**
      * Create a SeaCommand.
@@ -76,13 +123,12 @@ public class SeaCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command,
         String label, String[] args) {
-        if (args.length < 1) {
-            sender.sendMessage(Component.text("No subcommand specified."));
-            sender.sendMessage(Component.text("Valid subcommands:"));
-            return helpCommand(sender);
-        }
-
         if (sender instanceof Player player) {
+            if (args.length < 1) {
+                sender.sendMessage(noSubCommandMsg);
+                return helpCommand(sender);
+            }
+
             switch (args[0].toLowerCase()) {
                 case "bind":
                     return bindCommand(player, args);
@@ -95,8 +141,7 @@ public class SeaCommand implements TabExecutor {
                     return helpCommand(sender);
             }
         } else {
-            sender.sendMessage(
-                Component.text("Only players can use this command."));
+            sender.sendMessage(onlyPlayersMsg);
             return true;
         }
     }
@@ -131,8 +176,7 @@ public class SeaCommand implements TabExecutor {
 
     private boolean bindCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
-            sender.sendMessage(
-                Component.text("Can't bind an enhancement to nothing!"));
+            sender.sendMessage(noItemMsg);
             return true;
         }
 
@@ -140,9 +184,7 @@ public class SeaCommand implements TabExecutor {
             .getItemInMainHand());
 
         if (args.length < 2) {
-            sender.sendMessage(Component.text("No enhancement given."));
-            sender.sendMessage(
-                Component.text("Trying all registered enhancements..."));
+            sender.sendMessage(noEnhancementMsg);
 
             for (Enhancement enhancement : enhancementManager.getAll()) {
                 if (bind(sender, item, enhancement)) {
@@ -151,17 +193,15 @@ public class SeaCommand implements TabExecutor {
                 }
             }
 
-            sender.sendMessage(
-                Component.text("Couldn't find a valid enhancement."));
-
+            sender.sendMessage(noValidEnhancementMsg);
             return true;
         }
 
         for (int i = 1; i < args.length; i++) {
             Enhancement enhancement = enhancementManager.get(args[i]);
             if (enhancement instanceof EmptySocket) {
-                sender.sendMessage(Component.text("Unknown enhancement \"" +
-                    args[i] + "\""));
+                sender.sendMessage(unknownEnhancementMsgStart.append(
+                    Component.text('"'+args[i]+'"')));
                 return false;
             }
 
@@ -175,52 +215,45 @@ public class SeaCommand implements TabExecutor {
 
     private boolean addSocketCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
-            sender.sendMessage(
-                Component.text("Can't add a socket to nothing!"));
+            sender.sendMessage(noItemMsg);
             return true;
         }
 
         EnhancedItem item = forge.create(sender.getInventory()
             .getItemInMainHand());
 
-        if (item.sockets() >= item.socketLimit()) {
-            sender.sendMessage(Component.text(
-                "This item already has the maximum number of sockets. (" +
-                 item.socketLimit() + ")"));
-            return true;
-        }
-
         int numSockets = 1;
         if (args.length > 1) {
             try {
                 numSockets = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(Component.text(args[1] +
-                    " Is not a valid number."));
+                sender.sendMessage(Component.text('"'+args[1]+'"')
+                    .color(NamedTextColor.RED).append(badNumberMsgEnd));
                 return false;
             }
         }
 
+        if (item.sockets() >= item.socketLimit()) {
+            sender.sendMessage(maxSocketsMsgStart.append(
+                Component.text("("+item.socketLimit()+")")));
+            return true;
+        }
+
         if (item.sockets() + numSockets > item.socketLimit()) {
-            sender.sendMessage(Component.text("Adding that many " +
-                "sockets would put this item over it's socket limit. (" +
-                 item.socketLimit() + ")"));
+            sender.sendMessage(tooManySocketsMsgStart.append(
+                Component.text("("+item.socketLimit()+")")));
             return true;
         }
 
         item.addSockets(numSockets);
         item.update();
 
-        sender.sendMessage(Component.text("Added " + numSockets +
-            " to held item."));
-
         return true;
     }
 
     private boolean replaceCommand(Player sender, String[] args) {
         if (sender.getInventory().getItemInMainHand().isEmpty()) {
-            sender.sendMessage(
-                Component.text("No item in main hand."));
+            sender.sendMessage(noItemMsg);
             return true;
         }
 
@@ -229,30 +262,28 @@ public class SeaCommand implements TabExecutor {
 
         if (args.length < 3) {
             if (args.length < 2)
-                sender.sendMessage(Component.text("No base or replacement" +
-                    " enhancement given."));
+                sender.sendMessage(noBaseOrReplacementMsg);
             else
-                sender.sendMessage(Component.text("No replacement" +
-                    " enhancement given."));
+                sender.sendMessage(noReplacementMsg);
             return false;
         }
 
         Enhancement enhancement2 = enhancementManager.get(args[2]);
         if (enhancement2 instanceof EmptySocket) {
-            sender.sendMessage(Component.text("Unknown enhancement \"" +
-                args[2] + "\""));
+            sender.sendMessage(unknownEnhancementMsgStart.append(
+                Component.text('"'+args[2]+'"')));
             return false;
         }
 
         if (!item.remove(args[1])) {
-            sender.sendMessage(Component.text("Item doesn't have \"" +
-                args[1] + "\" bound to it."));
+            sender.sendMessage(notBoundMsgStart.append(
+                Component.text('"'+args[1]+'"')).append(notBoundMsgEnd));
             return false;
         }
 
         if (!item.bind(enhancement2)) {
-            sender.sendMessage(Component.text("\"" + args[2] +
-                "\" cannot be bound to item."));
+            sender.sendMessage(Component.text('"'+args[2]+'"')
+                .color(NamedTextColor.RED).append(cannotBindMsgEnd));
             return false;
         }
 
@@ -262,8 +293,10 @@ public class SeaCommand implements TabExecutor {
     }
 
     private boolean helpCommand(CommandSender sender) {
-        for (TextComponent message : subCommands)
-            sender.sendMessage(message);
+        sender.sendMessage(bindHelpMsg);
+        sender.sendMessage(addsocketHelpMsg);
+        sender.sendMessage(replaceHelpMsg);
+        sender.sendMessage(helpHelpMsg);
         return true;
     }
 
@@ -280,28 +313,23 @@ public class SeaCommand implements TabExecutor {
     private boolean bind(CommandSender sender, EnhancedItem item,
         Enhancement enhancement) {
         if (!item.hasEmptySocket()) {
-            sender.sendMessage(
-                Component.text("No empty sockets available."));
+            sender.sendMessage(noEmptySocketsMsg);
             return false;
         }
 
         if (!enhancement.isValidItem(item)) {
-            sender.sendMessage(Component.text("\"" + enhancement.name() +
-                "\" cannot be bound to this item."));
+            sender.sendMessage(Component.text('"'+enhancement.name()+'"')
+                .color(NamedTextColor.RED).append(cannotBindMsgEnd));
             return false;
         }
 
         if (item.has(enhancement)) {
-            sender.sendMessage(Component.text("This item already has \"" +
-                    enhancement.name() + "\"."));
+            sender.sendMessage(alreadyBoundMsgStart
+                .append(Component.text('"'+enhancement.name()+'"')));
             return false;
         }
 
-        // EnhancedItem.bind() also does most of the above checks, oh well.
         item.bind(enhancement);
-
-        sender.sendMessage(Component.text("Bound \"" +
-            enhancement.name() + "\" to held item."));
 
         return true;
     }
