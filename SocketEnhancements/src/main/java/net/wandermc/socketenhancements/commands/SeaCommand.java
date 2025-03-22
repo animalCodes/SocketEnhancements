@@ -54,9 +54,7 @@ public class SeaCommand implements TabExecutor {
         "Only players can use this command.").color(NamedTextColor.RED);
     private static final Component bindHelpMsg = Component.text(
         "bind {enhancements} - Bind given list of enhancements to item held " +
-        "in main hand. If no enhancements are given SocketEnhancements will " +
-        "bind the first valid enhancement it finds.")
-        .color(NamedTextColor.YELLOW);
+        "in main hand.").color(NamedTextColor.YELLOW);
     private static final Component addsocketHelpMsg = Component.text(
         "addsocket {n} - Add n socket(s) to item held in main hand. If n " +
         "isn't specified, 1 socket is added.").color(NamedTextColor.YELLOW);
@@ -77,11 +75,7 @@ public class SeaCommand implements TabExecutor {
         "Unknown enhancement ").color(NamedTextColor.RED);
 
     private static final Component noEnhancementMsg = Component.text(
-        "No enhancement given.").color(NamedTextColor.RED).appendNewline()
-        .append(Component.text("Trying all registered enhancements...")
-            .color(NamedTextColor.YELLOW));
-    private static final Component noValidEnhancementMsg = Component.text(
-        "Couldn't find a valid enhancement.").color(NamedTextColor.RED);
+        "No enhancement given.").color(NamedTextColor.RED);
     private static final Component noEmptySocketsMsg = Component.text(
         "No empty sockets available.").color(NamedTextColor.RED);
     private static final Component alreadyBoundMsgStart = Component.text(
@@ -185,15 +179,6 @@ public class SeaCommand implements TabExecutor {
 
         if (args.length < 2) {
             sender.sendMessage(noEnhancementMsg);
-
-            for (Enhancement enhancement : enhancementManager.getAll()) {
-                if (bind(sender, item, enhancement)) {
-                    item.update();
-                    return true;
-                }
-            }
-
-            sender.sendMessage(noValidEnhancementMsg);
             return true;
         }
 
