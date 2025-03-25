@@ -42,14 +42,17 @@ public class SocketEnhancements extends JavaPlugin {
     private EnhancementGemManager enhancementGemManager;
 
     public void onEnable() {
-        // TODO stop this from logging a warning if the file already exists
-        saveResource("sockets.yml", false);
+        File socketsFile = new File(getDataFolder(), "sockets.yml");
+        if (!socketsFile.exists())
+            saveResource("sockets.yml", false);
         YamlConfiguration socketsConfig = YamlConfiguration
-            .loadConfiguration(new File(getDataFolder(), "sockets.yml"));
+            .loadConfiguration(socketsFile);
 
-        saveResource("enhancements.yml", false);
+        File enhancementsFile = new File(getDataFolder(), "enhancements.yml");
+        if (!enhancementsFile.exists())
+            saveResource("enhancements.yml", false);
         YamlConfiguration enhancementsConfig = YamlConfiguration
-            .loadConfiguration(new File(getDataFolder(), "enhancements.yml"));
+            .loadConfiguration(enhancementsFile);
 
         this.enhancementManager = new EnhancementManager(this,
             new EmptySocket(socketsConfig));

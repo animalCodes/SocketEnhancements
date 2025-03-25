@@ -149,7 +149,6 @@ public class OrbOfBindingManager implements Listener {
      * binding.
      */
     private void registerRecipes() {
-        // Recipe for crafting an orb of binding.
         ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
             new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
 
@@ -157,6 +156,9 @@ public class OrbOfBindingManager implements Listener {
             orbOfBindingRecipe.addIngredient(ingredient);
 
         plugin.getServer().addRecipe(orbOfBindingRecipe, true);
+
+        if (forge.enhanceableMaterials().isEmpty())
+            return;
 
         ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
                 new NamespacedKey(plugin, "orb_of_binding_upgrade"),
