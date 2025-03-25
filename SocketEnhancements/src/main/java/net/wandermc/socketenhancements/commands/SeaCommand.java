@@ -285,6 +285,8 @@ public class SeaCommand implements TabExecutor {
 
     /**
      * Attempt to bind enhancement to item, notifying sender of any issues.
+     * If no empty sockets are available and the item hasn't reached its socket
+     * limit, one will be added.
      *
      * This does NOT update the item.
      *
@@ -295,11 +297,6 @@ public class SeaCommand implements TabExecutor {
      */
     private boolean bind(CommandSender sender, EnhancedItem item,
         Enhancement enhancement) {
-        if (!item.hasEmptySocket()) {
-            sender.sendMessage(noEmptySocketsMsg);
-            return false;
-        }
-
         if (!enhancement.isValidItem(item)) {
             sender.sendMessage(Component.text('"'+enhancement.name()+'"')
                 .color(NamedTextColor.RED).append(cannotBindMsgEnd));
@@ -310,6 +307,15 @@ public class SeaCommand implements TabExecutor {
             sender.sendMessage(alreadyBoundMsgStart
                 .append(Component.text('"'+enhancement.name()+'"')));
             return false;
+        }
+
+        if (!item.hasEmptySocket()) {
+            if (item.sockets() < item.socketLimit()) {
+                item.addSockets(1);
+            } else {
+                sender.sendMessage(noEmptySocketsMsg);
+                return false;
+            }
         }
 
         item.bind(enhancement);
