@@ -59,8 +59,7 @@ public class EnhancementManager {
      * @return Normalised version of `name`
      */
     private String normalise(String name) {
-        // TODO expand this
-        return name.toLowerCase();
+        return name.toLowerCase().strip().replaceAll("\s", "_");
     }
 
     /**
@@ -75,7 +74,8 @@ public class EnhancementManager {
      *         `org.bukkit.event.Listener.
      */
     public boolean register(Enhancement enhancement) {
-        if (enhancementStore.containsKey(normalise(enhancement.name())))
+        String name = normalise(enhancement.name());
+        if (enhancementStore.containsKey(name))
             return false;
 
         if (enhancement instanceof Listener listener) {
@@ -86,7 +86,7 @@ public class EnhancementManager {
                 "\" does not implement org.bukkit.event.Listener.");
         }
 
-        enhancementStore.put(normalise(enhancement.name()), enhancement);
+        enhancementStore.put(name, enhancement);
         return true;
     }
 
