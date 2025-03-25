@@ -120,7 +120,7 @@ public class OrbOfBindingManager implements Listener {
         }
 
         if (ingredients.size() == 0) {
-            ingredients.add(Material.GHAST_TEAR);
+            ingredients.add(Material.BLAZE_POWDER);
             ingredients.add(Material.PRISMARINE_SHARD);
             ingredients.add(Material.CHORUS_FRUIT);
         }

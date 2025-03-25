@@ -68,11 +68,11 @@ public class WitheringEnhancement implements Enhancement, Listener {
     public WitheringEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.chance = config.getDouble("chance", 0.3);
+        this.chance = config.getDouble("chance", 0.25);
 
-        int duration = config.getInt("duration", 160);
+        int duration = config.getInt("duration", 100);
         if (duration <= 0)
-            duration = 160;
+            duration = 100;
 
         int amplifier = config.getInt("amplifier", 1);
         if (amplifier <= 0)

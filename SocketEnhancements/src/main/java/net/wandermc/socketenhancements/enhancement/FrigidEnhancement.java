@@ -68,15 +68,15 @@ public class FrigidEnhancement implements Enhancement, Listener {
     public FrigidEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.chancePerItem = config.getDouble("chance_per", 0.15);
+        this.chancePerItem = config.getDouble("chance_per", 0.1);
 
-        int duration = config.getInt("duration", 70);
+        int duration = config.getInt("duration", 50);
         if (duration <= 0)
-            duration = 70;
+            duration = 50;
 
-        int amplifier = config.getInt("amplifier", 2);
+        int amplifier = config.getInt("amplifier", 1);
         if (amplifier <= 0)
-            amplifier = 2;
+            amplifier = 1;
 
         this.effect = new PotionEffect(PotionEffectType.MINING_FATIGUE,
             duration, amplifier);

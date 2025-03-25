@@ -1,6 +1,6 @@
 # Message displayed on an item's lore for each empty socket it has.
 # Uses [MiniMessage](https://docs.advntr.dev/minimessage/format.html#minimessage-format) format.
-empty_socket_message: <white><italic:false>\<Empty Socket></italic:false></white>
+empty_socket_message: <white><italic:false><Empty Socket>
 
 # Socket limit used for any item not in below list.
 # If less than zero, will be set to zero.
@@ -63,14 +63,14 @@ limits:
   TURTLE_HELMET: 3
 
 orbs_of_binding:
-  # Whether orbs of binding can be crafted and applied to items.
-  # Note that if this is `false`, safety features such as not being able to place (previously obtained) orbs will be disabled.
+  # Note that if this is `false`, previously obtained orbs will act like normal
+  # items.
   enabled: true
   # Material type of orbs of binding.
-  # Cannot be AIR
   material: CONDUIT
   # Materials used to craft an orb of binding.
-  # If there are more than nine items in the list, only the first nine (valid) items will be used.
-  ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
-  # Whether dropped orbs will be destroyed by fire/lava
+  # If there are more than nine items in the list, only the first nine (valid)
+  # items will be used.
+  ingredients: ["BLAZE_POWDER", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+  # Whether dropped orbs can be destroyed by fire/lava
   flammable: false

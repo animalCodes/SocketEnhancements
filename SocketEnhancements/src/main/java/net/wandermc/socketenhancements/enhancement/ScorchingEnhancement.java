@@ -75,8 +75,8 @@ public class ScorchingEnhancement implements Enhancement, Listener {
         config) {
         this.forge = forge;
 
-        this.chancePerItem = config.getDouble("chance_per", 0.2);
-        this.fireTicks = config.getInt("fire_ticks", 40);
+        this.chancePerItem = config.getDouble("chance_per", 0.15);
+        this.fireTicks = config.getInt("fire_ticks", 30);
 
         double knockback = config.getDouble("knockback", 0.5);
         if (knockback <= 0)

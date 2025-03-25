@@ -67,7 +67,7 @@ public class LifestealEnhancement implements Enhancement, Listener {
     public LifestealEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.chance = config.getDouble("chance", 0.5);
+        this.chance = config.getDouble("chance", 0.25);
         this.gain = config.getDouble("gain", 0.25);
     }
 
