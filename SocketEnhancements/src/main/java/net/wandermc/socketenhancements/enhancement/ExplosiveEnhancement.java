@@ -26,7 +26,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -36,7 +35,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.PICKAXES;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -47,7 +45,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * radius. (3*3 cube centered on mined block)
  * May cost set amount of items which must be held in offhand.
  */
-public class ExplosiveEnhancement implements Enhancement, Listener {
+public class ExplosiveEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_red>Explosive<white>>");

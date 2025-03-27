@@ -26,7 +26,6 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +36,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.PICKAXES;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -47,7 +45,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Allows spawners to be mined with pickaxes.
  * May be consumed in the process (configurable)
  */
-public class CapturingEnhancement implements Enhancement, Listener {
+public class CapturingEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<blue>Capturing<white>>");

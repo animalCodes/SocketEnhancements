@@ -25,7 +25,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -36,8 +35,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.HELMETS;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -47,7 +44,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * When a player is struck with lightning, apply various buffs.
  * Default buffs aim to simulate the effect of eating a golden apple.
  */
-public class DirectingEnhancement implements Enhancement, Listener {
+public class DirectingEnhancement implements ActiveEnhancement {
     private final int foodGain;
     private final float saturationGain;
     private final ArrayList<PotionEffect> potionEffects;

@@ -22,7 +22,6 @@ import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +41,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  *
  * Reduces damage taken from flying into walls.
  */
-public class CushioningEnhancement implements Enhancement, Listener {
+public class CushioningEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<gray>Cushioning<white>>");

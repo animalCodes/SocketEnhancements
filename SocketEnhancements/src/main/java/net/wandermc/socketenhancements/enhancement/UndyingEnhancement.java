@@ -27,7 +27,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -39,8 +38,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import static com.destroystokyo.paper.MaterialTags.SWORDS;
 import static com.destroystokyo.paper.MaterialTags.AXES;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -51,7 +48,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * while holding enhanced item, prevent death, apply configurable buffs and
  * remove the enhancement.
  */
-public class UndyingEnhancement implements Enhancement, Listener {
+public class UndyingEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<yellow>Undying<white>>");

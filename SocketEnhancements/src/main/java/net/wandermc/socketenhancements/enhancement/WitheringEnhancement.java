@@ -21,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +32,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import static com.destroystokyo.paper.MaterialTags.SWORDS;
 import static com.destroystokyo.paper.MaterialTags.AXES;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -44,7 +42,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  *
  * On attacking another entity, have a chance to apply wither to them.
  */
-public class WitheringEnhancement implements Enhancement, Listener {
+public class WitheringEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_gray>Withering<white>>");

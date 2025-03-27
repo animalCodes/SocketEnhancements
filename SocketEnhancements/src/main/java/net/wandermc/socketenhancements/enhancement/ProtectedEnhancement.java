@@ -19,7 +19,6 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -28,8 +27,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -38,7 +35,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  *
  * Stops the item from breaking but will be consumed in the process.
  */
-public class ProtectedEnhancement implements Enhancement, Listener {
+public class ProtectedEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_gray>Protected<white>>");

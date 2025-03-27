@@ -21,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -32,8 +31,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementManager;
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -45,7 +42,7 @@ import static net.wandermc.socketenhancements.util.Dice.roll;
  * When worn, has a chance to freeze and apply mining fatigue to attackers.
  * Chance increases per enhanced armour piece.
  */
-public class FrigidEnhancement implements Enhancement, Listener {
+public class FrigidEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<aqua>Frigid<white>>");

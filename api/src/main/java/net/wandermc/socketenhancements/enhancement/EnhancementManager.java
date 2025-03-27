@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,21 +69,20 @@ public class EnhancementManager {
      *
      * @param enhancement The Enhancement to store.
      * @return Whether the enhancement was registered.
-     * @throws IllegalArgumentException If `enhancement` does not implement
-     *         `org.bukkit.event.Listener.
+     * @throws IllegalArgumentException If `enhancement` is not an
+     *         `ActiveEnhancement`.
      */
     public boolean register(Enhancement enhancement) {
         String name = normalise(enhancement.name());
         if (enhancementStore.containsKey(name))
             return false;
 
-        if (enhancement instanceof Listener listener) {
-            pluginManager.registerEvents(listener, plugin);
-        } else {
+        if (enhancement instanceof ActiveEnhancement activeEnhancement)
+            pluginManager.registerEvents(activeEnhancement, plugin);
+        else
             throw new IllegalArgumentException("enhancement \"" +
-                enhancement.name() +
-                "\" does not implement org.bukkit.event.Listener.");
-        }
+                enhancement.name() + "\" is not a valid extension " +
+                "of Enhancement.");
 
         enhancementStore.put(name, enhancement);
         return true;

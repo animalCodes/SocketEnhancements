@@ -28,7 +28,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -41,7 +40,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
-import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
@@ -52,7 +50,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * it is near enough, at the cost of some experience points and temporary
  * blindness.
  */
-public class BlinkEnhancement implements Enhancement, Listener {
+public class BlinkEnhancement implements ActiveEnhancement {
     // All blocks that can be teleported through.
     private static final EnumSet<Material> BLINK_THROUGH_BLOCKS;
 
