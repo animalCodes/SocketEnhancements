@@ -195,10 +195,10 @@ public class BlinkEnhancement implements ActiveEnhancement {
     private static void applySuccessCosmetics(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
             60, 1, false, false));
-        player.spawnParticle(Particle.WARPED_SPORE, player.getLocation(),
-            10);
-        player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,
-            3, 10);
+        player.getWorld().spawnParticle(Particle.WARPED_SPORE,
+            player.getLocation(), 10);
+        player.getWorld().playSound(player.getLocation(),
+            Sound.ITEM_CHORUS_FRUIT_TELEPORT, 3, 10);
     }
 
     /**

@@ -75,7 +75,8 @@ public class CushioningEnhancement implements ActiveEnhancement {
 
             if (helmet != null && forge.has(helmet, this)) {
                 context.setDamage(context.getDamage() * damageTaken);
-                player.spawnParticle(Particle.CLOUD, player.getLocation(), 2);
+                player.getWorld().spawnParticle(Particle.CLOUD,
+                    player.getLocation(), 2);
             }
         }
     }

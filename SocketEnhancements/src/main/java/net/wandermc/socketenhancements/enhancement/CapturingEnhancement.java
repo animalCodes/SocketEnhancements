@@ -91,7 +91,7 @@ public class CapturingEnhancement implements ActiveEnhancement {
             enhancedPickaxe.update();
         }
 
-        context.getPlayer().playSound(spawner.getLocation(),
+        context.getPlayer().getWorld().playSound(spawner.getLocation(),
             Sound.BLOCK_BEACON_DEACTIVATE, SoundCategory.NEUTRAL, 5, 10);
     }
 
@@ -125,7 +125,7 @@ public class CapturingEnhancement implements ActiveEnhancement {
 
         blockState.update();
 
-        event.getPlayer().playSound(block.getLocation(),
+        event.getPlayer().getWorld().playSound(block.getLocation(),
             Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.NEUTRAL, 5, 10);
     }
 

@@ -20,6 +20,7 @@ package net.wandermc.socketenhancements.enhancement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -101,12 +102,12 @@ public class UndyingEnhancement implements ActiveEnhancement {
     /**
      * Apply the "cosmetic" effects of an undying item activating.
      *
-     * @param player the Player to apply the effects to.
+     * @param location Where to play the effects.
      */
-    private static void applyCosmetics(Player player) {
-        player.spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation(),
+    private static void applyCosmetics(Location location) {
+        location.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, location,
             10);
-        player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 5, 10);
+        location.getWorld().playSound(location, Sound.ITEM_TOTEM_USE, 5, 10);
     }
 
     @EventHandler(ignoreCancelled=true)
@@ -131,7 +132,7 @@ public class UndyingEnhancement implements ActiveEnhancement {
             potionEffects.forEach(effect -> entity.addPotionEffect(effect));
 
             if (entity instanceof Player player)
-                applyCosmetics(player);
+                applyCosmetics(player.getLocation());
 
             context.setCancelled(true);
 

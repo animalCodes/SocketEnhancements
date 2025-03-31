@@ -129,10 +129,10 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
             offhand.getType() != costType || offhand.getAmount() < costAmount)
             return;
 
-        player.spawnParticle(Particle.EXPLOSION, context.getBlock()
-            .getLocation(), 10);
-        player.playSound(context.getBlock().getLocation(),
-            Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
+        context.getBlock().getWorld().spawnParticle(Particle.EXPLOSION,
+            context.getBlock() .getLocation(), 10);
+        context.getBlock().getWorld().playSound(context.getBlock().getLocation()
+            , Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1, 1);
 
         EnhancedItem enhancedPickaxe = forge.create(pickaxe);
         // Temporarily remove enhancement to avoid 'cascade' where potentially
