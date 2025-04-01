@@ -67,7 +67,7 @@ public class OrbOfBindingManager implements Listener {
      *
      * `config` defaults:
      * material: "CONDUIT"
-     * ingredients: ["GHAST_TEAR", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
+     * ingredients: ["BLAZE_POWDER", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
      * flammable: false
      *
      * @param plugin The plugin this manager is working for.

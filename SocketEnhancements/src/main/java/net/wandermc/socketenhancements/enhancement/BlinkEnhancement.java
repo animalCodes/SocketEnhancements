@@ -99,7 +99,7 @@ public class BlinkEnhancement implements ActiveEnhancement {
         this.maxDistance = config.getInt("max_distance", 64);
     }
 
-    @EventHandler(ignoreCancelled=true)
+    @EventHandler(ignoreCancelled=false)
     public void run(PlayerInteractEvent context) {
         if (!contextMatches(context))
             return;
