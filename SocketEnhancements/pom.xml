@@ -18,18 +18,12 @@
         <dependency>
             <groupId>net.wandermc</groupId>
             <artifactId>SocketEnhancements-api</artifactId>
-            <version>${version}</version>
+            <version>0.6.0</version>
         </dependency>
     </dependencies>
 
     <build>
         <directory>../target</directory>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
