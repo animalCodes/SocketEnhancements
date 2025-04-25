@@ -358,7 +358,6 @@ public class EnhancedItemForge {
             if (!enhancement.isValidItem(this))
                 return false;
 
-            // Can't bind an enhancement more than once.
             if (has(enhancement))
                 return false;
 
@@ -408,7 +407,9 @@ public class EnhancedItemForge {
         public ItemStack update() {
             itemMeta.getPersistentDataContainer().set(socketsKey,
                 PersistentDataType.LIST.strings(), socketList);
+
             updateLore();
+
             item.setItemMeta(itemMeta);
             return item;
         }

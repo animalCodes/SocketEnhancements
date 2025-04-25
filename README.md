@@ -13,7 +13,7 @@ and the ability to fill those sockets with enhancements.
 
 ### Sockets
 
-Sockets represent "slots" in an item which can be filled with enhancements. By
+Sockets represent 'slots' in an item which can be filled with enhancements. By
 default, they are applied by crafting an "orb of binding" which is then added to
 the item in a crafting table.
 
@@ -29,14 +29,14 @@ By default they are applied by enchanting an item with at least one empty
 socket, depending on which button in the enchanting table was pressed, a single
 enhancement will be randomly chosen and applied to the item.
 
-(As you can see, I didn't spend long on choosing a name for this plugin)
+(As you can see, I didn't spend long on choosing a name for this plugin.)
 
 ## Configuration
 
 SocketEnhancements is highly configurable, with options ranging from tweaking
 how powerful different enhancements are, to disabling core features such as orbs
 of binding entirely. It is highly recommended that you configure the plugin to
-your liking before you let your player's use it.
+your liking before you let your players use it.
 
 ## API
 
