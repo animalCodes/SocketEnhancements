@@ -1,5 +1,5 @@
 name: "SocketEnhancements"
-version: "0.6.0"
+version: "1.0.0"
 description: "A basic gear enhancement plugin for PaperMC servers."
 author: "animal"
 prefix: "SE"

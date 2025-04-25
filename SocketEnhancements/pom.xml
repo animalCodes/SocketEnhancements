@@ -10,7 +10,7 @@
     <parent>
         <groupId>net.wandermc</groupId>
         <artifactId>SocketEnhancements-parent</artifactId>
-        <version>0.6.0</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>net.wandermc</groupId>
             <artifactId>SocketEnhancements-api</artifactId>
-            <version>0.6.0</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
