@@ -150,12 +150,6 @@ public class SocketEnhancements extends JavaPlugin {
             enhancementManager.register(
                 new LifestealEnhancement(enhancedItemForge, lifestealConfig));
 
-        ConfigurationSection frigidConfig = nsConfig(config
-            .getConfigurationSection("frigid"));
-        if (frigidConfig.getBoolean("enabled", true))
-            enhancementManager.register(
-                new FrigidEnhancement(enhancedItemForge, frigidConfig));
-
         ConfigurationSection witheringConfig = nsConfig(config
             .getConfigurationSection("withering"));
         if (witheringConfig.getBoolean("enabled", true))

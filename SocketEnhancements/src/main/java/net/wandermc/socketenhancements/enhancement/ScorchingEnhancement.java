@@ -122,8 +122,6 @@ public class ScorchingEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        if (item.has("frigid"))
-            return false;
         return ARMOR.isTagged(item.itemStack().getType());
     }
 }

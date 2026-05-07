@@ -102,15 +102,6 @@ enhancements:
     # was dealt.
     gain: 0.25
 
-  frigid:
-    enabled: true
-    # Chance increase per armour piece.
-    chance_per: 0.15
-    # Duration of mining fatigue effect. (In ticks)
-    duration: 70
-    # Strength of mining fatigue effect.
-    amplifier: 2
-
   withering:
     enabled: true
     # Chance to apply wither.
