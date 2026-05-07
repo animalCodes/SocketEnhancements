@@ -176,10 +176,11 @@ public class SocketEnhancements extends JavaPlugin {
      * @return Null-safe config.
      */
     private ConfigurationSection nsConfig(ConfigurationSection config) {
+        // YamlConfiguration appears to be the only extension of
+        // ConfigurationSection with an accessible blank constructor.
         if (config == null)
-            // YamlConfiguration appears to be the only extension of
-            // ConfigurationSection with an accessible blank constructor.
             return new YamlConfiguration();
+
         return config;
     }
 }

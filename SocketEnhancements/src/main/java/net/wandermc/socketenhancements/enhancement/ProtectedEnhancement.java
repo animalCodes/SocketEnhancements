@@ -62,14 +62,11 @@ public class ProtectedEnhancement implements ActiveEnhancement {
 
         ItemStack itemStack = enhancedItem.update();
 
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (!(itemMeta instanceof Damageable))
-            return;
-
-        ((Damageable) itemMeta).setDamage(0);
-        itemStack.setItemMeta(itemMeta);
-
-        context.getPlayer().getInventory().addItem(itemStack);
+        if (itemStack.getItemMeta() instanceof Damageable damageable) {
+            damageable.setDamage(0);
+            itemStack.setItemMeta(damageable);
+            context.getPlayer().getInventory().addItem(itemStack);
+        }
     }
 
     public String name() {

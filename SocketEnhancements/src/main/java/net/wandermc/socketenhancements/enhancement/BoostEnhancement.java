@@ -84,7 +84,6 @@ public class BoostEnhancement implements ActiveEnhancement {
             .createItemStack("minecraft:firework_rocket[fireworks={" +
                 "explosions:[{shape:star,colors:[11743532]}],flight_duration:"
                 +flightDuration+"}]");
-
     }
 
     /**
@@ -111,8 +110,9 @@ public class BoostEnhancement implements ActiveEnhancement {
             if ((context.getItem().getType().getMaxDurability() -
                 damageable.getDamage() <= (damage * 2)))
                 return false;
-        } else
+        } else {
             return false;
+        }
 
         return true;
     }

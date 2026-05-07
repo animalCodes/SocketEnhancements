@@ -76,12 +76,13 @@ public class EnhancedItemForge {
     /**
      * Parse socket limits.
      *
-     * @param c EnhancedItemForge Configuration section.
+     * @param config EnhancedItemForge Configuration section.
      * @return Socket limits.
      */
-    private EnumMap<Material, Integer> parseLimits(ConfigurationSection c) {
+    private static EnumMap<Material, Integer> parseLimits(
+        ConfigurationSection config) {
         EnumMap<Material, Integer> socketLimits = new EnumMap<>(Material.class);
-        ConfigurationSection limits = c.getConfigurationSection("limits");
+        ConfigurationSection limits = config.getConfigurationSection("limits");
 
         if (limits != null) {
             for (String key : limits.getKeys(false)) {
@@ -126,7 +127,7 @@ public class EnhancedItemForge {
      * @return Socket limit for `mat`.
      */
     public int socketLimit(Material mat) {
-        return socketLimits.get(mat);
+        return socketLimits.getOrDefault(mat, -1);
     }
 
     /**
@@ -187,9 +188,11 @@ public class EnhancedItemForge {
 
             PersistentDataContainer dataContainer = itemMeta
                 .getPersistentDataContainer();
-            if (!dataContainer.has(socketsKey))
+
+            if (!dataContainer.has(socketsKey)) {
                 dataContainer.set(socketsKey, PersistentDataType.LIST.strings(),
                      new ArrayList<String>());
+            }
 
             this.socketList = new ArrayList<String>(dataContainer
                 .get(socketsKey, PersistentDataType.LIST.strings()));

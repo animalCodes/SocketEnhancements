@@ -46,6 +46,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
  */
 public class SeaCommand implements TabExecutor {
     // 'Informational' text is coloured YELLOW. Errors are coloured RED.
+    // TODO explain these messages ..
     private static final Component noSubCommandMsg = Component.text(
         "No subcommand specified.").color(NamedTextColor.RED).appendNewline()
         .append(Component.text("Valid subcommands:")
@@ -125,18 +126,22 @@ public class SeaCommand implements TabExecutor {
             }
 
             switch (args[0].toLowerCase()) {
-                case "bind":
+                case "bind": {
                     bindCommand(player, args);
                     break;
-                case "addsocket":
+                }
+                case "addsocket": {
                     addSocketCommand(player, args);
                     break;
-                case "replace":
+                }
+                case "replace": {
                     replaceCommand(player, args);
                     break;
+                }
                 case "help":
-                default:
+                default: {
                     helpCommand(sender);
+                }
             }
         } else {
             sender.sendMessage(onlyPlayersMsg);
@@ -161,10 +166,12 @@ public class SeaCommand implements TabExecutor {
             case "bind": {
                 suggestions.addAll(enhancementManager.getAllNames());
                 break;
-            } case "addsocket": {
+            }
+            case "addsocket": {
                 suggestions.add("1");
                 break;
-            } case "replace": {
+            }
+            case "replace": {
                 suggestions.addAll(enhancementManager.getAllNames());
                 break;
             }
@@ -189,6 +196,7 @@ public class SeaCommand implements TabExecutor {
 
         for (int i = 1; i < args.length; i++) {
             Enhancement enhancement = enhancementManager.get(args[i]);
+
             if (enhancement instanceof EmptySocket) {
                 sender.sendMessage(unknownEnhancementMsgStart.append(
                     Component.text('"'+args[i]+'"')));

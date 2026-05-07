@@ -115,8 +115,9 @@ public class BlinkEnhancement implements ActiveEnhancement {
             if (tpLocation.equals(newLocation)) {
                 applyFailureCosmetics(player);
                 return;
-            } else
-                tpLocation = newLocation;
+            }
+
+            tpLocation = newLocation;
         }
 
         tpLocation.setYaw(player.getLocation().getYaw());

@@ -137,10 +137,14 @@ public class OrbOfBindingManager implements Listener {
     private ItemStack createOrbOfBinding() {
         ItemStack orb = new ItemStack(orbOfBindingType);
         ItemMeta meta = orb.getItemMeta();
+
         meta.displayName(ORB_OF_BINDING_NAME);
+
         if (!flammable)
             meta.setDamageResistant(DamageTypeTags.IS_FIRE);
+
         orb.setItemMeta(meta);
+
         return orb;
     }
 
@@ -182,6 +186,7 @@ public class OrbOfBindingManager implements Listener {
     public void handleCraft(PrepareItemCraftEvent event) {
         int orbs = 0;
         EnhancedItem itemToUpgrade = null;
+
         for (ItemStack item : event.getInventory().getMatrix()) {
             if (item == null)
                 continue;
@@ -195,8 +200,7 @@ public class OrbOfBindingManager implements Listener {
         if (orbs < 1 || itemToUpgrade == null)
             return;
 
-        if (itemToUpgrade.socketLimit() >=
-            itemToUpgrade.sockets() + orbs) {
+        if (itemToUpgrade.socketLimit() >= itemToUpgrade.sockets() + orbs) {
             itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.update());
         } else {

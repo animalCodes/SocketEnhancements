@@ -106,8 +106,7 @@ public class EnhancementGemManager implements Listener {
         BlockableAction[] javaIsDumb = {};
         this.eventBlocker = new ItemEventBlocker(plugin,
             item -> isEnhancementGem(item),
-            BlockableAction.getValidActions
-            (gemType).toArray(javaIsDumb));
+            BlockableAction.getValidActions(gemType).toArray(javaIsDumb));
 
         registerRecipe();
 
@@ -126,8 +125,10 @@ public class EnhancementGemManager implements Listener {
     public boolean isEnhancementGem(ItemStack item) {
         if (!item.hasItemMeta())
             return false;
+
         PersistentDataContainer dataContainer = item.getItemMeta()
-        .getPersistentDataContainer();
+            .getPersistentDataContainer();
+
         if (dataContainer.has(gemKey))
             return dataContainer.get(gemKey, PersistentDataType.BOOLEAN);
         else
@@ -149,6 +150,7 @@ public class EnhancementGemManager implements Listener {
      */
     public ItemStack createGemOfType(Enhancement enhancement) {
         EnhancedItem enhancedItem = createGem();
+
         if (enhancedItem.checklessBind(enhancement))
             return enhancedItem.update();
         else
@@ -164,11 +166,13 @@ public class EnhancementGemManager implements Listener {
         ItemStack item = new ItemStack(gemType);
 
         ItemMeta meta = item.getItemMeta();
+
         if (!flammable)
             meta.setDamageResistant(DamageTypeTags.IS_FIRE);
         meta.displayName(ENHANCEMENT_GEM_NAME);
         meta.getPersistentDataContainer()
             .set(gemKey, PersistentDataType.BOOLEAN, true);
+
         item.setItemMeta(meta);
 
         EnhancedItem enhancedItem = forge.create(item);
@@ -204,14 +208,12 @@ public class EnhancementGemManager implements Listener {
      */
     @EventHandler(ignoreCancelled=true)
     public void handleInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK
+            || event.getClickedBlock().getType() != blockType
+            || !event.getPlayer().isSneaking()
+            || event.getHand() != EquipmentSlot.HAND)
             return;
-        if (event.getClickedBlock().getType() != blockType)
-            return;
-        if (!event.getPlayer().isSneaking())
-            return;
-        if (event.getHand() != EquipmentSlot.HAND)
-            return;
+
         ItemStack item = event.getItem();
 
         // Don't let players remove enhancements from enhancement gems,
@@ -254,8 +256,9 @@ public class EnhancementGemManager implements Listener {
                 Enhancement enhancement = last(forge.create(item));
                 if (enhancement != null)
                     enhancements.add(enhancement);
-            } else
+            } else {
                 itemToEnhance = forge.create(item.clone());
+            }
         }
 
         if (enhancements.size() < 1 || itemToEnhance == null)

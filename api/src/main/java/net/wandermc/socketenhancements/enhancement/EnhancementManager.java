@@ -77,12 +77,13 @@ public class EnhancementManager {
         if (enhancementStore.containsKey(name))
             return false;
 
-        if (enhancement instanceof ActiveEnhancement activeEnhancement)
+        if (enhancement instanceof ActiveEnhancement activeEnhancement) {
             pluginManager.registerEvents(activeEnhancement, plugin);
-        else
+        } else {
             throw new IllegalArgumentException("enhancement \"" +
                 enhancement.name() + "\" is not a valid extension " +
                 "of Enhancement.");
+        }
 
         enhancementStore.put(name, enhancement);
         return true;

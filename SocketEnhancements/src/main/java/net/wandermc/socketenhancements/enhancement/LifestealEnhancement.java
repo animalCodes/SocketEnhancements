@@ -82,8 +82,8 @@ public class LifestealEnhancement implements ActiveEnhancement {
             if (!roll(chance))
                 return;
 
-            double maxHealth = attacker.getAttribute(
-                Attribute.MAX_HEALTH).getValue();
+            double maxHealth = attacker.getAttribute(Attribute.MAX_HEALTH)
+                .getValue();
             if (attacker.getHealth() >= maxHealth)
                 return;
 

@@ -94,60 +94,74 @@ public class ItemEventBlocker implements Listener {
             try {
                 Method handler;
                 switch (action) {
-                    case BLOCK_PLACE:
+                    case BLOCK_PLACE: {
                         handler = this.getClass().getMethod("blockBlockPlace",
                             action.eventType());
                         break;
-                    case FUEL_BREWING:
+                    }
+                    case FUEL_BREWING: {
                         handler = this.getClass().getMethod("blockFuelBrewing",
                             action.eventType());
                         break;
-                    case BREW_INGREDIENT:
+                    }
+                    case BREW_INGREDIENT: {
                         handler = this.getClass().getMethod(
                             "blockBrewIngredient", action.eventType());
                         break;
-                    case BURN:
+                    }
+                    case BURN: {
                         handler = this.getClass().getMethod("blockBurn",
                             action.eventType());
                         break;
-                    case COMBINE:
+                    }
+                    case COMBINE: {
                         handler = this.getClass().getMethod("blockCombine",
                             action.eventType());
                         break;
-                    case COOK:
+                    }
+                    case COOK: {
                         handler = this.getClass().getMethod("blockCook",
                             action.eventType());
                         break;
-                    case ENCHANT:
+                    }
+                    case ENCHANT: {
                         handler = this.getClass().getMethod("blockEnchant",
                             action.eventType());
                         break;
-                    case ENTITY_PLACE:
+                    }
+                    case ENTITY_PLACE: {
                         handler = this.getClass().getMethod("blockEntityPlace",
                             action.eventType());
                         break;
-                    case ENTITY_SPAWN:
+                    }
+                    case ENTITY_SPAWN: {
                         handler = this.getClass().getMethod("blockEntitySpawn",
                             action.eventType());
                         break;
-                    case GRIND:
+                    }
+                    case GRIND: {
                         handler = this.getClass().getMethod("blockGrind",
                             action.eventType());
                         break;
-                    case SMELT:
+                    }
+                    case SMELT: {
                         handler = this.getClass().getMethod("blockSmelt",
                             action.eventType());
                         break;
-                    case USE_IN_RECIPE:
+                    }
+                    case USE_IN_RECIPE: {
                         handler = this.getClass().getMethod("blockUseInRecipe",
                             action.eventType());
                         break;
-                    default:
+                    }
+                    default: {
                         // In case of unrecognised action, deliberately cause a
                         // NoSuchMethodException. (Also causes handler to be set
                         // in all branches, which makes javac happy.)
                         handler = this.getClass().getMethod("Foo");
+                    }
                 }
+
                 registerHandler(handler, action.eventType());
             } catch (NoSuchMethodException exception) {
                 plugin.getLogger().log(Level.SEVERE, this.getClass().getName()+
@@ -235,12 +249,14 @@ public class ItemEventBlocker implements Listener {
      * first place.
      */
     public void blockCook(PlayerInteractEvent event) {
-        if (event.hasBlock() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+        if (event.hasBlock()
+            && event.getAction() == Action.RIGHT_CLICK_BLOCK
             && (event.getClickedBlock().getType() == Material.CAMPFIRE
                 || event.getClickedBlock().getType() == Material.SOUL_CAMPFIRE)
-            && (event.hasItem()
-                && itemChecker.test(nullEmpty(event.getItem()))))
-            {event.setCancelled(true);}
+            && (event.hasItem() && itemChecker.test(nullEmpty(
+                event.getItem())))) {
+            event.setCancelled(true);
+        }
     }
 
     /**
@@ -248,18 +264,21 @@ public class ItemEventBlocker implements Listener {
      */
     public void blockEntityPlace(EntityPlaceEvent event) {
         if (itemChecker.test(nullEmpty(
-            event.getPlayer().getInventory().getItem(event.getHand()))))
+            event.getPlayer().getInventory().getItem(event.getHand())))) {
             event.setCancelled(true);
+        }
     }
 
     /**
      * Prevent an entity from being spawned if the spawning item matches.
      */
     public void blockEntitySpawn(PlayerInteractEvent event) {
-        if ((event.hasItem() && itemChecker.test(nullEmpty(event.getItem()))) &&
-            (event.getAction() == Action.RIGHT_CLICK_AIR
-            || event.getAction() == Action.RIGHT_CLICK_BLOCK))
+        if ((event.hasItem()
+            && itemChecker.test(nullEmpty(event.getItem())))
+            && (event.getAction() == Action.RIGHT_CLICK_AIR
+                || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             event.setCancelled(true);
+        }
     }
 
     /**

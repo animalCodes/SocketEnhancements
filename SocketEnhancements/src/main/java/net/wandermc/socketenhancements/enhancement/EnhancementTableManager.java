@@ -37,7 +37,7 @@ import static net.wandermc.socketenhancements.util.Dice.randomise;
 
 /**
  * Manages the use of enchanting tables to enhance items. (referred to as
- * Enhancement tables")
+ * "Enhancement tables")
  *
  * Note that constructing an instance of this class is sufficient to enable
  * enhancement tables.
@@ -91,18 +91,22 @@ public class EnhancementTableManager implements Listener {
 
         for (Enhancement enhancement : manager.getAll()) {
             switch (enhancement.rarity()) {
-                case I: 
+                case I: {
                     enhancementPoolI.add(enhancement);
                     if (!additivePools)
                         break;
-                case II: 
+                }
+                case II: {
                     enhancementPoolII.add(enhancement);
                     if (!additivePools)
                         break;
-                case III: 
+                }
+                case III: {
                     enhancementPoolIII.add(enhancement);
-                default:
+                }
+                default: {
                     break;
+                }
             }
         }
 
@@ -147,7 +151,7 @@ public class EnhancementTableManager implements Listener {
 
         ArrayList<Enhancement> pool;
         switch (event.whichButton()) {
-            case 0:
+            case 0: {
                 pool = this.enhancementPoolI;
                 iCounter++;
                 if (iCounter > randomisationFrequency) {
@@ -155,7 +159,8 @@ public class EnhancementTableManager implements Listener {
                     iCounter = 0;
                 }
                 break;
-            case 1:
+            }
+            case 1: {
                 pool = this.enhancementPoolII;
                 iiCounter++;
                 if (iiCounter > randomisationFrequency) {
@@ -163,9 +168,10 @@ public class EnhancementTableManager implements Listener {
                     iiCounter = 0;
                 }
                 break;
+            }
             // If the player manages to find and press a 4th button, they'll get
             // the rarest pool. Good for them!
-            default:
+            default: {
                 pool = this.enhancementPoolIII;
                 iiiCounter++;
                 if (iiiCounter > randomisationFrequency) {
@@ -173,6 +179,7 @@ public class EnhancementTableManager implements Listener {
                     iiiCounter = 0;
                 }
                 break;
+            }
         }
 
         int i = 0;

@@ -40,10 +40,10 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 
 /**
- * Capturing enhancement
+ * Capturing enhancement.
  *
  * Allows spawners to be mined with pickaxes.
- * May be consumed in the process (configurable)
+ * May be consumed in the process. (configurable)
  */
 public class CapturingEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
@@ -102,8 +102,8 @@ public class CapturingEnhancement implements ActiveEnhancement {
     public void placeSpawners(BlockPlaceEvent event) {
         Block block = event.getBlock();
 
-        if (block.getType() != Material.SPAWNER || event.getPlayer()
-            .getGameMode() != GameMode.SURVIVAL)
+        if (block.getType() != Material.SPAWNER ||
+            event.getPlayer().getGameMode() != GameMode.SURVIVAL)
             return;
 
         CreatureSpawner itemBlockState = (CreatureSpawner)

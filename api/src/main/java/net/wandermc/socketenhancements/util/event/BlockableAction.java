@@ -223,6 +223,7 @@ public enum BlockableAction {
         if (mat == Material.ARMOR_STAND || mat == Material.END_CRYSTAL
             || ITEMS_BOATS.isTagged(mat))
             return true;
+
         return mat.toString().contains("MINECART");
     }
 
@@ -237,7 +238,8 @@ public enum BlockableAction {
             case EGG, ENDER_EYE, ENDER_PEARL, ITEM_FRAME,
             GLOW_ITEM_FRAME, PAINTING, SPLASH_POTION, LINGERING_POTION:
                 return true;
-            default: return SPAWN_EGGS.isTagged(mat);
+            default:
+                return SPAWN_EGGS.isTagged(mat);
         }
     }
 
@@ -266,12 +268,13 @@ public enum BlockableAction {
         Recipe recipe;
         while (iterator.hasNext()) {
             recipe = iterator.next();
-            if (recipe instanceof CookingRecipe &&
-                !(recipe instanceof CampfireRecipe)) {
-                    if (((CookingRecipe<?>)recipe)
-                        .getInputChoice().test(new ItemStack(mat)))
-                            return true;
+            if (recipe instanceof CookingRecipe
+                && !(recipe instanceof CampfireRecipe)) {
+                if (((CookingRecipe<?>)recipe).getInputChoice().test(
+                    new ItemStack(mat))) {
+                        return true;
                 }
+            }
         }
         return false;
     }
