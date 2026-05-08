@@ -73,7 +73,7 @@ public class CushioningEnhancement implements ActiveEnhancement {
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
 
-            if (helmet != null && forge.has(helmet, this)) {
+            if (!helmet.isEmpty() && forge.has(helmet, this)) {
                 context.setDamage(context.getDamage() * damageTaken);
                 player.getWorld().spawnParticle(Particle.CLOUD,
                     player.getLocation(), 2);

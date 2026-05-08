@@ -108,7 +108,7 @@ public class DirectingEnhancement implements ActiveEnhancement {
 
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
-            if (helmet == null || !forge.has(helmet, this))
+            if (helmet.isEmpty() || !forge.has(helmet, this))
                 return;
 
             context.setCancelled(true);
