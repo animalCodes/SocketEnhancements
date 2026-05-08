@@ -145,7 +145,11 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
             if (relative.getType().getBlastResistance() <= 10) {
                 BlockBreakEvent event = new BlockBreakEvent(relative, player);
                 pluginManager.callEvent(event);
-                if (event.isCancelled())
+
+                // Respect region-protection plugins, don't break blocks
+                // outside of the world border.
+                if (event.isCancelled() || !relative.getWorld().getWorldBorder()
+                    .isInside(relative.getLocation()))
                     continue;
 
                 if (relative.getType().getHardness() > 0)
