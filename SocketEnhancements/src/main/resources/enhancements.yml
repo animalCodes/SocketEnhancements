@@ -45,6 +45,7 @@ enhancements:
   cushioning:
     enabled: true
     # Amount of damage taken when equipped. (Multiplier)
+    # Cannot be greater than 1.
     damage_taken: 0.5
 
   directing:
@@ -90,7 +91,7 @@ enhancements:
     chance_per: 0.2
     # How long to set attacker on fire for, in ticks. (20 ticks = 1 second)
     fire_ticks: 40
-    # Knockback strength. Must be greater than 0.
+    # Knockback strength.
     knockback: 0.5
 
   lifesteal:

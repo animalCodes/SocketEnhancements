@@ -49,9 +49,9 @@ public class BoostEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Boost<white>>");
 
-    private final int damage;
-    private final int flightDuration;
-    private final double damageChance;
+    private int damage;
+    private int flightDuration;
+    private double damageChance;
 
     private final ItemStack rocket;
     private final ItemStack damageRocket;
@@ -72,9 +72,18 @@ public class BoostEnhancement implements ActiveEnhancement {
     public BoostEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
+
         this.damage = config.getInt("cost", 8);
+        if (this.damage < 0)
+            this.damage = 8;
+
         this.flightDuration = config.getInt("duration", 2);
+        if (this.flightDuration < 0)
+            this.flightDuration = 2;
+
         this.damageChance = config.getDouble("damage_chance", 0.15);
+        if (this.damageChance < 0)
+            this.damageChance = 0.15;
 
         this.rocket = Bukkit.getServer().getItemFactory().createItemStack(
             "minecraft:firework_rocket[fireworks={flight_duration:"+

@@ -48,9 +48,9 @@ public class ScorchingEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<yellow>Scorching<white>>");
 
-    private final double chancePerItem;
-    private final int fireTicks;
-    private final double knockbackStrength;
+    private double chancePerItem;
+    private int fireTicks;
+    private double knockbackStrength;
     private final PotionEffect effect;
 
     private EnhancedItemForge forge;
@@ -63,8 +63,6 @@ public class ScorchingEnhancement implements ActiveEnhancement {
      * "fire_ticks": 40
      * "knockback": 0.5
      *
-     * "knockback" must be > 0.
-     *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.
      */
@@ -72,13 +70,17 @@ public class ScorchingEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        this.chancePerItem = config.getDouble("chance_per", 0.15);
-        this.fireTicks = config.getInt("fire_ticks", 30);
+        this.chancePerItem = config.getDouble("chance_per", 0.2);
+        if (this.chancePerItem < 0)
+            this.chancePerItem = 0.2;
 
-        double knockback = config.getDouble("knockback", 0.5);
-        if (knockback <= 0)
-            knockback = 0.5;
-        this.knockbackStrength = knockback;
+        this.fireTicks = config.getInt("fire_ticks", 40);
+        if (this.fireTicks < 0)
+            this.fireTicks = 40;
+
+        this.knockbackStrength = config.getDouble("knockback", 0.5);
+        if (this.knockbackStrength <= 0)
+            this.knockbackStrength = 0.5;
 
         this.effect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
             (int)(this.fireTicks * 1.5), 1);

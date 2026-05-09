@@ -51,7 +51,7 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         .deserialize("<!italic><white><<dark_red>Explosive<white>>");
 
     private final Material costType;
-    private final int costAmount;
+    private int costAmount;
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
     private final EnhancedItemForge forge;
@@ -77,6 +77,8 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         this.costType = costType;
 
         this.costAmount = config.getInt("cost_amount", 2);
+        if (this.costAmount < 0)
+            this.costAmount = 2;
     }
 
     /**

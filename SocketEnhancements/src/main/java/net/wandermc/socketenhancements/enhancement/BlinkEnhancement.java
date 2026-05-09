@@ -68,8 +68,8 @@ public class BlinkEnhancement implements ActiveEnhancement {
         .deserialize("<!italic><white><<dark_purple>Blink<white>>");
 
     private final Material costType;
-    private final int costAmount;
-    private final int maxDistance;
+    private int costAmount;
+    private int maxDistance;
 
     private final EnhancedItemForge forge;
 
@@ -96,7 +96,11 @@ public class BlinkEnhancement implements ActiveEnhancement {
         this.costType = mat;
 
         this.costAmount = config.getInt("cost_amount", 16);
+        if (this.costAmount < 0)
+            this.costAmount = 16;
         this.maxDistance = config.getInt("max_distance", 64);
+        if (this.maxDistance < 0)
+            this.maxDistance = 64;
     }
 
     @EventHandler(ignoreCancelled=false)

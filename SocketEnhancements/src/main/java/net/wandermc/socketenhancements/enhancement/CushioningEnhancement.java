@@ -48,7 +48,7 @@ public class CushioningEnhancement implements ActiveEnhancement {
 
     private final EnhancedItemForge forge;
 
-    private final double damageTaken;
+    private double damageTaken;
 
     /**
      * Create a Cushioning enhancement.
@@ -62,7 +62,10 @@ public class CushioningEnhancement implements ActiveEnhancement {
     public CushioningEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
+
         this.damageTaken = config.getDouble("damage_taken", 0.5);
+        if (this.damageTaken > 1)
+            this.damageTaken = 0.5;
     }
 
     @EventHandler(ignoreCancelled=true)

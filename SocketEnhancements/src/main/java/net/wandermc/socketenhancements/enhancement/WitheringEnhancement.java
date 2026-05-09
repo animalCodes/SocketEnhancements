@@ -47,7 +47,7 @@ public class WitheringEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_gray>Withering<white>>");
 
-    private final double chance;
+    private double chance;
     private final PotionEffect effect;
 
     private final EnhancedItemForge forge;
@@ -66,7 +66,10 @@ public class WitheringEnhancement implements ActiveEnhancement {
     public WitheringEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.chance = config.getDouble("chance", 0.25);
+
+        this.chance = config.getDouble("chance", 0.3);
+        if (this.chance < 0)
+            this.chance = 0.3;
 
         int duration = config.getInt("duration", 100);
         if (duration <= 0)

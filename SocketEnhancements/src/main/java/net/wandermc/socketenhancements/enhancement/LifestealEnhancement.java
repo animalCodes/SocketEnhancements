@@ -47,8 +47,8 @@ public class LifestealEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Lifesteal<white>>");
 
-    private final double chance;
-    private final double gain;
+    private double chance;
+    private double gain;
 
     private final EnhancedItemForge forge;
 
@@ -65,8 +65,14 @@ public class LifestealEnhancement implements ActiveEnhancement {
     public LifestealEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
-        this.chance = config.getDouble("chance", 0.25);
+
+        this.chance = config.getDouble("chance", 0.5);
+        if (this.chance < 0)
+            this.chance = 0.5;
+
         this.gain = config.getDouble("gain", 0.25);
+        if (this.gain < 0)
+            this.gain = 0.25;
     }
 
     @EventHandler(ignoreCancelled=true)

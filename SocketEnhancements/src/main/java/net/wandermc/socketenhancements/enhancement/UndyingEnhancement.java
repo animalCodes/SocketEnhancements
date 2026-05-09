@@ -84,9 +84,18 @@ public class UndyingEnhancement implements ActiveEnhancement {
         config.getMapList("effects").forEach(rawMap -> {
             HashMap convMap = new HashMap();
             rawMap.forEach((k, v) -> convMap.put(k.toString(), v));
-            try {
-                this.potionEffects.add(new PotionEffect(convMap));
-            } catch (Exception e) {}
+
+            if (!convMap.containsKey("duration")
+                || !convMap.containsKey("amplifier"))
+                return;
+
+            if ((int)convMap.get("duration") <= 0)
+                return;
+
+            if ((int)convMap.get("amplifier") <= 0)
+                return;
+
+            this.potionEffects.add(new PotionEffect(convMap));
         });
 
         if (this.potionEffects.size() == 0) {

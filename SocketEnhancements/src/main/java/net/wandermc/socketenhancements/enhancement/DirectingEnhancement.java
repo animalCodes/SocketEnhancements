@@ -45,13 +45,13 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
  * Default buffs aim to simulate the effect of eating a golden apple.
  */
 public class DirectingEnhancement implements ActiveEnhancement {
-    private final int foodGain;
-    private final float saturationGain;
-    private final ArrayList<PotionEffect> potionEffects;
-
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<aqua>Directing<white>>");
+
+    private int foodGain;
+    private float saturationGain;
+    private final ArrayList<PotionEffect> potionEffects;
 
     private EnhancedItemForge forge;
 
@@ -78,17 +78,32 @@ public class DirectingEnhancement implements ActiveEnhancement {
     public DirectingEnhancement(EnhancedItemForge forge, ConfigurationSection
         config) {
         this.forge = forge;
+
         this.foodGain = config.getInt("food_gain", 4);
-        this.saturationGain = (float)config.getDouble("saturation_gain", 9.6);
+        if (this.foodGain < 0)
+            this.foodGain = 4;
+
+        this.saturationGain = (float) config.getDouble("saturation_gain", 9.6);
+        if (this.saturationGain < 0)
+            this.saturationGain = (float) 9.6;
 
         this.potionEffects = new ArrayList();
 
         config.getMapList("effects").forEach(rawMap -> {
             HashMap convMap = new HashMap();
             rawMap.forEach((k, v) -> convMap.put(k.toString(), v));
-            try {
-                this.potionEffects.add(new PotionEffect(convMap));
-            } catch (Exception e) {}
+
+            if (!convMap.containsKey("duration")
+                || !convMap.containsKey("amplifier"))
+                return;
+
+            if ((int)convMap.get("duration") <= 0)
+                return;
+
+            if ((int)convMap.get("amplifier") <= 0)
+                return;
+
+            this.potionEffects.add(new PotionEffect(convMap));
         });
 
         if (this.potionEffects.size() == 0) {
