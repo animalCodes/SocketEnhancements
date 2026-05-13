@@ -26,10 +26,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
+import static io.papermc.paper.tag.BaseTag.ITEMS_HEAD_ARMOR;
+
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
-import static com.destroystokyo.paper.MaterialTags.HELMETS;
 
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
@@ -97,6 +97,6 @@ public class CushioningEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return HELMETS.isTagged(item.itemStack().getType());
+        return ITEMS_HEAD_ARMOR.isTagged(item.itemStack().getType());
     }
 }

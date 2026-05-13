@@ -31,10 +31,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
+import static io.papermc.paper.tag.BaseTag.ITEMS_PICKAXES;
+
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
-import static com.destroystokyo.paper.MaterialTags.PICKAXES;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -158,7 +158,7 @@ public class CapturingEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return !item.has("explosive") && PICKAXES.isTagged(item.itemStack()
-            .getType());
+        return !item.has("explosive") && ITEMS_PICKAXES.isTagged(
+            item.itemStack().getType());
     }
 }

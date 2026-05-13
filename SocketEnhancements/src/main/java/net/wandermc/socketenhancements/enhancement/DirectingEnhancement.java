@@ -30,10 +30,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import static io.papermc.paper.tag.BaseTag.ITEMS_HEAD_ARMOR;
+
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
-import static com.destroystokyo.paper.MaterialTags.HELMETS;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -146,6 +146,6 @@ public class DirectingEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return HELMETS.isTagged(item.itemStack().getType());
+        return ITEMS_HEAD_ARMOR.isTagged(item.itemStack().getType());
     }
 }

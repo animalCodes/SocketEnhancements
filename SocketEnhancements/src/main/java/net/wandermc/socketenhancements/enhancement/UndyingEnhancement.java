@@ -33,11 +33,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import static io.papermc.paper.tag.BaseTag.ITEMS_AXES;
+import static io.papermc.paper.tag.BaseTag.ITEMS_SWORDS;
+
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
-import static com.destroystokyo.paper.MaterialTags.SWORDS;
-import static com.destroystokyo.paper.MaterialTags.AXES;
 
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
@@ -166,7 +166,7 @@ public class UndyingEnhancement implements ActiveEnhancement {
 
     public boolean isValidItem(EnhancedItem item) {
         return item.itemStack().getType() == Material.SHIELD
-            || SWORDS.isTagged(item.itemStack().getType())
-            || AXES.isTagged(item.itemStack().getType());
+            || ITEMS_AXES.isTagged(item.itemStack().getType())
+            || ITEMS_SWORDS.isTagged(item.itemStack().getType());
     }
 }
