@@ -34,6 +34,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static io.papermc.paper.tag.BaseTag.ITEMS_AXES;
+import static io.papermc.paper.tag.BaseTag.ITEMS_SPEARS;
 import static io.papermc.paper.tag.BaseTag.ITEMS_SWORDS;
 
 import net.kyori.adventure.text.TextComponent;
@@ -167,6 +168,7 @@ public class UndyingEnhancement implements ActiveEnhancement {
     public boolean isValidItem(EnhancedItem item) {
         return item.itemStack().getType() == Material.SHIELD
             || ITEMS_AXES.isTagged(item.itemStack().getType())
+            || ITEMS_SPEARS.isTagged(item.itemStack().getType())
             || ITEMS_SWORDS.isTagged(item.itemStack().getType());
     }
 }

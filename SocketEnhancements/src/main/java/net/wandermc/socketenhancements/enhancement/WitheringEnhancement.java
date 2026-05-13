@@ -27,6 +27,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static io.papermc.paper.tag.BaseTag.ITEMS_AXES;
+import static io.papermc.paper.tag.BaseTag.ITEMS_SPEARS;
 import static io.papermc.paper.tag.BaseTag.ITEMS_SWORDS;
 
 import net.kyori.adventure.text.TextComponent;
@@ -112,7 +113,8 @@ public class WitheringEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return ITEMS_SWORDS.isTagged(item.itemStack().getType()) ||
-            ITEMS_AXES.isTagged(item.itemStack().getType());
+        return ITEMS_SWORDS.isTagged(item.itemStack().getType())
+            || ITEMS_SPEARS.isTagged(item.itemStack().getType())
+            || ITEMS_AXES.isTagged(item.itemStack().getType());
     }
 }
