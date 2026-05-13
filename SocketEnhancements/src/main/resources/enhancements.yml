@@ -29,7 +29,7 @@ enhancements:
     # the player's offhand.
     cost_type: EXP
     # Number of items to take or experience points to deduct on use.
-    cost_amount: 16
+    cost_amount: 8
     # Maximum distance players can teleport.
     max_distance: 64
 
@@ -90,14 +90,14 @@ enhancements:
     # Chance increase per enhanced armour piece.
     chance_per: 0.2
     # How long to set attacker on fire for, in ticks. (20 ticks = 1 second)
-    fire_ticks: 40
+    fire_ticks: 30
     # Knockback strength.
-    knockback: 0.5
+    knockback: 1.5
 
   lifesteal:
     enabled: true
     # Chance to gain health.
-    chance: 0.5
+    chance: 0.4
     # Amount of damage dealt to regain as health.
     # Note that any value over 1 will result in gaining more health than damage
     # was dealt.

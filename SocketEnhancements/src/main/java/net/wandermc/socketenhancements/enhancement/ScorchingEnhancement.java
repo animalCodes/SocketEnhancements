@@ -60,8 +60,8 @@ public class ScorchingEnhancement implements ActiveEnhancement {
      *
      * `config` defaults:
      * "chance_per": 0.2
-     * "fire_ticks": 40
-     * "knockback": 0.5
+     * "fire_ticks": 30
+     * "knockback": 1.5
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration options.
@@ -74,13 +74,13 @@ public class ScorchingEnhancement implements ActiveEnhancement {
         if (this.chancePerItem < 0)
             this.chancePerItem = 0.2;
 
-        this.fireTicks = config.getInt("fire_ticks", 40);
+        this.fireTicks = config.getInt("fire_ticks", 30);
         if (this.fireTicks < 0)
-            this.fireTicks = 40;
+            this.fireTicks = 30;
 
-        this.knockbackStrength = config.getDouble("knockback", 0.5);
+        this.knockbackStrength = config.getDouble("knockback", 1.5);
         if (this.knockbackStrength <= 0)
-            this.knockbackStrength = 0.5;
+            this.knockbackStrength = 1.5;
 
         this.effect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
             (int)(this.fireTicks * 1.5), 1);

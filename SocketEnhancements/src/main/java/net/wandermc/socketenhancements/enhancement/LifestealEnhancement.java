@@ -57,7 +57,7 @@ public class LifestealEnhancement implements ActiveEnhancement {
      * Create a LifestealEnhancement.
      *
      * `config` defaults:
-     * chance: 0.5
+     * chance: 0.4
      * gain: 0.25
      *
      * @param forge The current EnhancedItemForge.
@@ -67,9 +67,9 @@ public class LifestealEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        this.chance = config.getDouble("chance", 0.5);
+        this.chance = config.getDouble("chance", 0.4);
         if (this.chance < 0)
-            this.chance = 0.5;
+            this.chance = 0.4;
 
         this.gain = config.getDouble("gain", 0.25);
         if (this.gain < 0)

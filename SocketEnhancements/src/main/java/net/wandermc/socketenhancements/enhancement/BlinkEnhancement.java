@@ -77,8 +77,8 @@ public class BlinkEnhancement implements ActiveEnhancement {
      * Create a BlinkEnhancement.
      *
      * `config` defaults:
-     * cost_type: "AIR"
-     * cost_amount: 16
+     * cost_type: "EXP" (AIR)
+     * cost_amount: 8
      * max_distance: 64
      *
      * @param forge The current EnhancedItemForge.
@@ -95,9 +95,9 @@ public class BlinkEnhancement implements ActiveEnhancement {
             mat = Material.AIR;
         this.costType = mat;
 
-        this.costAmount = config.getInt("cost_amount", 16);
+        this.costAmount = config.getInt("cost_amount", 8);
         if (this.costAmount < 0)
-            this.costAmount = 16;
+            this.costAmount = 8;
         this.maxDistance = config.getInt("max_distance", 64);
         if (this.maxDistance < 0)
             this.maxDistance = 64;
