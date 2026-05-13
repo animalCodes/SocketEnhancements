@@ -41,13 +41,14 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
  * - bind {enhancements} - Bind `enhancements` to held item.
  * - add {n} - Alias for "addsocket".
  * - addsocket {n} - Add `n` sockets to held item.
+ * - remove {enhancement} - Remove `enhancement` from held item.
  * - replace {enhancement1} {enhancement2} - Replace `enhancement1` with
  *   `enhancement2` on held item.
  * - help - Print help.
  */
 public class SeaCommand implements TabExecutor {
     // 'Informational' text is coloured YELLOW. Errors are coloured RED.
-    // TODO explain these messages ..
+    // Generic messages
     private static final Component noSubCommandMsg = Component.text(
         "No subcommand specified.").color(NamedTextColor.RED).appendNewline()
         .append(Component.text("Valid subcommands:")
@@ -69,13 +70,13 @@ public class SeaCommand implements TabExecutor {
     private static final Component helpHelpMsg = Component.text(
         "help - Print this help.").color(NamedTextColor.YELLOW);
 
+    // 'bind' messages
     private static final Component noItemMsg = Component.text(
         "No item in main hand.").color(NamedTextColor.RED);
     private static final Component cannotBindMsgEnd = Component.text(
         " cannot be bound to this item.").color(NamedTextColor.RED);
     private static final Component unknownEnhancementMsgStart = Component.text(
         "Unknown enhancement ").color(NamedTextColor.RED);
-
     private static final Component noEnhancementMsg = Component.text(
         "No enhancement given.").color(NamedTextColor.RED);
     private static final Component noEmptySocketsMsg = Component.text(
@@ -83,6 +84,7 @@ public class SeaCommand implements TabExecutor {
     private static final Component alreadyBoundMsgStart = Component.text(
         "This item already has ").color(NamedTextColor.RED);
 
+    // 'add(socket)' messages
     private static final Component maxSocketsMsgStart = Component.text(
         "This item already has the maximum number of sockets. ")
         .color(NamedTextColor.RED);
@@ -92,6 +94,7 @@ public class SeaCommand implements TabExecutor {
         "Adding that many sockets would put this item over its socket limit. ")
         .color(NamedTextColor.RED);
 
+    // 'replace' messages
     private static final Component noBaseOrReplacementMsg = Component.text(
         "No base or replacement enhancement given.").color(NamedTextColor.RED);
     private static final Component noReplacementMsg = Component.text(
@@ -136,6 +139,10 @@ public class SeaCommand implements TabExecutor {
                     addSocketCommand(player, args);
                     break;
                 }
+                case "remove": {
+                    removeCommand(player, args);
+                    break;
+                }
                 case "replace": {
                     replaceCommand(player, args);
                     break;
@@ -159,21 +166,20 @@ public class SeaCommand implements TabExecutor {
         if (args.length == 1) {
             suggestions.add("bind");
             suggestions.add("add(socket)");
+            suggestions.add("remove");
             suggestions.add("replace");
             suggestions.add("help");
             return suggestions;
         }
 
         switch (args[0].toLowerCase()) {
-            case "bind": {
-                suggestions.addAll(enhancementManager.getAllNames());
-                break;
-            }
             case "add":
             case "addsocket": {
                 suggestions.add("1");
                 break;
             }
+            case "bind":
+            case "remove":
             case "replace": {
                 suggestions.addAll(enhancementManager.getAllNames());
                 break;
@@ -245,6 +251,29 @@ public class SeaCommand implements TabExecutor {
         }
 
         item.addSockets(numSockets);
+        item.update();
+    }
+
+    private void removeCommand(Player sender, String[] args) {
+        if (sender.getInventory().getItemInMainHand().isEmpty()) {
+            sender.sendMessage(noItemMsg);
+            return;
+        }
+
+        EnhancedItem item = forge.create(sender.getInventory()
+            .getItemInMainHand());
+
+        if (args.length < 2) {
+            sender.sendMessage(noEnhancementMsg);
+            return;
+        }
+
+        if (!item.remove(args[1])) {
+            sender.sendMessage(notBoundMsgStart.append(
+                Component.text('"'+args[1]+'"')).append(notBoundMsgEnd));
+            return;
+        }
+
         item.update();
     }
 
