@@ -39,6 +39,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge;
  *
  * Subcommands:
  * - bind {enhancements} - Bind `enhancements` to held item.
+ * - add {n} - Alias for "addsocket".
  * - addsocket {n} - Add `n` sockets to held item.
  * - replace {enhancement1} {enhancement2} - Replace `enhancement1` with
  *   `enhancement2` on held item.
@@ -57,7 +58,7 @@ public class SeaCommand implements TabExecutor {
         "bind {enhancements} - Bind given list of enhancements to item held " +
         "in main hand.").color(NamedTextColor.YELLOW);
     private static final Component addsocketHelpMsg = Component.text(
-        "addsocket {n} - Add n socket(s) to item held in main hand. If n " +
+        "add(socket) {n} - Add n socket(s) to item held in main hand. If n " +
         "isn't specified, 1 socket is added.").color(NamedTextColor.YELLOW);
     private static final Component replaceHelpMsg = Component.text(
         "replace {enhancement1} {enhancement2} - Replace enhancement1 with " +
@@ -130,6 +131,7 @@ public class SeaCommand implements TabExecutor {
                     bindCommand(player, args);
                     break;
                 }
+                case "add":
                 case "addsocket": {
                     addSocketCommand(player, args);
                     break;
@@ -156,7 +158,7 @@ public class SeaCommand implements TabExecutor {
 
         if (args.length == 1) {
             suggestions.add("bind");
-            suggestions.add("addsocket");
+            suggestions.add("add(socket)");
             suggestions.add("replace");
             suggestions.add("help");
             return suggestions;
@@ -167,6 +169,7 @@ public class SeaCommand implements TabExecutor {
                 suggestions.addAll(enhancementManager.getAllNames());
                 break;
             }
+            case "add":
             case "addsocket": {
                 suggestions.add("1");
                 break;
