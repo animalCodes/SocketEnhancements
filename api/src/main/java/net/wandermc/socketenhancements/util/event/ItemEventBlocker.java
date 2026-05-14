@@ -23,6 +23,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Crafter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,6 +33,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
@@ -179,6 +181,11 @@ public class ItemEventBlocker implements Listener {
                     }
                     case SMELT: {
                         handler = this.getClass().getMethod("blockSmelt",
+                            action.eventType());
+                        break;
+                    }
+                    case SHOOT: {
+                        handler = this.getClass().getMethod("blockShoot",
                             action.eventType());
                         break;
                     }
@@ -399,6 +406,20 @@ public class ItemEventBlocker implements Listener {
     public void blockSmelt(FurnaceSmeltEvent event) {
         if (itemChecker.test(nullEmpty(event.getSource())))
             event.setCancelled(true);
+    }
+
+    /**
+     * Prevent matching items from being shot from a bow/crossbow.
+     */
+    public void blockShoot(EntityShootBowEvent event) {
+        if (itemChecker.test(nullEmpty(event.getConsumable()))) {
+            event.setCancelled(true);
+            // Yeah this is a bit fucky, but for some reason the consumable will
+            // be taken even if you cancel the event.
+            if (event.getEntity() instanceof Player player) {
+                player.give(event.getConsumable());
+            }
+        }
     }
 
     /**

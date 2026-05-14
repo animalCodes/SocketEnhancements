@@ -28,6 +28,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
@@ -48,6 +49,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import static org.bukkit.Tag.ITEMS_ARROWS;
 import static org.bukkit.Tag.ITEMS_BOATS;
 
 import static com.destroystokyo.paper.MaterialTags.BUCKETS;
@@ -138,6 +140,11 @@ public enum BlockableAction {
      * An item being smelted in a furnace, smoker or blast furnace.
      */
     SMELT(FurnaceSmeltEvent.class),
+
+    /**
+     * An item being shot from a bow or crossbow.
+     */
+    SHOOT(EntityShootBowEvent.class),
 
     /**
      * An item being used as an ingredient in a crafter.
@@ -382,6 +389,16 @@ public enum BlockableAction {
     }
 
     /**
+     * Whether the action "SHOOT" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canShoot(Material mat) {
+        return mat == Material.FIREWORK_ROCKET || ITEMS_ARROWS.isTagged(mat);
+    }
+
+    /**
      * Whether the action "USE_IN_CRAFTER" can be performed on `mat`.
      *
      * Same as `canUseInRecipe()`.
@@ -481,6 +498,9 @@ public enum BlockableAction {
 
         if (canSmelt(mat))
             actions.add(SMELT);
+
+        if (canShoot(mat))
+            actions.add(SHOOT);
 
         if (canUseInCrafter(mat))
             actions.add(USE_IN_CRAFTER);
