@@ -35,6 +35,9 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketEntityEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CampfireRecipe;
@@ -47,6 +50,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import static org.bukkit.Tag.ITEMS_BOATS;
 
+import static com.destroystokyo.paper.MaterialTags.BUCKETS;
 import static com.destroystokyo.paper.MaterialTags.ENCHANTABLE;
 import static com.destroystokyo.paper.MaterialTags.SPAWN_EGGS;
 
@@ -64,6 +68,21 @@ public enum BlockableAction {
      * An item being used as an ingredient in a brewing stand.
      */
     BREW_INGREDIENT(BrewEvent.class),
+
+    /**
+     * A bucket being emptied.
+     */
+    BUCKET_EMPTY(PlayerBucketEmptyEvent.class),
+
+    /**
+     * A bucket being filled with an entity.
+     */
+    BUCKET_ENTITY_FILL(PlayerBucketEntityEvent.class),
+
+    /**
+     * A bucket being filled.
+     */
+    BUCKET_FILL(PlayerBucketFillEvent.class),
 
     /**
      * An item being used as fuel in a furnace, smoker or blast furnace.
@@ -172,6 +191,36 @@ public enum BlockableAction {
             default:
                 return false;
         }
+    }
+
+    /**
+     * Whether the action "BUCKET_EMPTY" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBucketEmpty(Material mat) {
+        return mat != Material.BUCKET && BUCKETS.isTagged(mat);
+    }
+
+    /**
+     * Whether the action "BUCKET_ENTITY_FILL" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBucketEntityFill(Material mat) {
+        return mat == Material.WATER_BUCKET;
+    }
+
+    /**
+     * Whether the action "BUCKET_FILL" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canBucketFill(Material mat) {
+        return mat == Material.BUCKET;
     }
 
     /**
@@ -390,6 +439,15 @@ public enum BlockableAction {
 
         if (canBrewIngredient(mat))
             actions.add(BREW_INGREDIENT);
+
+        if (canBucketEmpty(mat))
+            actions.add(BUCKET_EMPTY);
+
+        if (canBucketEntityFill(mat))
+            actions.add(BUCKET_ENTITY_FILL);
+
+        if (canBucketFill(mat))
+            actions.add(BUCKET_FILL);
 
         if (canBurn(mat))
             actions.add(BURN);

@@ -123,7 +123,7 @@ public class EnhancementGemManager implements Listener {
      * @return Whether `item` is an Enhancement Gem.
      */
     public boolean isEnhancementGem(ItemStack item) {
-        if (!item.hasItemMeta())
+        if (item.getType() != gemType || !item.hasItemMeta())
             return false;
 
         PersistentDataContainer dataContainer = item.getItemMeta()

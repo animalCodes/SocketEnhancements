@@ -20,6 +20,7 @@ package net.wandermc.socketenhancements.util.event;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 import java.util.logging.Level;
+
 import org.bukkit.Material;
 import org.bukkit.block.Crafter;
 import org.bukkit.event.Event;
@@ -38,8 +39,12 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketEntityEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -105,6 +110,21 @@ public class ItemEventBlocker implements Listener {
                     case BREW_INGREDIENT: {
                         handler = this.getClass().getMethod(
                             "blockBrewIngredient", action.eventType());
+                        break;
+                    }
+                    case BUCKET_EMPTY: {
+                        handler = this.getClass().getMethod("blockBucketEmpty",
+                            action.eventType());
+                        break;
+                    }
+                    case BUCKET_ENTITY_FILL: {
+                        handler = this.getClass().getMethod(
+                            "blockBucketEntityFill", action.eventType());
+                        break;
+                    }
+                    case BUCKET_FILL: {
+                        handler = this.getClass().getMethod("blockBucketFill",
+                            action.eventType());
                         break;
                     }
                     case BURN: {
@@ -221,6 +241,48 @@ public class ItemEventBlocker implements Listener {
     public void blockBrewIngredient(BrewEvent event) {
         if (itemChecker.test(nullEmpty(event.getContents().getIngredient())))
             event.setCancelled(true);
+    }
+
+    /**
+     * Prevent matching bucket items from being emptied.
+     */
+    public void blockBucketEmpty(PlayerBucketEmptyEvent event) {
+        if (event.getHand() == EquipmentSlot.HAND) {
+            if (itemChecker.test(event.getPlayer().getInventory()
+                .getItemInMainHand())) {
+                event.setCancelled(true);
+            }
+        } else if (event.getHand() == EquipmentSlot.OFF_HAND) {
+            if (itemChecker.test(event.getPlayer().getInventory()
+                .getItemInOffHand())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    /**
+     * Prevent matching bucket items from being filled with entities.
+     */
+    public void blockBucketEntityFill(PlayerBucketEntityEvent event) {
+        if (itemChecker.test(event.getOriginalBucket()))
+            event.setCancelled(true);
+    }
+
+    /**
+     * Prevent matching bucket items from being filled.
+     */
+    public void blockBucketFill(PlayerBucketFillEvent event) {
+        if (event.getHand() == EquipmentSlot.HAND) {
+            if (itemChecker.test(event.getPlayer().getInventory()
+                .getItemInMainHand())) {
+                event.setCancelled(true);
+            }
+        } else if (event.getHand() == EquipmentSlot.OFF_HAND) {
+            if (itemChecker.test(event.getPlayer().getInventory()
+                .getItemInOffHand())) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     /**
