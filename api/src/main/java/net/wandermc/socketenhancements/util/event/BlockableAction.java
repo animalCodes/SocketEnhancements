@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.BrewEvent;
@@ -108,7 +109,14 @@ public enum BlockableAction {
     SMELT(FurnaceSmeltEvent.class),
 
     /**
+     * An item being used as an ingredient in a crafter.
+     */
+    USE_IN_CRAFTER(CrafterCraftEvent.class),
+
+    /**
      * An item being used in any crafting recipe.
+     *
+     * Does NOT block use in "crafters" - use USE_IN_CRAFTER for this.
      */
     USE_IN_RECIPE(PrepareItemCraftEvent.class);
 
@@ -280,6 +288,18 @@ public enum BlockableAction {
     }
 
     /**
+     * Whether the action "USE_IN_CRAFTER" can be performed on `mat`.
+     *
+     * Same as `canUseInRecipe()`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canUseInCrafter(Material mat) {
+        return canUseInRecipe(mat);
+    }
+
+    /**
      * Whether the action "USE_IN_RECIPE" can be performed on `mat`.
      *
      * @param mat The Material to check.
@@ -352,6 +372,9 @@ public enum BlockableAction {
 
         if (canSmelt(mat))
             actions.add(SMELT);
+
+        if (canUseInCrafter(mat))
+            actions.add(USE_IN_CRAFTER);
 
         if (canUseInRecipe(mat))
             actions.add(USE_IN_RECIPE);

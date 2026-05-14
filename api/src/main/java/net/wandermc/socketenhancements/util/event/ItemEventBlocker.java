@@ -20,13 +20,14 @@ package net.wandermc.socketenhancements.util.event;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-
 import org.bukkit.Material;
+import org.bukkit.block.Crafter;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.BrewEvent;
@@ -146,6 +147,11 @@ public class ItemEventBlocker implements Listener {
                     }
                     case SMELT: {
                         handler = this.getClass().getMethod("blockSmelt",
+                            action.eventType());
+                        break;
+                    }
+                    case USE_IN_CRAFTER: {
+                        handler = this.getClass().getMethod("blockUseInCrafter",
                             action.eventType());
                         break;
                     }
@@ -301,6 +307,19 @@ public class ItemEventBlocker implements Listener {
     public void blockSmelt(FurnaceSmeltEvent event) {
         if (itemChecker.test(nullEmpty(event.getSource())))
             event.setCancelled(true);
+    }
+
+    /**
+     * Prevent an item being crafted in a crafter if an ingredient matches.
+     */
+    public void blockUseInCrafter(CrafterCraftEvent event) {
+        Crafter crafter = (Crafter) event.getBlock().getState();
+        for (ItemStack item : (crafter.getInventory().getContents())) {
+            if (itemChecker.test(nullEmpty(item))) {
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
     /**
