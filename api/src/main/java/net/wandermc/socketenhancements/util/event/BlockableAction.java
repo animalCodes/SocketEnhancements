@@ -36,6 +36,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -73,6 +74,11 @@ public enum BlockableAction {
      * An item being combined with another item in an anvil.
      */
     COMBINE(PrepareAnvilEvent.class),
+
+    /**
+     * An item being consumed by a player.
+     */
+    CONSUME(PlayerItemConsumeEvent.class),
 
     /**
      * An item being placed on a campfire.
@@ -189,6 +195,29 @@ public enum BlockableAction {
      */
     public static boolean canCombine(Material mat) {
         return mat != Material.AIR;
+    }
+
+    /**
+     * Whether the action "CONSUME" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canConsume(Material mat) {
+        switch (mat) {
+            case SUSPICIOUS_STEW, OMINOUS_BOTTLE, POTION, APPLE,
+            BAKED_POTATO, BEETROOT, BEETROOT_SOUP, BREAD, CARROT,
+            CHORUS_FRUIT, COOKED_CHICKEN, COOKED_COD, COOKED_MUTTON,
+            COOKED_PORKCHOP, COOKED_RABBIT, COOKED_SALMON, COOKIE, DRIED_KELP,
+            ENCHANTED_GOLDEN_APPLE, GOLDEN_APPLE, GLOW_BERRIES, GOLDEN_CARROT,
+            HONEY_BOTTLE, MELON_SLICE, MUSHROOM_STEW, POISONOUS_POTATO,
+            POTATO, PUFFERFISH, PUMPKIN_PIE, RABBIT_STEW, COOKED_BEEF, CHICKEN,
+            COD, MUTTON, PORKCHOP, RABBIT, SALMON, ROTTEN_FLESH, SPIDER_EYE,
+            BEEF, SWEET_BERRIES, TROPICAL_FISH:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -367,6 +396,9 @@ public enum BlockableAction {
 
         if (canCombine(mat))
             actions.add(COMBINE);
+
+        if (canConsume(mat))
+            actions.add(CONSUME);
 
         if (canCook(mat))
             actions.add(COOK);

@@ -39,6 +39,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -113,6 +114,11 @@ public class ItemEventBlocker implements Listener {
                     }
                     case COMBINE: {
                         handler = this.getClass().getMethod("blockCombine",
+                            action.eventType());
+                        break;
+                    }
+                    case CONSUME: {
+                        handler = this.getClass().getMethod("blockConsume",
                             action.eventType());
                         break;
                     }
@@ -239,10 +245,10 @@ public class ItemEventBlocker implements Listener {
     }
 
     /**
-     * Prevent matching items from being enchanted.
+     * Prevent matching items from being consumed.
      */
-    public void blockEnchant(PrepareItemEnchantEvent event) {
-        if (itemChecker.test((event.getItem())))
+    public void blockConsume(PlayerItemConsumeEvent event) {
+        if (itemChecker.test(event.getItem()))
             event.setCancelled(true);
     }
 
@@ -261,6 +267,14 @@ public class ItemEventBlocker implements Listener {
                 event.getItem())))) {
             event.setCancelled(true);
         }
+    }
+
+    /**
+     * Prevent matching items from being enchanted.
+     */
+    public void blockEnchant(PrepareItemEnchantEvent event) {
+        if (itemChecker.test((event.getItem())))
+            event.setCancelled(true);
     }
 
     /**
