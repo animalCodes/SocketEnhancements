@@ -23,6 +23,7 @@ import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -59,11 +60,6 @@ public enum BlockableAction {
     BLOCK_PLACE(BlockPlaceEvent.class),
 
     /**
-     * An item being used as fuel in a brewing stand.
-     */
-    FUEL_BREWING(BrewingStandFuelEvent.class),
-
-    /**
      * An item being used as an ingredient in a brewing stand.
      */
     BREW_INGREDIENT(BrewEvent.class),
@@ -97,6 +93,16 @@ public enum BlockableAction {
      * An entity being spawned.
      */
     ENTITY_SPAWN(PlayerInteractEvent.class),
+
+    /**
+     * A crop being fertilized with bonemeal.
+     */
+    FERTILIZE(BlockFertilizeEvent.class),
+
+    /**
+     * An item being used as fuel in a brewing stand.
+     */
+    FUEL_BREWING(BrewingStandFuelEvent.class),
 
     /**
      * An item being repaired / disenchanted in a grindstone.
@@ -138,16 +144,6 @@ public enum BlockableAction {
      */
     public static boolean canBlockPlace(Material mat) {
         return mat.isBlock();
-    }
-
-    /**
-     * Whether the action "FUEL_BREWING" can be performed on `mat`.
-     *
-     * @param mat The Material to check.
-     * @return Whether the action can be performed.
-     */
-    public static boolean canFuelBrewing(Material mat) {
-        return mat == Material.BLAZE_POWDER;
     }
 
     /**
@@ -252,6 +248,26 @@ public enum BlockableAction {
     }
 
     /**
+     * Whether the action "FERTILIZE" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canFertilize(Material mat) {
+        return mat == Material.BONE_MEAL;
+    }
+
+    /**
+     * Whether the action "FUEL_BREWING" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canFuelBrewing(Material mat) {
+        return mat == Material.BLAZE_POWDER;
+    }
+
+    /**
      * Whether the action "GRIND" can be performed on `mat`.
      *
      * As any item can have an enchantment applied to it, any item can have an
@@ -343,9 +359,6 @@ public enum BlockableAction {
         if (canBlockPlace(mat))
             actions.add(BLOCK_PLACE);
 
-        if (canFuelBrewing(mat))
-            actions.add(FUEL_BREWING);
-
         if (canBrewIngredient(mat))
             actions.add(BREW_INGREDIENT);
 
@@ -366,6 +379,12 @@ public enum BlockableAction {
 
         if (canEntitySpawn(mat))
             actions.add(ENTITY_SPAWN);
+
+        if (canFertilize(mat))
+            actions.add(FERTILIZE);
+
+        if (canFuelBrewing(mat))
+            actions.add(FUEL_BREWING);
 
         if (canGrind(mat))
             actions.add(GRIND);

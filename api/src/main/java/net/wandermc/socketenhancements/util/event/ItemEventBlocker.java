@@ -26,6 +26,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -100,11 +101,6 @@ public class ItemEventBlocker implements Listener {
                             action.eventType());
                         break;
                     }
-                    case FUEL_BREWING: {
-                        handler = this.getClass().getMethod("blockFuelBrewing",
-                            action.eventType());
-                        break;
-                    }
                     case BREW_INGREDIENT: {
                         handler = this.getClass().getMethod(
                             "blockBrewIngredient", action.eventType());
@@ -137,6 +133,16 @@ public class ItemEventBlocker implements Listener {
                     }
                     case ENTITY_SPAWN: {
                         handler = this.getClass().getMethod("blockEntitySpawn",
+                            action.eventType());
+                        break;
+                    }
+                    case FERTILIZE: {
+                        handler = this.getClass().getMethod("blockFertilize",
+                            action.eventType());
+                        break;
+                    }
+                    case FUEL_BREWING: {
+                        handler = this.getClass().getMethod("blockFuelBrewing",
                             action.eventType());
                         break;
                     }
@@ -197,14 +203,6 @@ public class ItemEventBlocker implements Listener {
     public void blockBlockPlace(BlockPlaceEvent event) {
         // blockBlockBlockBlockBlockBlockBlock
         if (itemChecker.test(event.getItemInHand()))
-            event.setCancelled(true);
-    }
-
-    /**
-     * Prevent matching item from being used as fuel in a brewing stand.
-     */
-    public void blockFuelBrewing(BrewingStandFuelEvent event) {
-        if (itemChecker.test(event.getFuel()))
             event.setCancelled(true);
     }
 
@@ -285,6 +283,24 @@ public class ItemEventBlocker implements Listener {
                 || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             event.setCancelled(true);
         }
+    }
+
+    /**
+     * Prevent matching item from being used to fertilize crops.
+     */
+    public void blockFertilize(BlockFertilizeEvent event) {
+        if (itemChecker.test(event.getPlayer().getEquipment()
+            .getItemInMainHand())) {
+            event.setCancelled(true);
+        }
+    }
+
+    /**
+     * Prevent matching item from being used as fuel in a brewing stand.
+     */
+    public void blockFuelBrewing(BrewingStandFuelEvent event) {
+        if (itemChecker.test(event.getFuel()))
+            event.setCancelled(true);
     }
 
     /**
