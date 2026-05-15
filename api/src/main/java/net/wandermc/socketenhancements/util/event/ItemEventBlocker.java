@@ -252,7 +252,8 @@ public class ItemEventBlocker implements Listener {
      * Item will appear to be applied at first, but will not be taken.
      */
     public void blockBrewIngredient(BrewEvent event) {
-        if (itemChecker.test(nullEmpty(event.getContents().getIngredient())))
+        ItemStack item = event.getContents().getIngredient();
+        if (item != null && itemChecker.test(item))
             event.setCancelled(true);
     }
 
@@ -302,21 +303,25 @@ public class ItemEventBlocker implements Listener {
      * Prevent matching items from being used as fuel.
      */
     public void blockBurn(FurnaceBurnEvent event) {
-        if (itemChecker.test(nullEmpty(event.getFuel())))
+        if (event.getFuel() != null && itemChecker.test(event.getFuel()))
             event.setCancelled(true);
     }
 
     /**
      * Prevent items from being combined in an anvil if either matches.
+     *
+     * Also prevents renames.
      */
     public void blockCombine(PrepareAnvilEvent event) {
         ItemStack first = event.getInventory().getFirstItem();
         ItemStack second = event.getInventory().getSecondItem();
-        // If we just checked whether one of the items matched, we'd end up
-        // catching rename events as well.
-        if ((itemChecker.test(nullEmpty(first)) && second != null)
-            || (itemChecker.test(nullEmpty(second)) && first != null))
-            event.setResult(null);
+
+        if (first == null)
+            return;
+
+        if (itemChecker.test(first) ||
+            (second != null && itemChecker.test(second)))
+            event.setResult(ItemStack.empty());
     }
 
     /**
@@ -338,8 +343,7 @@ public class ItemEventBlocker implements Listener {
             && event.getAction() == Action.RIGHT_CLICK_BLOCK
             && (event.getClickedBlock().getType() == Material.CAMPFIRE
                 || event.getClickedBlock().getType() == Material.SOUL_CAMPFIRE)
-            && (event.hasItem() && itemChecker.test(nullEmpty(
-                event.getItem())))) {
+            && (event.hasItem() && itemChecker.test(event.getItem()))) {
             event.setCancelled(true);
         }
     }
@@ -356,20 +360,19 @@ public class ItemEventBlocker implements Listener {
      * Prevent an entity from being placed if the placed item matches.
      */
     public void blockEntityPlace(EntityPlaceEvent event) {
-        if (itemChecker.test(nullEmpty(
-            event.getPlayer().getInventory().getItem(event.getHand())))) {
+        ItemStack item = event.getPlayer().getInventory().getItem(
+            event.getHand());
+
+        if (item != null && itemChecker.test(item))
             event.setCancelled(true);
-        }
     }
 
     /**
      * Prevent an entity from being spawned if the spawning item matches.
      */
     public void blockEntitySpawn(PlayerInteractEvent event) {
-        if ((event.hasItem()
-            && itemChecker.test(nullEmpty(event.getItem())))
-            && (event.getAction() == Action.RIGHT_CLICK_AIR
-                || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+        if (event.hasItem() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+            && itemChecker.test(event.getItem())) {
             event.setCancelled(true);
         }
     }
@@ -397,9 +400,14 @@ public class ItemEventBlocker implements Listener {
      * in a grindstone.
      */
     public void blockGrind(PrepareGrindstoneEvent event) {
-        if (itemChecker.test(nullEmpty(event.getInventory().getUpperItem()))
-            || itemChecker.test(nullEmpty(event.getInventory().getLowerItem())))
-            event.setResult(null);
+        ItemStack upper = event.getInventory().getUpperItem();
+        ItemStack lower = event.getInventory().getLowerItem();
+
+        if (upper != null && itemChecker.test(upper))
+            event.setResult(ItemStack.empty());
+
+        if (lower != null && itemChecker.test(lower))
+            event.setResult(ItemStack.empty());
     }
 
     /**
@@ -410,7 +418,10 @@ public class ItemEventBlocker implements Listener {
      * will appear and the item won't be taken.
      */
     public void blockSmelt(FurnaceSmeltEvent event) {
-        if (itemChecker.test(nullEmpty(event.getSource())))
+        if (event.getSource() == null)
+            return;
+
+        if (itemChecker.test(event.getSource()))
             event.setCancelled(true);
     }
 
@@ -418,12 +429,13 @@ public class ItemEventBlocker implements Listener {
      * Prevent matching items from being shot from a bow/crossbow.
      */
     public void blockShoot(EntityShootBowEvent event) {
-        if (itemChecker.test(nullEmpty(event.getConsumable()))) {
+        ItemStack consumable = event.getConsumable();
+        if (consumable != null && itemChecker.test(consumable)) {
             event.setCancelled(true);
             // Yeah this is a bit fucky, but for some reason the consumable will
             // be taken even if you cancel the event.
             if (event.getEntity() instanceof Player player) {
-                player.give(event.getConsumable());
+                player.give(consumable);
             }
         }
     }
@@ -432,9 +444,9 @@ public class ItemEventBlocker implements Listener {
      * Prevent matching items from being thrown.
      */
     public void blockThrow(PlayerInteractEvent event) {
-        if (itemChecker.test(nullEmpty(event.getItem()))) {
+        ItemStack item = event.getItem();
+        if (item != null && itemChecker.test(item))
             event.setUseItemInHand(Event.Result.DENY);
-        }
     }
 
     /**
@@ -443,7 +455,7 @@ public class ItemEventBlocker implements Listener {
     public void blockUseInCrafter(CrafterCraftEvent event) {
         Crafter crafter = (Crafter) event.getBlock().getState();
         for (ItemStack item : (crafter.getInventory().getContents())) {
-            if (itemChecker.test(nullEmpty(item))) {
+            if (item != null && itemChecker.test(item)) {
                 event.setCancelled(true);
                 return;
             }
@@ -455,17 +467,10 @@ public class ItemEventBlocker implements Listener {
      */
     public void blockUseInRecipe(PrepareItemCraftEvent event) {
         for (ItemStack item : (event.getInventory().getMatrix())) {
-            if (itemChecker.test(nullEmpty(item))) {
+            if (item != null && itemChecker.test(item)) {
                 event.getInventory().setResult(null);
                 return;
             }
         }
-    }
-
-    /**
-     * If itemStack is null, return `ItemStack.empty()`. Otherwise itemStack.
-     */
-    private ItemStack nullEmpty(ItemStack itemStack) {
-        return (itemStack == null) ? ItemStack.empty() : itemStack;
     }
 }

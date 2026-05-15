@@ -93,6 +93,8 @@ public enum BlockableAction {
 
     /**
      * An item being combined with another item in an anvil.
+     *
+     * Doubles as a "rename" action.
      */
     COMBINE(PrepareAnvilEvent.class),
 
