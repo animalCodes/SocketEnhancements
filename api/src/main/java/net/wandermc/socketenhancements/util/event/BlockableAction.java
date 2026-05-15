@@ -180,7 +180,8 @@ public enum BlockableAction {
      * @return Whether the action can be performed.
      */
     public static boolean canBlockPlace(Material mat) {
-        return mat.isBlock();
+        return mat == Material.FIRE_CHARGE || mat == Material.FLINT_AND_STEEL
+            || mat == Material.POWDER_SNOW_BUCKET || mat.isBlock();
     }
 
     /**
@@ -212,7 +213,8 @@ public enum BlockableAction {
      * @return Whether the action can be performed.
      */
     public static boolean canBucketEmpty(Material mat) {
-        return mat != Material.BUCKET && BUCKETS.isTagged(mat);
+        return mat != Material.BUCKET && mat != Material.POWDER_SNOW_BUCKET
+            && mat != Material.MILK_BUCKET && BUCKETS.isTagged(mat);
     }
 
     /**
@@ -274,7 +276,7 @@ public enum BlockableAction {
             HONEY_BOTTLE, MELON_SLICE, MUSHROOM_STEW, POISONOUS_POTATO,
             POTATO, PUFFERFISH, PUMPKIN_PIE, RABBIT_STEW, COOKED_BEEF, CHICKEN,
             COD, MUTTON, PORKCHOP, RABBIT, SALMON, ROTTEN_FLESH, SPIDER_EYE,
-            BEEF, SWEET_BERRIES, TROPICAL_FISH:
+            BEEF, SWEET_BERRIES, TROPICAL_FISH, MILK_BUCKET:
                 return true;
             default:
                 return false;
@@ -329,7 +331,7 @@ public enum BlockableAction {
      */
     public static boolean canEntitySpawn(Material mat) {
         switch (mat) {
-            case ITEM_FRAME, GLOW_ITEM_FRAME, PAINTING:
+            case FIREWORK_ROCKET, ITEM_FRAME, GLOW_ITEM_FRAME, PAINTING:
                 return true;
             default:
                 return SPAWN_EGGS.isTagged(mat);
@@ -359,19 +361,17 @@ public enum BlockableAction {
     /**
      * Whether the action "GRIND" can be performed on `mat`.
      *
-     * As any item can have an enchantment applied to it, any item can have an
-     * enchantment *removed* from it. So provided `mat` isn't AIR, this will
-     * return true.
-     *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
      */
     public static boolean canGrind(Material mat) {
-        return mat != Material.AIR;
+        return ENCHANTABLE.isTagged(mat);
     }
 
     /**
      * Whether the action "SMELT" can be performed on `mat`.
+     *
+     * Goes through all registered recipes, use with caution.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -410,8 +410,8 @@ public enum BlockableAction {
      */
     public static boolean canThrow(Material mat) {
         switch (mat) {
-            case EGG, ENDER_EYE, ENDER_PEARL, SPLASH_POTION, LINGERING_POTION,
-            WIND_CHARGE:
+            case SNOWBALL, EGG, BROWN_EGG, BLUE_EGG, ENDER_EYE, ENDER_PEARL,
+            SPLASH_POTION, LINGERING_POTION, WIND_CHARGE:
                 return true;
             default:
                 return false;
@@ -432,6 +432,8 @@ public enum BlockableAction {
 
     /**
      * Whether the action "USE_IN_RECIPE" can be performed on `mat`.
+     *
+     * Goes through all registered recipes, use with caution.
      *
      * @param mat The Material to check.
      * @return Whether the action can be performed.
@@ -464,6 +466,9 @@ public enum BlockableAction {
 
     /**
      * Determine all BlockableActions that can be performed on `mat`.
+     *
+     * Due to the amount of work this does, it is recommended that this function
+     * is only called on plugin/server startup.
      *
      * @param mat The Material to check.
      * @return All actions that can be performed on `mat`.
