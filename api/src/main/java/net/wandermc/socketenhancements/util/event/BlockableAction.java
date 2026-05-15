@@ -147,6 +147,11 @@ public enum BlockableAction {
     SHOOT(EntityShootBowEvent.class),
 
     /**
+     * An item being thrown from a player's hand.
+     */
+    THROW(PlayerInteractEvent.class),
+
+    /**
      * An item being used as an ingredient in a crafter.
      */
     USE_IN_CRAFTER(CrafterCraftEvent.class),
@@ -324,8 +329,7 @@ public enum BlockableAction {
      */
     public static boolean canEntitySpawn(Material mat) {
         switch (mat) {
-            case EGG, ENDER_EYE, ENDER_PEARL, ITEM_FRAME,
-            GLOW_ITEM_FRAME, PAINTING, SPLASH_POTION, LINGERING_POTION:
+            case ITEM_FRAME, GLOW_ITEM_FRAME, PAINTING:
                 return true;
             default:
                 return SPAWN_EGGS.isTagged(mat);
@@ -396,6 +400,22 @@ public enum BlockableAction {
      */
     public static boolean canShoot(Material mat) {
         return mat == Material.FIREWORK_ROCKET || ITEMS_ARROWS.isTagged(mat);
+    }
+
+    /**
+     * Whether the action "THROW" can be performed on `mat`.
+     *
+     * @param mat The Material to check.
+     * @return Whether the action can be performed.
+     */
+    public static boolean canThrow(Material mat) {
+        switch (mat) {
+            case EGG, ENDER_EYE, ENDER_PEARL, SPLASH_POTION, LINGERING_POTION,
+            WIND_CHARGE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -501,6 +521,9 @@ public enum BlockableAction {
 
         if (canShoot(mat))
             actions.add(SHOOT);
+
+        if (canThrow(mat))
+            actions.add(THROW);
 
         if (canUseInCrafter(mat))
             actions.add(USE_IN_CRAFTER);

@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Crafter;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -186,6 +187,11 @@ public class ItemEventBlocker implements Listener {
                     }
                     case SHOOT: {
                         handler = this.getClass().getMethod("blockShoot",
+                            action.eventType());
+                        break;
+                    }
+                    case THROW: {
+                        handler = this.getClass().getMethod("blockThrow",
                             action.eventType());
                         break;
                     }
@@ -419,6 +425,15 @@ public class ItemEventBlocker implements Listener {
             if (event.getEntity() instanceof Player player) {
                 player.give(event.getConsumable());
             }
+        }
+    }
+
+    /**
+     * Prevent matching items from being thrown.
+     */
+    public void blockThrow(PlayerInteractEvent event) {
+        if (itemChecker.test(nullEmpty(event.getItem()))) {
+            event.setUseItemInHand(Event.Result.DENY);
         }
     }
 
