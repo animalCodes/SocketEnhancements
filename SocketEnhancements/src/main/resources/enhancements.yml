@@ -79,6 +79,7 @@ enhancements:
   explosive:
     enabled: true
     # Material to be taken from player's offhand on use.
+    # If AIR or an invalid Material, experience points will be taken instead.
     cost_type: GUNPOWDER
     # Amount of above material to take.
     cost_amount: 2

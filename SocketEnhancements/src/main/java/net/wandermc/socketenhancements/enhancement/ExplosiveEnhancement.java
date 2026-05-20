@@ -50,7 +50,7 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_red>Explosive<white>>");
 
-    private final Material costType;
+    private Material costType;
     private int costAmount;
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
@@ -70,11 +70,10 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        Material costType = Material.getMaterial(config.getString("cost_type",
+        this.costType = Material.getMaterial(config.getString("cost_type",
             "GUNPOWDER"));
-        if (costType == Material.AIR || costType == null)
-            costType = Material.GUNPOWDER;
-        this.costType = costType;
+        if (this.costType == null)
+            this.costType = Material.AIR;
 
         this.costAmount = config.getInt("cost_amount", 2);
         if (this.costAmount < 0)
@@ -127,9 +126,15 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
             return;
 
         ItemStack offhand = player.getInventory().getItemInOffHand();
-        if (costAmount > 0 &&
-            offhand.getType() != costType || offhand.getAmount() < costAmount)
-            return;
+
+        if (costType == Material.AIR) {
+            if (player.calculateTotalExperiencePoints() < costAmount)
+                return;
+        } else {
+            if (offhand.getType() != costType
+                || offhand.getAmount() < costAmount)
+                return;
+        }
 
         context.getBlock().getWorld().spawnParticle(Particle.EXPLOSION,
             context.getBlock() .getLocation(), 10);
@@ -165,8 +170,14 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
 
         pickaxe.damage(damage, player);
 
-        if (costAmount > 0)
-            offhand.setAmount(offhand.getAmount() - costAmount);
+        if (costAmount > 0) {
+            if (costType == Material.AIR) {
+                player.setExperienceLevelAndProgress(
+                    player.calculateTotalExperiencePoints() - costAmount);
+            } else {
+                offhand.setAmount(offhand.getAmount() - costAmount);
+            }
+        }
     }
 
     public String name() {
