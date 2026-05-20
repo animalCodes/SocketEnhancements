@@ -66,6 +66,7 @@ public class OrbOfBindingManager implements Listener {
      * Create an OrbOfBindingManager for `plugin`.
      *
      * `config` defaults:
+     * craftable: true
      * material: "CONDUIT"
      * ingredients: ["BLAZE_POWDER", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
      * flammable: false
@@ -96,7 +97,7 @@ public class OrbOfBindingManager implements Listener {
             item -> item.isSimilar(this.orbOfBinding),
             BlockableAction.getValidActions(orbOfBindingType).toArray(a));
 
-        registerRecipes();
+        registerRecipes(config.getBoolean("craftable", true));
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -130,6 +131,40 @@ public class OrbOfBindingManager implements Listener {
     }
 
     /**
+     * Create and register the recipes for crafting and applying orbs of
+     * binding.
+     *
+     * @param registerCraft Whether to register the recipe for crafting an orb
+     *    of binding.
+     */
+    private void registerRecipes(boolean registerCraft) {
+        if (registerCraft) {
+            ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
+                new NamespacedKey(plugin, "orb_of_binding_craft"),
+                orbOfBinding);
+
+            for (Material ingredient : ingredients)
+                orbOfBindingRecipe.addIngredient(ingredient);
+
+            plugin.getServer().addRecipe(orbOfBindingRecipe, true);
+        }
+
+        if (forge.enhanceableMaterials().isEmpty())
+            return;
+
+        ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
+                new NamespacedKey(plugin, "orb_of_binding_upgrade"),
+                new ItemStack(Material.STONE, 1));
+
+        upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
+            forge.enhanceableMaterials().stream().collect(
+                Collectors.toList())));
+        upgradeRecipe.addIngredient(orbOfBinding);
+
+        plugin.getServer().addRecipe(upgradeRecipe);
+    }
+
+    /**
      * Create an Orb of Binding.
      *
      * @return An Orb of Binding ItemStack.
@@ -146,34 +181,6 @@ public class OrbOfBindingManager implements Listener {
         orb.setItemMeta(meta);
 
         return orb;
-    }
-
-    /**
-     * Create and register the recipes for crafting and applying orbs of
-     * binding.
-     */
-    private void registerRecipes() {
-        ShapelessRecipe orbOfBindingRecipe = new ShapelessRecipe(
-            new NamespacedKey(plugin, "orb_of_binding_craft"), orbOfBinding);
-
-        for (Material ingredient : ingredients)
-            orbOfBindingRecipe.addIngredient(ingredient);
-
-        plugin.getServer().addRecipe(orbOfBindingRecipe, true);
-
-        if (forge.enhanceableMaterials().isEmpty())
-            return;
-
-        ShapelessRecipe upgradeRecipe = new ShapelessRecipe(
-                new NamespacedKey(plugin, "orb_of_binding_upgrade"),
-                new ItemStack(Material.STONE, 1));
-
-        upgradeRecipe.addIngredient(new RecipeChoice.MaterialChoice(
-            forge.enhanceableMaterials().stream().collect(
-                Collectors.toList())));
-        upgradeRecipe.addIngredient(orbOfBinding);
-
-        plugin.getServer().addRecipe(upgradeRecipe);
     }
 
     /**

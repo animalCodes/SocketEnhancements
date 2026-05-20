@@ -79,6 +79,8 @@ limits:
 
 orbs_of_binding:
   enabled: true
+  # Whether orbs can be crafted
+  craftable: true
   # Material type of orbs of binding.
   material: CONDUIT
   # Materials used to craft an orb of binding.
