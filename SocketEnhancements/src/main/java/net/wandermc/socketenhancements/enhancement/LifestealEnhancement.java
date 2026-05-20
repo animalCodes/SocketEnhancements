@@ -94,6 +94,10 @@ public class LifestealEnhancement implements ActiveEnhancement {
             if (attacker.getHealth() >= maxHealth)
                 return;
 
+            // Reduce damage dealt by amount of health gained
+            context.setDamage(context.getDamage() -
+                (context.getFinalDamage() * gain));
+
             double newHealth = attacker.getHealth() +
                 (context.getFinalDamage() * gain);
             if (newHealth > maxHealth)
