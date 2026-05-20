@@ -50,6 +50,10 @@ enhancements:
     # Amount of damage taken when equipped. (Multiplier)
     # Cannot be greater than 1.
     damage_taken: 0.5
+    # Amount of avoided damage to receive as experience points.
+    # '2' means receive double the amount of avoided damage as exp, 0 means
+    # no exp, etc.
+    exp_gain: 1
 
   directing:
     enabled: true

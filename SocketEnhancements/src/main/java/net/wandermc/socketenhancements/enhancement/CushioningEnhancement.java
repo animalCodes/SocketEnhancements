@@ -49,12 +49,14 @@ public class CushioningEnhancement implements ActiveEnhancement {
     private final EnhancedItemForge forge;
 
     private double damageTaken;
+    private double experienceGain;
 
     /**
      * Create a Cushioning enhancement.
      *
      * `config` defaults:
      * damage_taken: 0.5
+     * exp_gain: 1
      *
      * @param forge The current EnhancedItemForge.
      * @param config Configuration Options.
@@ -66,6 +68,8 @@ public class CushioningEnhancement implements ActiveEnhancement {
         this.damageTaken = config.getDouble("damage_taken", 0.5);
         if (this.damageTaken > 1)
             this.damageTaken = 0.5;
+
+        this.experienceGain = config.getDouble("exp_gain", 1);
     }
 
     @EventHandler(ignoreCancelled=true)
@@ -76,10 +80,19 @@ public class CushioningEnhancement implements ActiveEnhancement {
         if (context.getEntity() instanceof Player player) {
             ItemStack helmet = player.getInventory().getHelmet();
 
-            if (!helmet.isEmpty() && forge.has(helmet, this)) {
-                context.setDamage(context.getDamage() * damageTaken);
-                player.getWorld().spawnParticle(Particle.CLOUD,
-                    player.getLocation(), 2);
+            if (helmet.isEmpty() || !forge.has(helmet, this))
+                return;
+
+            double originalDamage = context.getDamage();
+            context.setDamage(originalDamage * damageTaken);
+
+            player.getWorld().spawnParticle(Particle.CLOUD,
+                player.getLocation(), 2);
+
+            if (experienceGain > 0) {
+                player.setExperienceLevelAndProgress(
+                    player.calculateTotalExperiencePoints() + (int)
+                    ((originalDamage - context.getDamage()) * experienceGain));
             }
         }
     }
