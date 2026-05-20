@@ -18,12 +18,14 @@
 package net.wandermc.socketenhancements.enhancement;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -35,6 +37,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.tag.DamageTypeTags;
 
@@ -73,6 +76,7 @@ public class EnhancementGemManager implements Listener {
      * Create an EnhancementGemManager for `plugin`.
      *
      * `config` defaults:
+     * obtainable: true
      * block: "GRINDSTONE"
      * material: "END_CRYSTAL"
      * flammable: false
@@ -110,7 +114,37 @@ public class EnhancementGemManager implements Listener {
 
         registerRecipe();
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        try {
+            registerHandlers(config.getBoolean("obtainable", true));
+        } catch (NoSuchMethodException exception) {
+            plugin.getLogger().log(Level.SEVERE, this.getClass().getName() +
+                "Encountered an exception while setting up event handlers:");
+            plugin.getLogger().log(Level.SEVERE, exception.getMessage());
+        }
+    }
+
+    /**
+     * Register event handlers.
+     *
+     * @param registerInteract Whether to register the 'interact' handler.
+     * @throws NoSuchMethodException if one of the handler methods cannot be
+     *    found.
+     */
+    private void registerHandlers(boolean registerInteract) throws
+        NoSuchMethodException {
+        if (registerInteract) {
+            plugin.getServer().getPluginManager().registerEvent(
+                PlayerInteractEvent.class, this, EventPriority.LOWEST,
+                EventExecutor.create(this.getClass().getMethod("handleInteract",
+                    PlayerInteractEvent.class), PlayerInteractEvent.class),
+                plugin, true);
+        }
+
+        plugin.getServer().getPluginManager().registerEvent(
+            PrepareItemCraftEvent.class, this, EventPriority.LOWEST,
+            EventExecutor.create(this.getClass().getMethod("handleCraft",
+                PrepareItemCraftEvent.class), PrepareItemCraftEvent.class),
+            plugin, true);
     }
 
     /**

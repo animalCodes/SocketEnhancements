@@ -7,8 +7,11 @@ enhancement_tables:
   randomisation_frequency: 5
 
 enhancement_gems:
-  # Whether enhancement gems are enabled/
+  # Whether enhancement gems can be used
+  # If false, overrides `obtainable`.
   enabled: true
+  # Whether enhancement gems can be obtained
+  obtainable: true
   # The Material type of the block that must be interacted with to get an
   # enhancement gem.
   block: "GRINDSTONE"
