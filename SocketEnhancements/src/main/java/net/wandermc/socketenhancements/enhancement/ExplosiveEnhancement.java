@@ -35,8 +35,9 @@ import static io.papermc.paper.tag.BaseTag.ITEMS_PICKAXES;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.util.cost.*;
 
 /**
  * Explosive enhancement
@@ -50,8 +51,7 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_red>Explosive<white>>");
 
-    private Material costType;
-    private int costAmount;
+    private final Cost cost;
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
     private final EnhancedItemForge forge;
@@ -70,14 +70,19 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        this.costType = Material.getMaterial(config.getString("cost_type",
+        Material costType = Material.getMaterial(config.getString("cost_type",
             "GUNPOWDER"));
-        if (this.costType == null)
-            this.costType = Material.AIR;
+        if (costType == null)
+            costType = Material.AIR;
 
-        this.costAmount = config.getInt("cost_amount", 2);
-        if (this.costAmount < 0)
-            this.costAmount = 2;
+        int costAmount = config.getInt("cost_amount", 2);
+        if (costAmount < 0)
+            costAmount = 2;
+
+        if (costType == Material.AIR)
+            this.cost = new CostExperiencePoints(costAmount);
+        else
+            this.cost = new CostOffhandItem(costType, costAmount);
     }
 
     /**
@@ -125,16 +130,8 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
         if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
             return;
 
-        ItemStack offhand = player.getInventory().getItemInOffHand();
-
-        if (costType == Material.AIR) {
-            if (player.calculateTotalExperiencePoints() < costAmount)
-                return;
-        } else {
-            if (offhand.getType() != costType
-                || offhand.getAmount() < costAmount)
-                return;
-        }
+        if (!cost.met(player))
+            return;
 
         context.getBlock().getWorld().spawnParticle(Particle.EXPLOSION,
             context.getBlock() .getLocation(), 10);
@@ -170,14 +167,7 @@ public class ExplosiveEnhancement implements ActiveEnhancement {
 
         pickaxe.damage(damage, player);
 
-        if (costAmount > 0) {
-            if (costType == Material.AIR) {
-                player.setExperienceLevelAndProgress(
-                    player.calculateTotalExperiencePoints() - costAmount);
-            } else {
-                offhand.setAmount(offhand.getAmount() - costAmount);
-            }
-        }
+        cost.take(player);
     }
 
     public String name() {

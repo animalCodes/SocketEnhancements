@@ -40,8 +40,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
-import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.util.cost.*;
 
 /**
  * Blink enhancement.
@@ -67,8 +68,8 @@ public class BlinkEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<dark_purple>Blink<white>>");
 
-    private final Material costType;
-    private int costAmount;
+    private final Cost cost;
+
     private int maxDistance;
 
     private final EnhancedItemForge forge;
@@ -88,16 +89,20 @@ public class BlinkEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        // AIR indicates experience points.
-        Material mat = Material.getMaterial(config.getString("cost_type",
+        Material costType = Material.getMaterial(config.getString("cost_type",
             "AIR"));
-        if (mat == null)
-            mat = Material.AIR;
-        this.costType = mat;
+        if (costType == null)
+            costType = Material.AIR;
 
-        this.costAmount = config.getInt("cost_amount", 8);
-        if (this.costAmount < 0)
-            this.costAmount = 8;
+        int costAmount = config.getInt("cost_amount", 8);
+        if (costAmount < 0)
+            costAmount = 8;
+
+        if (costType == Material.AIR)
+            this.cost = new CostExperiencePoints(costAmount);
+        else
+            this.cost = new CostOffhandItem(costType, costAmount);
+
         this.maxDistance = config.getInt("max_distance", 64);
         if (this.maxDistance < 0)
             this.maxDistance = 64;
@@ -130,13 +135,7 @@ public class BlinkEnhancement implements ActiveEnhancement {
         player.teleport(tpLocation, TeleportCause.PLUGIN);
         applySuccessCosmetics(player);
 
-        if (costType == Material.AIR) {
-            player.setExperienceLevelAndProgress(
-                player.calculateTotalExperiencePoints()-costAmount);
-        } else {
-            ItemStack offhand = player.getInventory().getItemInOffHand();
-            offhand.setAmount(offhand.getAmount()-costAmount);
-        }
+        cost.take(player);
     }
 
     /**
@@ -163,29 +162,13 @@ public class BlinkEnhancement implements ActiveEnhancement {
         if (!(context.hasItem() && forge.has(context.getItem(), this)))
             return false;
 
-        if (player.getPotionEffect(PotionEffectType.BLINDNESS) != null) {
+        if (player.getPotionEffect(PotionEffectType.BLINDNESS) != null
+            || !cost.met(player)) {
             applyFailureCosmetics(player);
             return false;
         }
 
-        if (costAmount <= 0)
-            return true;
-
-        if (costType == Material.AIR) {
-            if (player.calculateTotalExperiencePoints() < costAmount) {
-                applyFailureCosmetics(player);
-                return false;
-            }
-            return true;
-        } else {
-            ItemStack offhand = player.getInventory().getItemInOffHand();
-            if (offhand.getType() != costType || offhand.getAmount() <
-                costAmount) {
-                applyFailureCosmetics(player);
-                return false;
-            }
-            return true;
-        }
+        return true;
     }
 
     /**
