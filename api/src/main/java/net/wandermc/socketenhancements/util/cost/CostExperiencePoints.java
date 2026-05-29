@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 /**
  * A certain number of experience points.
  */
-public class CostExperiencePoints implements Cost {
+public class CostExperiencePoints implements Cost<Player> {
     private final int amount;
 
     /**

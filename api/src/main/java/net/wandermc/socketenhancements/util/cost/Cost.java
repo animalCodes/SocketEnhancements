@@ -20,28 +20,27 @@ package net.wandermc.socketenhancements.util.cost;
 import org.bukkit.entity.Player;
 
 /**
- * A description of a 'cost' (some condition that a player can meet), along with
+ * A description of a 'cost' (some condition that can be met), along with
  * methods for testing and deducting said costs.
  *
- * A 'condition' is simply something that a player can possess - such as an item
- * or experience points, which can be deducted when, for example, an enhancement
- * is activated.
+ * The thing to which the cost is applied is referred to as the 'entity'. This
+ * has no relation to minecraft Entities - it is simply *a thing*.
  */
-public interface Cost {
+public interface Cost<E> {
     /**
-     * Whether `player` can fulfill the requirements of this cost.
+     * Whether `entity` can fulfill the requirements of this cost.
      *
-     * @param player The player to check.
-     * @return Whether they meet the cost.
+     * @param entity The entity to check.
+     * @return Whether it meets the cost.
      */
-    public boolean met(Player player);
+    public boolean met(E entity);
 
     /**
-     * Deduct this cost from `player`.
+     * Deduct this cost from `entity`.
      * It is assumed that the cost can be met, so always run `met()`
      * before using this.
      *
-     * @param player The player to charge.
+     * @param entity The entity to charge.
      */
-    public void take(Player player);
+    public void take(E entity);
 }

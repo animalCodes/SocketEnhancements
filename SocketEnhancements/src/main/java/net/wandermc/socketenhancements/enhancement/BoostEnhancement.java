@@ -32,8 +32,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static com.destroystokyo.paper.MaterialTags.ARMOR;
 
-import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.util.cost.CostItemDamage;
 
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
@@ -49,7 +50,8 @@ public class BoostEnhancement implements ActiveEnhancement {
         MiniMessage.miniMessage()
         .deserialize("<!italic><white><<red>Boost<white>>");
 
-    private int damage;
+    private final CostItemDamage cost;
+
     private int flightDuration;
     private double damageChance;
 
@@ -73,9 +75,11 @@ public class BoostEnhancement implements ActiveEnhancement {
         config) {
         this.forge = forge;
 
-        this.damage = config.getInt("cost", 8);
-        if (this.damage < 0)
-            this.damage = 8;
+        int damage = config.getInt("cost", 8);
+        if (damage < 0)
+            damage = 8;
+
+        this.cost = new CostItemDamage(damage, false);
 
         this.flightDuration = config.getInt("duration", 2);
         if (this.flightDuration < 0)
@@ -100,7 +104,7 @@ public class BoostEnhancement implements ActiveEnhancement {
      *
      * The player must have interacted with the air while gliding and holding an
      * item with this bound to it, additionally, the item must have more than
-     * cost*2 durability.
+     * `damage` durability.
      *
      * @param context The context to check.
      * @return Whether this enhancement's effect should be run.
@@ -115,13 +119,8 @@ public class BoostEnhancement implements ActiveEnhancement {
         if (!(context.hasItem() && forge.has(context.getItem(), this)))
             return false;
 
-        if (context.getItem().getItemMeta() instanceof Damageable damageable) {
-            if ((context.getItem().getType().getMaxDurability() -
-                damageable.getDamage() <= (damage * 2)))
-                return false;
-        } else {
+        if (!cost.met(context.getItem()))
             return false;
-        }
 
         return true;
     }
@@ -138,7 +137,7 @@ public class BoostEnhancement implements ActiveEnhancement {
             player.fireworkBoost(rocket);
         }
 
-        context.getItem().damage(damage, player);
+        cost.take(context.getItem());
     }
 
     public String name() {

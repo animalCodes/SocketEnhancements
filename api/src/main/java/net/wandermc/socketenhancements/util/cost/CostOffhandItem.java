@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * A certain number of items held in the player's offhand.
  */
-public class CostOffhandItem implements Cost {
+public class CostOffhandItem implements Cost<Player> {
     private final Material type;
     private final int amount;
 
