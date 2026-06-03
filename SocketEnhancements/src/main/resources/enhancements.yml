@@ -136,3 +136,8 @@ enhancements:
     enabled: true
     # Number of experience points to take from player on use.
     cost_amount: 1
+
+  rebound:
+    enabled: true
+    # Number of experience points to take from player on use.
+    cost_amount: 8

@@ -167,6 +167,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (harvestingConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new HarvestingEnhancement(enhancedItemForge, harvestingConfig));
+
+        ConfigurationSection reboundConfig = nsConfig(config
+            .getConfigurationSection("rebound"));
+        if (reboundConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new ReboundEnhancement(enhancedItemForge, reboundConfig));
     }
 
     /**
