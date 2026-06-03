@@ -107,8 +107,6 @@ enhancements:
     # Chance to gain health.
     chance: 0.4
     # Amount of damage dealt to regain as health.
-    # Note that any value over 1 will result in gaining more health than damage
-    # was dealt.
     gain: 0.25
 
   withering:

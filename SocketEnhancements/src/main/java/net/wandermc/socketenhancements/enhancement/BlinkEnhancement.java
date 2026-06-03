@@ -115,24 +115,40 @@ public class BlinkEnhancement implements ActiveEnhancement {
 
         Player player = context.getPlayer();
 
-        Location tpLocation = player.getTargetBlock(BLINK_THROUGH_BLOCKS,
-            maxDistance).getRelative(player.getFacing().getOppositeFace())
-            .getLocation().toCenterLocation();
+        Location location = player.getTargetBlock(BLINK_THROUGH_BLOCKS,
+            maxDistance).getLocation();
 
-        if (!isSafe(tpLocation)) {
-            Location newLocation = findSafeLocation(tpLocation);
-            if (tpLocation.equals(newLocation)) {
+        // Try to find a safe location near to where the player is pointing
+        if (!isSafe(location)) {
+            Location safe = location.clone();
+
+            for (double modY = 1; modY <= maxDistance / 2; modY++) {
+                // Scan up from targeted block
+                safe.setY(location.getY()+modY);
+                if (isSafe(safe))
+                    break;
+
+                // Scan down from block 'in front' of targeted block
+                safe.setY(location.getY()-modY);
+                if (isSafe(safe.getBlock().getRelative(
+                    player.getFacing().getOppositeFace()).getLocation()))
+                    break;
+
+                safe = location.clone();
+            }
+
+            if (location.equals(safe)) {
                 applyFailureCosmetics(player);
                 return;
             }
 
-            tpLocation = newLocation;
+            location = safe.toCenterLocation();
         }
 
-        tpLocation.setYaw(player.getLocation().getYaw());
-        tpLocation.setPitch(player.getLocation().getPitch());
+        location.setYaw(player.getLocation().getYaw());
+        location.setPitch(player.getLocation().getPitch());
 
-        player.teleport(tpLocation, TeleportCause.PLUGIN);
+        player.teleport(location, TeleportCause.PLUGIN);
         applySuccessCosmetics(player);
 
         cost.take(player);
@@ -200,28 +216,6 @@ public class BlinkEnhancement implements ActiveEnhancement {
     private static void applyFailureCosmetics(Player player) {
         player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT_CLOSED,
             2, 10);
-    }
-
-    /**
-     * Attempt to find a safe location for a player, starting at `start`.
-     *
-     * @param start The original (unsafe) location.
-     * @return A safe location, or `start` if one cannot be found.
-     */
-    private Location findSafeLocation(Location start) {
-        Location safe = start.clone();
-
-        for (double modY = 1; modY <= maxDistance/2; modY++) {
-            safe.setY(start.getY()+modY);
-            if (isSafe(safe))
-                return safe;
-
-            safe.setY(start.getY()-modY);
-            if (isSafe(safe))
-                return safe;
-        }
-
-        return start;
     }
 
     /**
