@@ -161,6 +161,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (undyingConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new UndyingEnhancement(enhancedItemForge, undyingConfig));
+
+        ConfigurationSection harvestingConfig = nsConfig(config
+            .getConfigurationSection("harvesting"));
+        if (harvestingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new HarvestingEnhancement(enhancedItemForge, harvestingConfig));
     }
 
     /**
