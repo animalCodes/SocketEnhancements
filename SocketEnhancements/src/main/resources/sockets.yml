@@ -81,6 +81,9 @@ orbs_of_binding:
   enabled: true
   # Whether orbs can be crafted
   craftable: true
+  # How many sockets can be added above the item's socket limit.
+  # 0 means orbs respect socket limit.
+  bonus_sockets: 0
   # Material type of orbs of binding.
   material: CONDUIT
   # Materials used to craft an orb of binding.

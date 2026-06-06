@@ -58,6 +58,7 @@ public class OrbOfBindingManager implements Listener {
 
     private final ItemStack orbOfBinding;
 
+    private final int bonusSockets;
     private final Material orbOfBindingType;
     private final List<Material> ingredients;
     private final boolean flammable;
@@ -67,6 +68,7 @@ public class OrbOfBindingManager implements Listener {
      *
      * `config` defaults:
      * craftable: true
+     * bonus_sockets: 0
      * material: "CONDUIT"
      * ingredients: ["BLAZE_POWDER", "PRISMARINE_SHARD", "CHORUS_FRUIT"]
      * flammable: false
@@ -79,6 +81,8 @@ public class OrbOfBindingManager implements Listener {
         ConfigurationSection config) {
         this.plugin = plugin;
         this.forge = forge;
+
+        this.bonusSockets = config.getInt("bonus_sockets", 0);
 
         Material orbType = Material.getMaterial(config.getString("material",
             "AIR"));
@@ -207,7 +211,8 @@ public class OrbOfBindingManager implements Listener {
         if (orbs < 1 || itemToUpgrade == null)
             return;
 
-        if (itemToUpgrade.socketLimit() >= itemToUpgrade.sockets() + orbs) {
+        if (itemToUpgrade.socketLimit() + bonusSockets
+            >= itemToUpgrade.sockets() + orbs) {
             itemToUpgrade.addSockets(orbs);
             event.getInventory().setResult(itemToUpgrade.update());
         } else {
