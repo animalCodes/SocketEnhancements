@@ -153,3 +153,8 @@ enhancements:
       material: "ECHO_SHARD"
       # Chance for fragments to drop when bedrock is broken.
       drop_chance: 0.6
+
+  grapple:
+    enabled: true
+    # Amount to damage rod by on use.
+    cost_amount: 2

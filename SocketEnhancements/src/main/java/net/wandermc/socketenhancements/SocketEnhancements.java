@@ -180,6 +180,12 @@ public class SocketEnhancements extends JavaPlugin {
             enhancementManager.register(
                 new SurpassingEnhancement(this, enhancedItemForge,
                     surpassingConfig));
+
+        ConfigurationSection grappleConfig = nsConfig(config
+            .getConfigurationSection("grapple"));
+        if (grappleConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new GrappleEnhancement(enhancedItemForge, grappleConfig));
     }
 
     /**
