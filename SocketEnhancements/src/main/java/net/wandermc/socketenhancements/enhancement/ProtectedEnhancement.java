@@ -82,7 +82,9 @@ public class ProtectedEnhancement implements ActiveEnhancement {
     }
 
     public boolean isValidItem(EnhancedItem item) {
-        return item.itemStack().getItemMeta() instanceof Damageable
-            && item.itemStack().getType() != Material.ELYTRA;
+        ItemStack stack = item.itemStack();
+        return stack.getItemMeta() instanceof Damageable
+            && !stack.getItemMeta().isUnbreakable()
+            && stack.getType() != Material.ELYTRA;
     }
 }

@@ -173,6 +173,13 @@ public class SocketEnhancements extends JavaPlugin {
         if (reboundConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new ReboundEnhancement(enhancedItemForge, reboundConfig));
+
+        ConfigurationSection surpassingConfig = nsConfig(config
+            .getConfigurationSection("surpassing"));
+        if (surpassingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new SurpassingEnhancement(this, enhancedItemForge,
+                    surpassingConfig));
     }
 
     /**

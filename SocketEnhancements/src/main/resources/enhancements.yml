@@ -141,3 +141,15 @@ enhancements:
     enabled: true
     # Number of experience points to take from player on use.
     cost_amount: 8
+
+  surpassing:
+    enabled: true
+    # Whether enhancement is consumed on use.
+    single_use: true
+    # Number of experience points to take from player on use.
+    cost_amount: 32
+    fragments:
+      # Material type of fragments.
+      material: "ECHO_SHARD"
+      # Chance for fragments to drop when bedrock is broken.
+      drop_chance: 0.6
