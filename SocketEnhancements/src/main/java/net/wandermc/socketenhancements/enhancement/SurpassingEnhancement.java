@@ -19,25 +19,16 @@ package net.wandermc.socketenhancements.enhancement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.SmithingInventory;
-import org.bukkit.inventory.SmithingTransformRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.tag.DamageTypeTags;
 
 import io.papermc.paper.event.block.BlockBreakProgressUpdateEvent;
 
@@ -49,37 +40,38 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.util.cost.CostExperiencePoints;
-import net.wandermc.socketenhancements.util.event.BlockableAction;
-import net.wandermc.socketenhancements.util.event.ItemEventBlocker;
+import net.wandermc.socketenhancements.util.cost.CostItemDamage;
 
 import static net.wandermc.socketenhancements.util.Dice.roll;
 
 /**
  * Surpassing enhancement.
  *
- * Allows bedrock blocks to be broken. May be consumed in the process and may
- * drop 'Bedrock Fragments' that can be used to make items Unbreakable.
+ * Allows bedrock blocks to be broken. Costs experience points, damages pickaxe
+ * and may be consumed in the process.
  */
 public class SurpassingEnhancement implements ActiveEnhancement {
     private static final TextComponent socketMessage = (TextComponent)
         MiniMessage.miniMessage().deserialize(
             "<!italic><white><<black><shadow:grey>Surpassing<white>>");
 
+    private static final ItemStack bedrock = new ItemStack(Material.BEDROCK);
+
+    private final CostExperiencePoints experienceCost;
+    private final CostItemDamage damageCost;
+
+    private final boolean singleUse;
+
+    private final EnhancedItemForge forge;
+
+    /*
+    // Yeah turns out 'Bedrock Fragments' are quite overpowered, so remove
+    // them for now but retain most of the code so it can be reused when I
+    // figure out something more balanced.
+
     private static final TextComponent FRAGMENT_NAME = (TextComponent)
         MiniMessage.miniMessage().deserialize(
             "<!italic><aqua>Bedrock Fragment");
-
-    private static final ItemStack bedrock = new ItemStack(Material.BEDROCK);
-
-    private final CostExperiencePoints cost;
-
-    private final boolean singleUse;
-    private final double fragmentDropChance;
-
-    private final ItemStack fragment;
-
-    private final EnhancedItemForge forge;
-    private final ItemEventBlocker eventBlocker;
 
     /**
      * Create a Bedrock Fragment.
@@ -87,7 +79,8 @@ public class SurpassingEnhancement implements ActiveEnhancement {
      * @param mat Material type of fragment.
      * @return A Bedrock fragment
      */
-     private static ItemStack createFragment(Material mat) {
+    /*
+    private static ItemStack createFragment(Material mat) {
         ItemStack fragment = new ItemStack(mat);
 
         ItemMeta meta = fragment.getItemMeta();
@@ -96,7 +89,7 @@ public class SurpassingEnhancement implements ActiveEnhancement {
         fragment.setItemMeta(meta);
 
         return fragment;
-     }
+    }
 
     /**
      * Create and register the recipe for adding Bedrock Fragments to items.
@@ -104,6 +97,7 @@ public class SurpassingEnhancement implements ActiveEnhancement {
      * @param plugin The plugin to register the recipe under.
      * @param fragment Reference Bedrock Fragment.
      */
+    /*
     private static void registerRecipe(JavaPlugin plugin, ItemStack fragment) {
         SmithingTransformRecipe recipe = new SmithingTransformRecipe(
             new NamespacedKey(plugin, "bedrock_fragment_addition"),
@@ -115,98 +109,12 @@ public class SurpassingEnhancement implements ActiveEnhancement {
     }
 
     /**
-     * Create a SurpassingEnhancement.
-     *
-     * `config` defaults:
-     * single_use: true
-     * cost_amount: 32
-     * fragments:
-     *    material: "ECHO_SHARD"
-     *    drop_chance: 0.6
-     *
-     * @param plugin the plugin this is registered by.
-     * @param forge The current EnhancedItemForge.
-     * @param config Configuration options.
-     */
-    public SurpassingEnhancement(JavaPlugin plugin, EnhancedItemForge forge,
-        ConfigurationSection config) {
-        this.forge = forge;
-
-        this.singleUse = config.getBoolean("single_use", true);
-
-        int costAmount = config.getInt("cost_amount", 32);
-        if (costAmount < 32)
-            costAmount = 32;
-
-        this.cost = new CostExperiencePoints(costAmount);
-
-        // Setup fragments
-        ConfigurationSection fragmentConfig = config
-            .getConfigurationSection("fragments");
-        if (fragmentConfig == null)
-            fragmentConfig = new YamlConfiguration();
-
-        Material mat = Material.getMaterial(fragmentConfig
-            .getString("material", "ECHO_SHARD"));
-        if (mat == null || mat == Material.AIR)
-            mat = Material.ECHO_SHARD;
-
-        this.fragment = createFragment(mat);
-
-        BlockableAction[] a = {};
-        this.eventBlocker = new ItemEventBlocker(plugin,
-            item -> fragment.isSimilar(item),
-            BlockableAction.getValidActions(mat).toArray(a));
-
-        registerRecipe(plugin, this.fragment);
-
-        this.fragmentDropChance = fragmentConfig.getDouble("drop_chance",
-            0.6);
-    }
-
-    @EventHandler(ignoreCancelled=true)
-    public void run(BlockBreakProgressUpdateEvent context) {
-        if (context.getBlock().getType() != Material.BEDROCK)
-            return;
-
-        if (context.getEntity() instanceof Player player) {
-            ItemStack pickaxe = player.getInventory().getItemInMainHand();
-
-            if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
-                return;
-
-            if (!cost.met(player))
-                return;
-
-            Block block = context.getBlock();
-
-            block.breakNaturally();
-
-            block.getWorld().playSound(block.getLocation(),
-                Sound.ENTITY_WARDEN_ROAR, SoundCategory.NEUTRAL, 2, 5);
-            block.getWorld().spawnParticle(Particle.ITEM, block.getLocation(),
-                12, bedrock);
-
-            if (roll(fragmentDropChance))
-                player.getWorld().dropItemNaturally(
-                    block.getLocation(), fragment);
-
-            if (singleUse) {
-                EnhancedItem enhancedPickaxe = forge.create(pickaxe);
-                enhancedPickaxe.remove(this);
-                enhancedPickaxe.update();
-            }
-
-            cost.take(player);
-        }
-    }
-
-    /**
      * Make items 'unbreakable' when upgraded with a Bedrock Fragment.
      * Items must not be unbreakable or Protected.
      *
      * @param event The event.
      */
+    /*
     @EventHandler(ignoreCancelled=true)
     public void handleUpgrade(PrepareSmithingEvent event) {
         ItemStack equipment = event.getInventory().getInputEquipment();
@@ -228,6 +136,71 @@ public class SurpassingEnhancement implements ActiveEnhancement {
             result.setItemMeta(meta);
 
             event.setResult(result);
+        }
+    }
+    */
+
+    /**
+     * Create a SurpassingEnhancement.
+     *
+     * `config` defaults:
+     * single_use: true
+     * experience_cost: 32
+     * damage_cost: 12
+     *
+     * @param forge The current EnhancedItemForge.
+     * @param config Configuration options.
+     */
+    public SurpassingEnhancement(EnhancedItemForge forge, ConfigurationSection
+        config) {
+        this.forge = forge;
+
+        this.singleUse = config.getBoolean("single_use", true);
+
+        int experience = config.getInt("experience_cost", 32);
+        if (experience < 0)
+            experience = 32;
+
+        this.experienceCost = new CostExperiencePoints(experience);
+
+        int damage = config.getInt("damage_cost", 12);
+        if (damage < 0)
+            damage = 12;
+
+        this.damageCost = new CostItemDamage(damage, true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void run(BlockBreakProgressUpdateEvent context) {
+        if (context.getBlock().getType() != Material.BEDROCK)
+            return;
+
+        if (context.getEntity() instanceof Player player) {
+            ItemStack pickaxe = player.getInventory().getItemInMainHand();
+
+            if (pickaxe.isEmpty() || !forge.has(pickaxe, this))
+                return;
+
+            if (!experienceCost.met(player) || !damageCost.met(pickaxe))
+                return;
+
+            Block block = context.getBlock();
+
+            block.breakNaturally();
+
+            block.getWorld().playSound(block.getLocation(),
+                Sound.ENTITY_WARDEN_ROAR, SoundCategory.NEUTRAL, 2, 5);
+            block.getWorld().spawnParticle(Particle.ITEM, block.getLocation(),
+                12, bedrock);
+
+            if (singleUse) {
+                EnhancedItem enhancedPickaxe = forge.create(pickaxe);
+                enhancedPickaxe.remove(this);
+                enhancedPickaxe.update();
+            }
+
+            experienceCost.take(player);
+            damageCost.take(pickaxe);
         }
     }
 

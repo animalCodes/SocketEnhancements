@@ -147,12 +147,9 @@ enhancements:
     # Whether enhancement is consumed on use.
     single_use: true
     # Number of experience points to take from player on use.
-    cost_amount: 32
-    fragments:
-      # Material type of fragments.
-      material: "ECHO_SHARD"
-      # Chance for fragments to drop when bedrock is broken.
-      drop_chance: 0.6
+    experience_cost: 32
+    # Amount to damage pickaxe by on use.
+    damage_cost: 12
 
   grapple:
     enabled: true

@@ -178,8 +178,7 @@ public class SocketEnhancements extends JavaPlugin {
             .getConfigurationSection("surpassing"));
         if (surpassingConfig.getBoolean("enabled", true))
             enhancementManager.register(
-                new SurpassingEnhancement(this, enhancedItemForge,
-                    surpassingConfig));
+                new SurpassingEnhancement(enhancedItemForge, surpassingConfig));
 
         ConfigurationSection grappleConfig = nsConfig(config
             .getConfigurationSection("grapple"));
