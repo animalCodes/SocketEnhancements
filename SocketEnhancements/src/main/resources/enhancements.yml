@@ -1,6 +1,11 @@
 enhancement_tables:
   # Whether enchanting tables can be used to enhance items
   enabled: true
+  # Experience level cost for each button.
+  # All must be greater than 0.
+  cost_one: 8
+  cost_two: 16
+  cost_three: 32
   # Whether enhancement pools contain enhancements of lesser rarities.
   additive_pools: true
   # How many times an enhancement pool can be accessed before being reshuffled.

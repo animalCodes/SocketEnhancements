@@ -30,8 +30,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.wandermc.socketenhancements.enhancement.Enhancement;
 import net.wandermc.socketenhancements.enhancement.EnhancementManager;
 import net.wandermc.socketenhancements.enhancement.EnhancementRarity;
-import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
+import net.wandermc.socketenhancements.item.EnhancedItemForge;
+import net.wandermc.socketenhancements.util.cost.CostExperienceLevels;
 
 import static net.wandermc.socketenhancements.util.Dice.randomise;
 
@@ -47,11 +48,19 @@ import static net.wandermc.socketenhancements.util.Dice.randomise;
  * be bound to the item. If `additivePools` is true, the pools will contain
  * enhancements of that rarity and lesser rarities, if it is false they will
  * only contain enhancements of that exact rarity.
+ *
+ * If a player attempts to enhance an item with an empty socket but no valid
+ * enhancements can be found, the item will be enchanted instead.
  */
 public class EnhancementTableManager implements Listener {
     private final JavaPlugin plugin;
     private final EnhancementManager manager;
     private final EnhancedItemForge forge;
+
+    // Cost for each button
+    private final CostExperienceLevels costI;
+    private final CostExperienceLevels costII;
+    private final CostExperienceLevels costIII;
 
     private final ArrayList<Enhancement> enhancementPoolI;
     private int iCounter = 0;
@@ -66,6 +75,9 @@ public class EnhancementTableManager implements Listener {
      * Create an EnhancementTableManager for `plugin`.
      *
      * `config` defaults:
+     * cost_one: 8
+     * cost_two: 16
+     * cost_three: 32
      * additive_pools: true
      * randomisation_frequency: 5
      *
@@ -80,39 +92,58 @@ public class EnhancementTableManager implements Listener {
         this.manager = manager;
         this.forge = forge;
 
+        // Get and validate configuration values.
+
+        int cost = config.getInt("cost_one", 8);
+        if (cost < 0)
+            cost = 8;
+        this.costI = new CostExperienceLevels(cost);
+
+        cost = config.getInt("cost_two", 16);
+        if (cost < 0)
+            cost = 16;
+        this.costII = new CostExperienceLevels(cost);
+
+        cost = config.getInt("cost_three", 32);
+        if (cost < 0)
+            cost = 32;
+        this.costIII = new CostExperienceLevels(cost);
+
         this.randomisationFrequency = config.getInt("randomisation_frequency",
             5);
 
         boolean additivePools = config.getBoolean("additive_pools", true);
 
-        enhancementPoolI = new ArrayList();
-        enhancementPoolII = new ArrayList();
-        enhancementPoolIII = new ArrayList();
+        // Setup pools
+        this.enhancementPoolI = new ArrayList();
+        this.enhancementPoolII = new ArrayList();
+        this.enhancementPoolIII = new ArrayList();
 
         for (Enhancement enhancement : manager.getAll()) {
             switch (enhancement.rarity()) {
                 case I: {
-                    enhancementPoolI.add(enhancement);
+                    this.enhancementPoolI.add(enhancement);
                     if (!additivePools)
                         break;
                 }
                 case II: {
-                    enhancementPoolII.add(enhancement);
+                    this.enhancementPoolII.add(enhancement);
                     if (!additivePools)
                         break;
                 }
                 case III: {
-                    enhancementPoolIII.add(enhancement);
+                    this.enhancementPoolIII.add(enhancement);
                 }
+                // Note that "IMPOSSIBLE" rarity Enhancements are ignored
                 default: {
                     break;
                 }
             }
         }
 
-        enhancementPoolI.trimToSize();
-        enhancementPoolII.trimToSize();
-        enhancementPoolIII.trimToSize();
+        this.enhancementPoolI.trimToSize();
+        this.enhancementPoolII.trimToSize();
+        this.enhancementPoolIII.trimToSize();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -149,9 +180,11 @@ public class EnhancementTableManager implements Listener {
         if (!item.hasEmptySocket())
             return;
 
+        CostExperienceLevels cost;
         ArrayList<Enhancement> pool;
         switch (event.whichButton()) {
             case 0: {
+                cost = costI;
                 pool = this.enhancementPoolI;
                 iCounter++;
                 if (iCounter > randomisationFrequency) {
@@ -161,6 +194,7 @@ public class EnhancementTableManager implements Listener {
                 break;
             }
             case 1: {
+                cost = costII;
                 pool = this.enhancementPoolII;
                 iiCounter++;
                 if (iiCounter > randomisationFrequency) {
@@ -172,6 +206,7 @@ public class EnhancementTableManager implements Listener {
             // If the player manages to find and press a 4th button, they'll get
             // the rarest pool. Good for them!
             default: {
+                cost = costIII;
                 pool = this.enhancementPoolIII;
                 iiiCounter++;
                 if (iiiCounter > randomisationFrequency) {
@@ -182,6 +217,16 @@ public class EnhancementTableManager implements Listener {
             }
         }
 
+        // Confirm that player has enough experience points for the chosen
+        // button.
+        if (!cost.met(event.getEnchanter())) {
+            if (!event.getItem().getEnchantments().isEmpty()) {
+                event.setCancelled(true);
+            }
+            return;
+        }
+
+        // Try to find a valid enhancement
         int i = 0;
         for (; i < pool.size(); i++) {
             if (item.bind(pool.get(i)))
@@ -196,10 +241,8 @@ public class EnhancementTableManager implements Listener {
         }
 
         item.update();
+        cost.take(event.getEnchanter());
 
         event.setCancelled(true);
-
-        if (!(event.getEnchanter().getLevel() < 1))
-            event.getEnchanter().setLevel(event.getEnchanter().getLevel() - 1);
     }
 }
