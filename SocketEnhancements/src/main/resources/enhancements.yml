@@ -8,8 +8,6 @@ enhancement_tables:
   cost_three: 32
   # Whether enhancement pools contain enhancements of lesser rarities.
   additive_pools: true
-  # How many times an enhancement pool can be accessed before being reshuffled.
-  randomisation_frequency: 5
 
 enhancement_gems:
   # Whether enhancement gems can be used
