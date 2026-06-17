@@ -34,7 +34,7 @@ import net.wandermc.socketenhancements.item.EnhancedItemForge.EnhancedItem;
 import net.wandermc.socketenhancements.item.EnhancedItemForge;
 import net.wandermc.socketenhancements.util.cost.CostExperienceLevels;
 
-import static net.wandermc.socketenhancements.util.Dice.randomise;
+import static net.wandermc.socketenhancements.util.Dice.chooseOne;
 
 /**
  * Manages the use of enchanting tables to enhance items. (referred to as
@@ -63,11 +63,8 @@ public class EnhancementTableManager implements Listener {
     private final CostExperienceLevels costIII;
 
     private final ArrayList<Enhancement> enhancementPoolI;
-    private int iCounter = 0;
     private final ArrayList<Enhancement> enhancementPoolII;
-    private int iiCounter = 0;
     private final ArrayList<Enhancement> enhancementPoolIII;
-    private int iiiCounter = 0;
 
     private int randomisationFrequency;
 
@@ -79,7 +76,6 @@ public class EnhancementTableManager implements Listener {
      * cost_two: 16
      * cost_three: 32
      * additive_pools: true
-     * randomisation_frequency: 5
      *
      * @param plugin The plugin this manager is working for.
      * @param manager The current EnhancementManager.
@@ -108,9 +104,6 @@ public class EnhancementTableManager implements Listener {
         if (cost < 0)
             cost = 32;
         this.costIII = new CostExperienceLevels(cost);
-
-        this.randomisationFrequency = config.getInt("randomisation_frequency",
-            5);
 
         boolean additivePools = config.getBoolean("additive_pools", true);
 
@@ -181,25 +174,21 @@ public class EnhancementTableManager implements Listener {
             return;
 
         CostExperienceLevels cost;
-        ArrayList<Enhancement> pool;
+        ArrayList<Enhancement> enhancements = new ArrayList();
         switch (event.whichButton()) {
             case 0: {
                 cost = costI;
-                pool = this.enhancementPoolI;
-                iCounter++;
-                if (iCounter > randomisationFrequency) {
-                    randomise(pool);
-                    iCounter = 0;
+                for (Enhancement enhancement : enhancementPoolI) {
+                    if (item.canBind(enhancement))
+                        enhancements.add(enhancement);
                 }
                 break;
             }
             case 1: {
                 cost = costII;
-                pool = this.enhancementPoolII;
-                iiCounter++;
-                if (iiCounter > randomisationFrequency) {
-                    randomise(pool);
-                    iiCounter = 0;
+                for (Enhancement enhancement : enhancementPoolII) {
+                    if (item.canBind(enhancement))
+                        enhancements.add(enhancement);
                 }
                 break;
             }
@@ -207,18 +196,14 @@ public class EnhancementTableManager implements Listener {
             // the rarest pool. Good for them!
             default: {
                 cost = costIII;
-                pool = this.enhancementPoolIII;
-                iiiCounter++;
-                if (iiiCounter > randomisationFrequency) {
-                    randomise(pool);
-                    iiiCounter = 0;
+                for (Enhancement enhancement : enhancementPoolIII) {
+                    if (item.canBind(enhancement))
+                        enhancements.add(enhancement);
                 }
                 break;
             }
         }
 
-        // Confirm that player has enough experience points for the chosen
-        // button.
         if (!cost.met(event.getEnchanter())) {
             if (!event.getItem().getEnchantments().isEmpty()) {
                 event.setCancelled(true);
@@ -226,19 +211,14 @@ public class EnhancementTableManager implements Listener {
             return;
         }
 
-        // Try to find a valid enhancement
-        int i = 0;
-        for (; i < pool.size(); i++) {
-            if (item.bind(pool.get(i)))
-                break;
-        }
-
-        if (i >= pool.size()) {
+        if (enhancements.isEmpty()) {
             if (!event.getItem().getEnchantments().isEmpty()) {
                 event.setCancelled(true);
             }
             return;
         }
+
+        item.bind(chooseOne(enhancements));
 
         item.update();
         cost.take(event.getEnchanter());

@@ -334,10 +334,8 @@ public class EnhancedItemForge {
         /**
          * Attempt to bind `enhancementName` to the item.
          *
-         * The following checks must pass for the binding to be successful:
-         * - This item is valid for the enhancement.
-         * - Item doesn't already have `enhancement`.
-         * - An empty socket is available.
+         * See `canBind()` for what checks must pass before an Enhancement is
+         * bound to an item.
          *
          * @param enhancement The name of the enhancement to bind.
          * @return Whether the binding was successful.
@@ -349,26 +347,24 @@ public class EnhancedItemForge {
         /**
          * Attempt to bind `enhancement` to the item.
          *
-         * The following checks must pass for the binding to be successful:
-         * - This item is valid for the enhancement.
-         * - Item doesn't already have `enhancement`.
-         * - An empty socket is available.
+         * See `canBind()` for what checks must pass before an Enhancement is
+         * bound to an item.
          *
          * @param enhancement The enhancement to bind
          * @return Whether the binding was successful.
          */
         public boolean bind(Enhancement enhancement) {
-            if (!enhancement.isValidItem(this))
+            if (!canBind(enhancement))
                 return false;
 
-            if (has(enhancement))
-                return false;
+            socketList.set(socketList.indexOf(manager.empty().name()),
+                enhancement.name());
 
-            return checklessBind(enhancement);
+            return true;
         }
 
         /**
-         * Bind `enhancementName` to item without checks.
+         * Bind `enhancementName` to item without (some) checks.
          *
          * Bypassed checks are whether the item is valid for this enhancement
          * and whether the item already has the enhancement.
@@ -383,7 +379,7 @@ public class EnhancedItemForge {
         }
 
         /**
-         * Bind `enhancement` to item without checks.
+         * Bind `enhancement` to item without (some) checks.
          *
          * Bypassed checks are whether the item is valid for this enhancement
          * and whether the item already has the enhancement.
@@ -400,6 +396,23 @@ public class EnhancedItemForge {
             else
                 socketList.set(index, enhancement.name());
             return true;
+        }
+
+        /**
+         * Whether `enhancement` can be bound to this item.
+         *
+         * The following checks must pass:
+         * - This item is valid for the enhancement.
+         * - This item doesn't already have `enhancement`.
+         * - An empty socket is available.
+         *
+         * @param enhancement The Enhancement to check.
+         * @return Whether it can be bound.
+         */
+        public boolean canBind(Enhancement enhancement) {
+            return enhancement.isValidItem(this)
+                && !has(enhancement)
+                && hasEmptySocket();
         }
 
         /**
