@@ -61,6 +61,10 @@ public class SeaCommand implements TabExecutor {
     private static final Component addsocketHelpMsg = Component.text(
         "add(socket) {n} - Add n socket(s) to item held in main hand. If n " +
         "isn't specified, 1 socket is added.").color(NamedTextColor.YELLOW);
+    private static final Component removeHelpMsg = Component.text(
+        "remove {enhancement} - Remove enhancement from item held in" +
+        " mainhand. Enhancement may be unregistered.")
+        .color(NamedTextColor.YELLOW);
     private static final Component replaceHelpMsg = Component.text(
         "replace {enhancement1} {enhancement2} - Replace enhancement1 with " +
         "enhancement2 on item held in main hand. enhancement1 may be an " +
@@ -319,6 +323,7 @@ public class SeaCommand implements TabExecutor {
     private void helpCommand(CommandSender sender) {
         sender.sendMessage(bindHelpMsg);
         sender.sendMessage(addsocketHelpMsg);
+        sender.sendMessage(removeHelpMsg);
         sender.sendMessage(replaceHelpMsg);
         sender.sendMessage(helpHelpMsg);
     }
