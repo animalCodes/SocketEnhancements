@@ -158,3 +158,9 @@ enhancements:
     enabled: true
     # Amount to damage rod by on use.
     cost_amount: 2
+
+  beheading:
+    enabled: true
+    # Chance for skull to drop.
+    # Must be > 0
+    chance: 0.4

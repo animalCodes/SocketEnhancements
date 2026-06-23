@@ -185,6 +185,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (grappleConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new GrappleEnhancement(enhancedItemForge, grappleConfig));
+
+        ConfigurationSection beheadingConfig = nsConfig(config
+            .getConfigurationSection("beheading"));
+        if (beheadingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new BeheadingEnhancement(enhancedItemForge, beheadingConfig));
     }
 
     /**
