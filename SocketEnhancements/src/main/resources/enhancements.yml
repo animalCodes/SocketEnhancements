@@ -164,3 +164,8 @@ enhancements:
     # Chance for skull to drop.
     # Must be > 0
     chance: 0.4
+
+  soulbound:
+    enabled: false
+    # Whether enhancement is consumed on use.
+    single_use: false

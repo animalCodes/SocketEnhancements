@@ -191,6 +191,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (beheadingConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new BeheadingEnhancement(enhancedItemForge, beheadingConfig));
+
+        ConfigurationSection soulboundConfig = nsConfig(config
+            .getConfigurationSection("soulbound"));
+        if (soulboundConfig.getBoolean("enabled", false))
+            enhancementManager.register(
+                new SoulboundEnhancement(enhancedItemForge, soulboundConfig));
     }
 
     /**
