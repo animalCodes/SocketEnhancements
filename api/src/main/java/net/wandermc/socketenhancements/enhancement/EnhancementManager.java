@@ -70,15 +70,18 @@ public class EnhancementManager {
      * @param enhancement The Enhancement to store.
      * @return Whether the enhancement was registered.
      * @throws IllegalArgumentException If `enhancement` is not an
-     *         `ActiveEnhancement`.
+     *         instance of a known Enhancement subtype.
      */
     public boolean register(Enhancement enhancement) {
         String name = normalise(enhancement.name());
         if (enhancementStore.containsKey(name))
             return false;
 
-        if (enhancement instanceof ActiveEnhancement activeEnhancement) {
-            pluginManager.registerEvents(activeEnhancement, plugin);
+        if (enhancement instanceof ActiveEnhancement active) {
+            pluginManager.registerEvents(active, plugin);
+        } else if (enhancement instanceof PassiveEnhancement passive) {
+            plugin.getServer().getScheduler().runTaskTimer(plugin, passive,
+                passive.period(), passive.period());
         } else {
             throw new IllegalArgumentException("enhancement \"" +
                 enhancement.name() + "\" is not a valid extension " +
@@ -86,6 +89,7 @@ public class EnhancementManager {
         }
 
         enhancementStore.put(name, enhancement);
+
         return true;
     }
 
