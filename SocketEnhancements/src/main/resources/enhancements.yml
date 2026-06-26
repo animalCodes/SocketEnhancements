@@ -169,3 +169,6 @@ enhancements:
     enabled: false
     # Whether enhancement is consumed on use.
     single_use: false
+
+  glowing:
+    enabled: true

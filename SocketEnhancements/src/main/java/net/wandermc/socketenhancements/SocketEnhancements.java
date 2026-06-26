@@ -197,6 +197,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (soulboundConfig.getBoolean("enabled", false))
             enhancementManager.register(
                 new SoulboundEnhancement(enhancedItemForge, soulboundConfig));
+
+        ConfigurationSection glowingConfig = nsConfig(config
+            .getConfigurationSection("glowing"));
+        if (glowingConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new GlowingEnhancement(enhancedItemForge));
     }
 
     /**
