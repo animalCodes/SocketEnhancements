@@ -11,6 +11,8 @@ it with other 'gear enhancement' plugins is not recommended.
 SocketEnhancements has two core features: The ability to add "sockets" to items,
 and the ability to fill those sockets with enhancements.
 
+A brief video going over the basics of adding and using Enhancements is available: [SocketEnhancements video guide](https://www.youtube.com/watch?v=S0FIdrkXp0E).
+
 ### Sockets
 
 Sockets represent 'slots' in an item which can be filled with enhancements. By
