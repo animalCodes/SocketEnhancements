@@ -162,7 +162,7 @@ enhancements:
   beheading:
     enabled: true
     # Chance for skull to drop.
-    # Must be > 0
+    # Must be > 0.
     chance: 0.4
 
   soulbound:
@@ -172,3 +172,15 @@ enhancements:
 
   glowing:
     enabled: true
+
+  gain:
+    enabled: true
+    # Delay, in seconds, between potential "gains".
+    # Must be >= 1.
+    delay: 8
+    # Chance per enhanced item.
+    # Must be > 0.
+    chance: 0.15
+    # Number of points to gain.
+    # Cannot be < 0.
+    points: 4

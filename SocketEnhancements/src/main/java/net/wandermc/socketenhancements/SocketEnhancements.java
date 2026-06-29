@@ -203,6 +203,12 @@ public class SocketEnhancements extends JavaPlugin {
         if (glowingConfig.getBoolean("enabled", true))
             enhancementManager.register(
                 new GlowingEnhancement(enhancedItemForge));
+
+        ConfigurationSection gainConfig = nsConfig(config
+            .getConfigurationSection("gain"));
+        if (gainConfig.getBoolean("enabled", true))
+            enhancementManager.register(
+                new GainEnhancement(enhancedItemForge, gainConfig));
     }
 
     /**
