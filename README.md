@@ -45,8 +45,9 @@ your liking before you let your players use it.
 All of SocketEnhancements core functionality is exposed through the
 "EnhancementManager" and "EnhancedItemForge" services, with the creation
 of Enhancements being as simple as creating a class which implements
-ActiveEnhancement. Allowing third-party plugins to create their own methods of
-adding sockets and enhancements, as well as creating their own Enhancements.
+ActiveEnhancement or PassiveEnhancement. Allowing third-party plugins to create
+their own methods of adding sockets and enhancements, as well as creating their
+own Enhancements.
 
 That said, please note that the SocketEnhancements API is not currently
 available on any public repository. It must be installed locally in order to be
